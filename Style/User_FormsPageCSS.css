@@ -1,0 +1,305 @@
+/* General styling */
+body {
+    overflow-x: hidden;
+    height: 100vh;
+    margin: 0; /* Ensure there's no unwanted margin */
+}
+
+/* Background container */
+.BGhome-container {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Background image */
+.BGhome {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Text styling */
+.txt_Title, .txt_MYW, .txt_Desc {
+    z-index: 999;
+    position: relative;
+    color: #1e271f;
+}
+
+.txt_MYW {
+    font-family: nexa;
+    font-size: 3rem;
+    margin-top: 3.5vh;
+}
+
+.txt_Desc {
+    font-family: louis;
+    margin-top: -8vh;
+}
+
+/* Button styling */
+.btnConsult {
+    background-color: #1e271f;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 40px;
+    font-family: louis;
+    border-style: none;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.btnConsult:hover {
+    opacity: 90%;
+    transition: 0.3s;
+}
+
+/* Form Styling */
+.form-container {
+    padding-top: 120px;
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    font-family: 'Louis', sans-serif;
+    width: 100%;
+    max-width: 800px;
+    padding: 35px;
+    background-color: #f9f9f9;
+    border-radius: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Form content layout */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    font-family: louis;
+}
+
+/* Input wrapper */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+input, select {
+    font-family: louis;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+}
+
+input[type="date"], input[type="time"], select {
+    width: 100%;
+}
+
+label {
+    position: relative;
+    margin-left: 0;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* Label floating effect */
+input:focus + label, input:not(:placeholder-shown) + label,
+select:focus + label, select:not(:placeholder-shown) + label {
+    top: -10px;
+    opacity: 80%;
+    font-size: 0.85rem;
+    color: #1e271f;
+}
+
+.name-fields {
+    width: 200%;
+    display: flex;
+    gap: 5px;
+}
+
+.input-wrapper1 {
+    width: 25%;
+    margin-bottom: 20px;
+}
+
+.input-wrapper2 {
+    width: 40%;
+    margin-bottom: 20px;
+}
+
+.consultation-fields {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-submit, .btn-clear {
+    font-family: louis;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background-color: #1e271f;
+    color: white;
+}
+
+.btn-submit:hover {
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.btn-clear {
+    background-color: #ccc;
+    color: black;
+}
+
+.btn-clear:hover {
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+input::placeholder {
+    font-family: louis;
+    font-size: 0.8rem;
+}
+
+/* Media Queries for Responsiveness */
+
+/* For devices with a max width of 1024px (tablets, smaller laptops) */
+@media (max-width: 1024px) {
+    .form-container {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .txt_MYW {
+        font-size: 2.5rem;
+    }
+
+    .txt_Desc {
+        margin-top: -5vh;
+    }
+
+    .name-fields {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-wrapper1, .input-wrapper2 {
+        width: 100%;
+    }
+
+    .btnConsult {
+        font-size: 0.9rem;
+        padding: 5px 30px;
+    }
+
+    .btn-submit, .btn-clear {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+
+/* For devices with a max width of 768px (tablets) */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 20px;
+        max-width: 90%;
+        top: 50%;
+    }
+
+    .txt_MYW {
+        font-size: 2rem;
+    }
+
+    .txt_Desc {
+        margin-top: -5vh;
+    }
+
+    .input-wrapper1, .input-wrapper2 {
+        width: 100%;
+    }
+
+    .consultation-fields {
+        flex-direction: column;
+    }
+
+    .name-fields {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .btn-submit, .btn-clear {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+
+/* For devices with a max width of 480px (mobile phones) */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .form-container {
+        padding: 15px;
+        max-width: 90%;
+        top: 50%;
+    }
+
+    .txt_MYW {
+        font-size: 1.5rem;
+    }
+
+    .txt_Desc {
+        margin-top: -5vh;
+    }
+
+    .input-wrapper1, .input-wrapper2 {
+        width: 100%;
+    }
+
+    .btnConsult {
+        font-size: 0.9rem;
+        padding: 5px 25px;
+    }
+
+    .btn-submit, .btn-clear {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

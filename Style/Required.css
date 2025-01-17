@@ -1,0 +1,417 @@
+/* Required */
+
+body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+@font-face {
+    src: url(Fonts/louis_george_cafe_bold-webfont.woff);
+    font-family: louis;
+}
+
+@font-face {
+    src: url(Fonts/Nexa-Heavy.woff);
+    font-family: nexa;
+}
+
+.navbar {
+    position: fixed;
+    top: 30px; /* Slightly offset from the top */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #1e271f;
+    padding: 5px 2px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto; /* Keep the width auto so it doesn't extend edge-to-edge */
+    z-index: 9999; /* Keep the navbar on top of the image */
+}
+
+.navbar a {
+    font-family: louis;
+    color: white;
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin: 0 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: 0;
+}
+
+.navbar a:hover {
+    opacity: 60%;
+    transition: 0.3s;
+}
+
+.logo {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 20;
+    width: 10px;
+}
+
+.logo img {
+    width: 30px;
+    height: auto;
+}
+
+/* .logo img:hover {
+    opacity: 50%;
+    transition: 0.3s ease-in-out;
+} */
+
+.iconProfile {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 20;
+}
+
+.iconProfile img {
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+}
+
+.iconProfile img:hover {
+    opacity: 50%;
+    transition: 0.3s ease-in-out;
+}
+
+.text-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 100;
+    padding-left: 5%;
+    padding-top: 0;
+    width: 100%;
+}
+
+.text-container h1 {
+    line-height: 0.9;
+    font-family: nexa;
+    font-size: 6rem;
+    color: white;
+    margin-bottom: 0;
+    font-weight: 800;
+}
+
+.text-container p {
+    line-height: 1.5;
+    font-family: louis;
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 5px;
+}
+
+/* Customize the scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 6px; /* Set the width of the scrollbar */
+    height: 6px; /* Set the height for horizontal scrollbar */
+  }
+  
+  /* Customize the scrollbar track (background) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Set track background color */
+    border-radius: 10px; /* Set rounded corners */
+  }
+  
+  /* Customize the scrollbar thumb (the draggable part) */
+  ::-webkit-scrollbar-thumb {
+    background: #1e271f; /* Set the color of the scrollbar thumb */
+    border-radius: 10px; /* Set rounded corners for the thumb */
+  }
+  
+  /* Optional: Add hover effect for the thumb */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333; /* Darker shade when hovered */
+  }
+
+  li {
+    font-family: louis;
+  }
+
+  .dropdown1 {
+    border-radius: 20px;
+  }
+
+  .inquiry-icon {
+   
+    width: 6vw;
+    position: fixed;
+    z-index: 999;
+    bottom: 4%;
+    right: 2%;
+  }
+
+  .inquiry-icon:hover {
+   opacity: 70%;
+   transition: 0.3s;
+  }
+
+  
+/* Media Queries for Responsiveness */
+
+/* Mobile Devices (portrait) */
+@media screen and (max-width: 480px) {
+    .scrollable-container {
+        flex-direction: column;  /* Stack the frames vertically */
+        gap: 10px;
+    }
+
+    .scroll-frame {
+        width: 90%;  /* Make the frames take up 90% of the screen */
+        max-width: 90%;  /* Ensuring they stay responsive */
+    }
+
+    .frame-title2 {
+        font-size: 1.2rem;  /* Smaller title on mobile */
+    }
+
+    .frame-text {
+        font-size: 1rem;  /* Smaller text for better mobile readability */
+    }
+}
+
+/* Tablet Devices (portrait and landscape) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .scrollable-container {
+        flex-direction: row;  /* Keep frames in a row, but add some space */
+        gap: 15px;
+    }
+
+    .scroll-frame {
+        width: 30%;  /* Use 30% of the screen width for each frame */
+        max-width: 30%;  /* Ensure they fit nicely */
+    }
+
+    .frame-title2 {
+        font-size: 1.3rem;  /* Adjust title size for tablet */
+    }
+
+    .frame-text {
+        font-size: 1.1rem;  /* Slightly smaller text for tablets */
+    }
+}
+
+/* Larger Devices (Desktops and Laptops) */
+@media screen and (min-width: 769px) {
+    .scrollable-container {
+        flex-direction: row;  /* Keep the frames in a row */
+        gap: 20px;
+    }
+
+    .scroll-frame {
+        width: 300px;  /* Keep the original width for larger screens */
+        max-width: 350px;
+    }
+
+    .frame-title2 {
+        font-size: 1.5rem;  /* Larger title for desktop */
+    }
+
+    .frame-text {
+        font-size: 1.2rem;  /* Adjust text size for larger screens */
+    }
+}
+
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .modal-left, .modal-right {
+        padding: 10px;
+        flex: none;
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+
+    .frames-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .frame {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+/* Frame and Modal */
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+    /* Navbar */
+    .navbar {
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px;
+    }
+
+    .navbar a {
+        font-size: 0.9rem;
+        margin: 0 5px;
+    }
+
+    /* Logo */
+    .logo {
+        top: 10px;
+        left: 10px;
+    }
+
+    .logo img {
+        width: 40px;
+    }
+
+    /* Profile Icon */
+    .iconProfile {
+        top: 10px;
+        right: 10px;
+    }
+
+    .iconProfile img {
+        width: 25px;
+    }
+
+    /* Text Container */
+    .text-container h1 {
+        font-size: 2rem;
+    }
+
+    .text-container p {
+        font-size: 1rem;
+    }
+
+    .btnConsult {
+        font-size: 1rem;
+        padding: 5px 30px 5px 30px;
+    }
+
+    /* BGHome Image */
+    .BGhome {
+        height: 100%;
+    }
+
+    /* Page Two */
+    .PageTwo-container {
+        padding: 8vh 3vw;
+    }
+
+    .logoHeader {
+        width: 40px;
+        margin-bottom: 10px;
+    }
+
+    .txtAbout-container {
+        max-width: 80%;
+    }
+
+    .txtAbout {
+        font-size: 0.9rem;
+    }
+}
+
+/* Media Query for Small Mobile Devices */
+@media (max-width: 480px) {
+    .navbar {
+        top: 10px;
+        padding: 8px;
+    }
+
+    .navbar a {
+        font-size: 0.75rem;
+    }
+
+    /* Logo */
+    .logo {
+        top: 5px;
+        left: 5px;
+        z-index: 999;
+    }
+
+    .logo img {
+        width: 35px;
+    }
+
+    /* Profile Icon */
+    .iconProfile {
+        top: 5px;
+        right: 5px;
+    }
+
+    .iconProfile img {
+        width: 25px;
+    }
+
+    /* Text Container */
+    .text-container h1 {
+        font-size: 3rem;
+    }
+
+    .text-container p {
+        font-size: 0.9rem;
+    }
+
+    .btnConsult {
+        font-size: 0.9rem;
+        padding: 5px 25px 5px 25px;
+    }
+
+    /* Page Two */
+    .PageTwo-container {
+        padding: 7vh 2vw;
+    }
+
+    .logoHeader {
+        width: 40px;
+        margin-bottom: 10px;
+    }
+
+    .txtAbout-container {
+        max-width: 90%;
+    }
+
+    .txtAbout {
+        font-size: 0.85rem;
+    }
+}
+
+/* Background container */
+.BGhome-container {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Background image */
+.BGhome {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+
+/* Required */

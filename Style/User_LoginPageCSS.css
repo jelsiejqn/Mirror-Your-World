@@ -1,0 +1,88 @@
+.loginForm {
+    margin-top: 150;
+    background-color: #f9f9f9;
+    max-width: 38%;
+    border-radius: 40px;
+}
+
+/* Text styling */
+.txt_Title, .txt_MYW, .txt_Desc {
+    z-index: 999;
+    position: relative;
+    color: #1e271f;
+}
+
+.txt_Title {
+    margin-bottom: 5vh;
+}
+
+.txt_MYW {
+    font-family: nexa;
+    font-size: 3rem;
+    margin-top: 3.5vh;
+}
+
+.txt_Desc {
+    font-family: louis;
+    margin-top: -8vh;
+}
+
+input, label {
+    
+    font-family: louis;
+    margin-bottom: 10px;
+    padding: 1px 5px 1px 5px;
+    
+}
+
+input {
+    height: 1.8rem;
+    width: 14rem;
+    border-radius: 5px;
+    border-style: solid;
+    opacity: 50%;
+}
+
+.btn_login {
+    margin-top: 15;
+    font-family: louis;
+    color: white;
+    background-color: #1e271f;
+    border-style: none;
+    border-radius: 20px;
+    padding: 10px 37px 10px 37px;
+    cursor: pointer;
+}
+
+.btn_login:hover {
+   opacity: 80%;
+   transition: 0.3s;
+}
+
+.existingacc, .a1 {
+    font-family: louis;
+}
+
+.existingacc {
+    opacity: 80%;
+}
+
+.a1 {
+    opacity: 60%;
+    text-decoration: none;
+    color: #1e271f;
+}
+
+.a1:hover {
+    opacity: 100%;
+    text-decoration: none;
+    color: #1e271f;
+    transition: 0.3s;
+}
+
+.field-icon {
+    top: 0;
+    width: 20px;
+    opacity: 80%;
+}
+
