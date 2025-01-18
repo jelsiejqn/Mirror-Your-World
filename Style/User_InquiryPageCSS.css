@@ -1,0 +1,791 @@
+
+
+.BGhome-container {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+}
+
+.BGhome {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btnConsult {
+    background-color: #1e271f;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 40px 5px 40px;
+    font-family: louis;
+    border-style: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btnConsult:hover {
+    opacity: 90%;
+    transition: 0.3s;
+}
+
+.PageTwo-container {
+    padding: 10%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 50px;
+    background-color: white;
+    padding: 10vh 5vw;
+    margin-top: -9vh;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoHeader-container {
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoHeader {
+    width: 50px;
+    margin-bottom: 3%;
+}
+
+
+
+.txtServices {
+    padding-top: 10%;
+    font-family: nexa;
+    color: #1e271f;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.txtServices-container {
+    align-items: center;
+    max-width: 45%;
+}
+
+
+
+/* Frame container */
+.frames-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.frame {
+    border:#ddd;
+    padding: 20px;
+    text-align: center;
+    width: 20%;
+    background-color: transparent;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.frame:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.frame-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.frame-title {
+    font-family: louis;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.frame-description {
+    font-family: louis;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.learn-more-btn {
+    background-color: #1e271f;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+    font-family: louis;
+}
+
+.learn-more-btn:hover {
+    background-color: #333;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding-top: 60px;
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-btn {
+    font-size: 2rem;
+    color: black;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-left {
+    flex: 1;
+    padding: 10px;
+}
+
+.modal-left img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.modal-right {
+    flex: 1;
+    padding: 10px;
+}
+
+.modal-right h3 {
+    font-family: Arial, sans-serif;
+    font-size: 1.5rem;
+}
+
+.modal-right p {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.text-container {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 100;
+    padding-left: 5%;
+    padding-top: 0;
+    width: 100%;
+    display: block;
+}
+
+.text-container h1 {
+    line-height: 0.9;
+    font-family: nexa;
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 0;
+    font-weight: 800;
+}
+
+.text-container p {
+    line-height: 1.5;
+    font-family: louis;
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 5px;
+}
+
+/* Position h2 on the far right */
+.text-container h2 {
+    line-height: 100%;
+    text-align: right;
+    position: absolute;
+    right: 10%; /* Align it 5% from the right side */
+    top: 50%; /* Vertically center it */
+    transform: translateY(-50%);
+    font-family: louis;
+    font-size: 1.2rem;
+    color: white;
+    margin: 0;
+}
+
+/* Position btn-email on the far right */
+.btn-email {
+   
+    position: absolute;
+    right: 10%; /* Align it 5% from the right side */
+    top: 65%; /* You can adjust this value based on how high/low you want the button */
+    transform: translateY(-50%);
+    font-family: louis;
+    background-color: #1e271f;
+    color: white;
+    padding: 7px 35px;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-email:hover {
+    opacity: 80%;
+    transition: 0.3s;
+}
+
+
+.Footer-container {
+    margin-top: -5vh;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+}
+
+.BGhome {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btnConsult {
+    background-color: #1e271f;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 40px 5px 40px;
+    font-family: louis;
+    border-style: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btnConsult:hover {
+    opacity: 90%;
+    transition: 0.3s;
+}
+
+
+
+
+/* Optional: Remove custom scroll bar if no longer needed */
+.scrollable-container::-webkit-scrollbar {
+    display: none;  /* Hide the scrollbar */
+}
+
+table {
+    margin-bottom: 7%;
+}
+
+tr {
+
+
+}
+
+td {
+    padding: 0px 20px 0px 20px;
+}
+
+.navbar-link {
+    font-family: louis;
+    text-decoration: none;
+    color: #1e271f
+}
+
+.navbar-link:hover {
+    opacity: 70%;
+    transition: 0.3s;
+}
+.faq-container {
+    width: 70vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Adjusted min-width to 180px for smaller frames */
+    gap: 10px; /* Reduced horizontal and vertical gap */
+    padding: 0px;
+    justify-items: stretch;
+    grid-auto-rows: minmax(80px, auto);
+}
+
+/* FAQ frames with smaller size */
+.faq-frame {
+    margin-bottom: 30%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 10px; /* Adjusted padding for better fit */
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%; /* Let the height be flexible */
+    width: 80%; /* Let the width fill the grid cell */
+}
+
+.faq-frame:hover {
+    background-color: #ddd;
+}
+
+.faq-frame p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Modal styles */
+.faq-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.faq-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+.faq-close {
+    font-size: 26px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.faq-close:hover {
+    color: red;
+}
+
+.faq-modal h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+p {
+    font-size: 10vw;
+    color: #1e271f;
+    font-family: louis;
+
+}
+
+.faq-modal p {
+    font-size: 10vw;
+    color: #1e271f;
+    font-family: louis;
+
+}
+
+/* Modal fade-in effect */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Media queries for different screen sizes */
+
+/* Small screens (mobile) */
+@media (max-width: 600px) {
+    .faq-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Further reduce width on mobile */
+        padding: 5px;
+    }
+
+    .faq-frame p {
+        font-size: 12px;
+    }
+
+    .faq-modal-content {
+        max-width: 90%;
+    }
+
+    .faq-modal h2 {
+        font-size: 18px;
+    }
+
+    .faq-modal p {
+        font-size: 10px;
+    }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .faq-container {
+        grid-template-columns: repeat(2, 1fr); /* Two columns for tablets */
+    }
+
+    .faq-frame p {
+        font-size: 14px;
+    }
+
+    .faq-modal-content {
+        max-width: 80%;
+    }
+
+    .faq-modal h2 {
+        font-size: 20px;
+    }
+
+    .faq-modal p {
+        font-size: 12px;
+    }
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1025px) {
+    .faq-container {
+        grid-template-columns: repeat(3, 1fr); /* Three columns for desktops */
+    }
+
+    .faq-frame p {
+        font-size: 14px;
+    }
+
+    .faq-modal-content {
+        max-width: 400px;
+    }
+
+    .faq-modal h2 {
+        font-size: 20px;
+    }
+
+    .faq-modal p {
+        font-size: 12px;
+    }
+}
+
+.material-scroll-container {
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(4, 1fr); /* Default: 4 columns */
+    gap: 10px;
+    padding: 10px;
+    scroll-behavior: smooth;
+    width: 100%;
+}
+
+/* Adjust the grid for smaller screens */
+@media (max-width: 1200px) {
+    .material-scroll-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for screens smaller than 1200px */
+    }
+}
+
+@media (max-width: 900px) {
+    .material-scroll-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for screens smaller than 900px */
+    }
+}
+
+@media (max-width: 600px) {
+    .material-scroll-container {
+        grid-template-columns: 1fr; /* 1 column for screens smaller than 600px */
+    }
+}
+
+.uparrow {
+    width: 2.5vw;
+    z-index: 999;
+    position: fixed;
+    bottom: 2vw;
+    left: 2vw;
+}
+
+.uparrow:hover {
+ opacity: 80%;
+}
+
+
+/* Hide the tooltip by default */
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    top: -30px; /* Adjust position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show the tooltip on hover */
+.back-to-top:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.materials-title {
+    margin-top: 10vh;
+    font-family: louis;
+}
+.material-frame {
+    height: 50vh;
+    width: 40vh;
+    background: #f9f9f9;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.material-frame:hover {
+    opacity: 80%;
+    transition: 0.3s ease-in-out;
+}
+
+
+
+.material-frame img {
+    width: 90%;
+    height: 70%;
+    border-radius: 8px;
+    margin-bottom: 1vh;
+}
+
+.material-frame-title {
+    margin: 2px;
+    text-align: left;
+    font-family: louis;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.material-frame-subtitle {
+    margin: 2px;
+    text-align: left;
+    font-family: louis;
+    font-size: 1em;
+    color: #555;
+}
+
+.material-frame-description {
+    margin: 2px;
+    text-align: left;
+    font-family: louis;
+    font-size: 0.9em;
+    color:green;
+}
+
+/* Modal Styles */
+.material-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.material-modal {
+    background: #fff;
+    width: 100vh;
+    height: 70vh;
+    padding: 1%;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.material-modal-left {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+}
+
+.material-modal-left img {
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    border-radius: 8px;
+}
+
+.material-modal-status {
+    font-family: louis;
+    text-align: center;
+    margin-top: 1%;
+    font-weight: bold;
+    color: green;
+}
+
+.material-modal-right {
+    flex: 1;
+    padding: 20px;
+}
+
+.material-modal-right-title {
+    font-family: nexa;
+    text-align: left;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.material-modal-details {
+    font-family: louis;
+    text-align: left;
+    font-size: 1em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.material-modal-close {
+    position: absolute;
+    margin: 10;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.policies-container {
+
+}
+
+.txtPolicies {
+    padding-top: 10%;
+    font-family: nexa;
+    color: #1e271f;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.policy-container {
+    width: 50vw;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.policy-header {
+    font-family: louis;
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.policy-section {
+    margin-bottom: 5vw;
+    font-family: louis;
+}
+
+.policy-section-header {
+    font-family: louis;
+    font-size: 1.6em;
+    color: #1e271f;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.policy-item {
+    font-family: louis;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.policy-item span {
+    font-family: louis;
+    font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .policy-header {
+        font-size: 1.8em;
+    }
+
+    .policy-container {
+        padding: 15px;
+    }
+
+    .policy-section-header {
+        font-size: 1.4em;
+    }
+
+    .policy-item {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    .policy-header {
+        font-size: 1.6em;
+    }
+
+    .policy-container {
+        padding: 10px;
+    }
+
+    .policy-section-header {
+        font-size: 1.2em;
+    }
+
+    .policy-item {
+        font-size: 0.9em;
+    }
+}

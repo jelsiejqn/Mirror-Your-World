@@ -1,5 +1,5 @@
 .loginForm {
-    margin-top: 150;
+    margin-top: 10%;
     background-color: #f9f9f9;
     max-width: 38%;
     border-radius: 40px;
@@ -24,7 +24,7 @@
 
 .txt_Desc {
     font-family: louis;
-    margin-top: -8vh;
+    margin-top: -7vh;
 }
 
 input, label {

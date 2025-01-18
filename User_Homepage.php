@@ -13,9 +13,9 @@
     <!-- Required -->
 
     <div class="navbar">
-        <a href="User_Homepage.html">About</a>
-        <a href="User_Contactpage.html">Contact</a>
-        <a href="User_Showcase.html">Showcase</a>
+        <a href="User_Homepage.php">About</a>
+        <a href="User_Contactpage.php">Contact</a>
+        <a href="User_Showcase.php">Showcase</a>
     </div>
 
     <div class="logo">
@@ -30,15 +30,15 @@
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="User_LoginPage.html" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
+                <a href="User_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_SignupPage.html" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
+                <a href="User_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
             </li>
         </ul>
     </div>
 
-    <a href="User_InquiryPage.html">
+    <a href="User_InquiryPage.php">
         <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
     </a>
 
@@ -48,7 +48,7 @@
         <div class="text-container">
             <h1>Mirror Your <br>World.</h1>
             <p>Aluminum and Glass, <br /> Installation Services.</p>
-            <button class="btnConsult" onclick="window.location.href='User_FormsPage.html';">Consult</button>
+            <button class="btnConsult" onclick="window.location.href='User_FormsPage.php';">Consult</button>
 
         </div>
     
@@ -179,7 +179,7 @@
         <div class="text-container">
             <h1>Book a <br> consultation <br> now.</h1>
             <p>Got something specific to request? <a href="#"> Email us. </a> </p>
-            <button class="btnConsult" onclick="window.location.href='User_FormsPage.html';">Consult</button>
+            <button class="btnConsult" onclick="window.location.href='User_FormsPage.php';">Consult</button>
 
         </div>
     

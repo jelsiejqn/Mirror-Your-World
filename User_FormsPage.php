@@ -14,9 +14,9 @@
       <!-- Required -->
 
       <div class="navbar">
-        <a href="User_Homepage.html">About</a>
-        <a href="User_Contactpage.html">Contact</a>
-        <a href="User_Showcase.html">Showcase</a>
+        <a href="User_Homepage.php">About</a>
+        <a href="User_Contactpage.php">Contact</a>
+        <a href="User_Showcase.php">Showcase</a>
     </div>
 
     <div class="logo">
@@ -31,18 +31,18 @@
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="User_AccountPage.html" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
+                <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_ActiveBookings.html" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_Homepage.html" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                <a href="User_Homepage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
             </li>
         </ul>
     </div>
 
-    <a href="User_InquiryPage.html">
+    <a href="User_InquiryPage.php">
         <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
     </a>
 
