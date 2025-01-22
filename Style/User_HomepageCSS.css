@@ -332,3 +332,19 @@
 .scrollable-container::-webkit-scrollbar {
     display: none;  /* Hide the scrollbar */
 }
+
+.custom-swal-popup {
+    border-radius: 20px !important;
+    font-family: 'louis', sans-serif !important;
+}
+
+.custom-swal-title,
+.custom-swal-text {
+    font-family: 'louis', sans-serif !important;
+}
+
+.custom-swal-confirm,
+.custom-swal-cancel {
+    font-family: 'louis', sans-serif !important;
+}
+

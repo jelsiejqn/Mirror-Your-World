@@ -155,6 +155,7 @@
 }
 
 .close-btn {
+    align-items: right;
     font-size: 2rem;
     color: black;
     font-weight: bold;
@@ -788,4 +789,19 @@ p {
     .policy-item {
         font-size: 0.9em;
     }
+}
+
+.custom-swal-popup {
+    border-radius: 20px !important;
+    font-family: 'louis', sans-serif !important;
+}
+
+.custom-swal-title,
+.custom-swal-text {
+    font-family: 'louis', sans-serif !important;
+}
+
+.custom-swal-confirm,
+.custom-swal-cancel {
+    font-family: 'louis', sans-serif !important;
 }

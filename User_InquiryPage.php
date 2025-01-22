@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/User_InquiryPageCSS.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
@@ -363,8 +364,7 @@
         <div class="text-container">
             <h1>Book a <br> consultation <br> now.</h1>
             <p>Still got questions? <a href="#"> Email us. </a> </p>
-            <button class="btnConsult" onclick="window.location.href='User_FormsPage.php';">Consult</button>
-
+            <button class="btnConsult" onclick="showConsultAlert()">Consult</button>
         </div>
     
         <img src="Assets/bg_Footer.png" alt="Full-Screen Image" class="BGhome">
@@ -492,6 +492,32 @@ window.onclick = function(event) {
     }
 }
 
+function showConsultAlert() {
+    Swal.fire({
+        title: 'Are we the perfect fit for you?',
+        text: 'Please visit the FAQs page before proceeding!',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Proceed to Form',
+        cancelButtonText: 'Visit FAQs',
+        reverseButtons: true,
+        customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            content: 'custom-swal-text',
+            confirmButton: 'custom-swal-confirm',
+            cancelButton: 'custom-swal-cancel'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to the form page
+            window.location.href = 'User_FormsPage.php';
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            // Redirect to the FAQs page
+            window.location.href = 'User_InquiryPage.php';
+        }
+    });
+}
 
 
 </script>
