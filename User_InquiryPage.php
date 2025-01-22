@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+$isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,12 +37,24 @@
         
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="User_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
-            </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
-            </li>
+            <?php if ($isLoggedIn): ?>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                    <a href="User_ViewProfile.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
+                </li>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                    <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+                </li>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                    <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+            <?php else: ?>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                    <a href="User_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
+                </li>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                    <a href="User_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 
@@ -50,9 +69,8 @@
             <h1>Are we the <br>perfect fit <br> for you?</h1>
             <p>Frequently asked questions and <br /> inquiry page.</p>
 
-
             <h2> Still have questions? <br> Don't hesitate to email us!</h2>
-            <button class = "btn-email"> Email </button>
+            <button class="btn-email"> Email </button>
         </div>
     
         <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">
@@ -64,8 +82,6 @@
     <img src="Assets/icon_uparrow.png" class ="uparrow">
     <span class="tooltip">Go back to top</span>
 </a>
-
-
 
     <!-- Page 2 -->
 
@@ -84,13 +100,10 @@
                     <td> <a href="#section-materials" class ="navbar-link"> Available Materials </a> </td>
                     <td id ="section-faq"> <a href="#section-policies" class ="navbar-link"> Policies </a> </td>
                 </tr>
-                
             </table>
         </div>
 
-
-
-        <div class="faq-container" >
+        <div class="faq-container">
             <div class="faq-frame" id="faq-frame-1">
               <p>How do I book an appointment?</p>
             </div>
@@ -103,67 +116,48 @@
             <div class="faq-frame" id="faq-frame-4">
               <p>What services do you provide?</p>
             </div>
-            <div class="faq-frame" id="faq-frame-4">
+            <div class="faq-frame" id="faq-frame-5">
                 <p>Which areas do the company serve?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>Do you offer
-                    consultations?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>What is your 
-                    cancellation policy?s</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>What are the modes
-                    and terms of 
-                    payment?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>What should I do to
-                    prepare for the
-                    installation?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>How do I book an
-                    appointment?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>How long do the 
-                    installations take?</p>
-              </div>
-              <div class="faq-frame" id="faq-frame-4">
-                <p>What is the process
-                    after booking an
-                    appointment?</p>
-              </div>
-
-          </div>
+            </div>
+            <div class="faq-frame" id="faq-frame-6">
+                <p>Do you offer consultations?</p>
+            </div>
+            <div class="faq-frame" id="faq-frame-7">
+                <p>What is your cancellation policy?</p>
+            </div>
+            <div class="faq-frame" id="faq-frame-8">
+                <p>What are the modes and terms of payment?</p>
+            </div>
+            <div class="faq-frame" id="faq-frame-9">
+                <p>What should I do to prepare for the installation?</p>
+            </div>
+            <div class="faq-frame" id="faq-frame-10">
+                <p>How long do the installations take?</p>
+            </div>
+            <div class="faq-frame" id="faq-frame-11">
+                <p>What is the process after booking an appointment?</p>
+            </div>
+        </div>
         
-          <div class="faq-modal" id="faq-modal" style="display: none;">
+        <div class="faq-modal" id="faq-modal" style="display: none;">
             <div class="faq-modal-content">
               <span class="faq-close" id="faq-close">&times;</span>
               <h2 id="faq-modal-title">Title</h2>
               <p id="faq-modal-description">Description</p>
             </div>
-          </div>
+        </div>
 
-        <div class="txtServices-container"  id ="section-services"> 
-            <h2 class ="txtServices"> Services Offered </h2>
+        <div class="txtServices-container" id="section-services"> 
+            <h2 class="txtServices"> Services Offered </h2>
         </div>
 
         <div class="services-container">
-
-
             <div class="frames-container">
                 <!-- Frame 1 -->
                 <div class="frame" id="frame1">
                     <img src="Assets/icon_Aluminum.png" alt="Icon 1" class="frame-icon">
                     <h3 class="frame-title">Aluminum Installation</h3>
-                    <p class="frame-description">Lorem ipsum dolor sit amet, conse
-                        ctetur adipiscing elit, sed do eiusm
-                        od tempor incididunt ut labore et d
-                        olore magna aliqua.</p>
+                    <p class="frame-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <button class="learn-more-btn" onclick="openModal(1)">Learn More</button>
                 </div>
             
@@ -171,10 +165,7 @@
                 <div class="frame" id="frame2">
                     <img src="Assets/icon_Glass.png" alt="Icon 2" class="frame-icon">
                     <h3 class="frame-title">Glass Installation</h3>
-                    <p class="frame-description">SLorem ipsum dolor sit amet, conse
-                        ctetur adipiscing elit, sed do eiusm
-                        od tempor incididunt ut labore et d
-                        olore magna aliqua.</p>
+                    <p class="frame-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <button class="learn-more-btn" onclick="openModal(2)">Learn More</button>
                 </div>
             
@@ -182,10 +173,7 @@
                 <div class="frame" id="frame3">
                     <img src="Assets/icon_GlassandAluminum.png" alt="Icon 3" class="frame-icon">
                     <h3 class="frame-title">Aluminum and Glass <br> Installation</h3>
-                    <p class="frame-description">Lorem ipsum dolor sit amet, conse
-                        ctetur adipiscing elit, sed do eiusm
-                        od tempor incididunt ut labore et d
-                        olore magna aliqua.</p>
+                    <p class="frame-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <button class="learn-more-btn" onclick="openModal(3)">Learn More</button>
                 </div>
             </div>
@@ -195,12 +183,9 @@
                 <div class="modal-content">
                     <span class="close-btn" onclick="closeModal()">&times;</span>
                     <div class="modal-body">
-                        <!-- Modal image on the left -->
                         <div id="modal-left" class="modal-left">
                             <img src="" alt="Image" id="modal-image">
                         </div>
-            
-                        <!-- Modal description on the right -->
                         <div id="modal-right" class="modal-right">
                             <h3 id="modal-title">Title</h3>
                             <p id="modal-description">Detailed description of the content will go here.</p>
@@ -209,158 +194,102 @@
                 </div>
             </div>
 
-<center> 
+            <center> 
             <h2 class="materials-title" id="section-materials"> Available Materials </h2>
 
             <div class="material-scroll-container">
+                <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                    <img src="Assets/placeholder2.jpg"> 
+                    <div class="material-frame-title">Sample Title</div>
+                    <div class="material-frame-subtitle">Sample Subtitle</div>
+                    <div class="material-frame-description">Unavailable</div>
+                </div>
 
-            
+                <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                    <img src="Assets/placeholder1.jpg"> 
+                    <div class="material-frame-title">Sample Title</div>
+                    <div class="material-frame-subtitle">Sample Subtitle</div>
+                    <div class="material-frame-description">Available</div>
+                </div>
 
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-   
-    <img src="Assets/placeholder2.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Unavailable</div>
-    </div>
+                <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                    <img src="Assets/placeholder3.jpg"> 
+                    <div class="material-frame-title">Sample Title</div>
+                    <div class="material-frame-subtitle">Sample Subtitle</div>
+                    <div class="material-frame-description">Available</div>
+                </div>
 
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-        <img src="Assets/placeholder1.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
+                <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                    <img src="Assets/placeholder.jpg"> 
+                    <div class="material-frame-title">Sample Title</div>
+                    <div class="material-frame-subtitle">Sample Subtitle</div>
+                    <div class="material-frame-description">Available</div>
+                </div>
+            </div>
 
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder3.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
+            <div class="material-modal-overlay" id="material-modal">
+                <div class="material-modal">
+                    <button class="material-modal-close" onclick="closeMaterialModal()">&times;</button>
+                    <div class="material-modal-left">
+                        <img src="Assets/placeholder2.jpg">
+                        <div id="material-modal-status" class="material-modal-status">Available</div>
+                    </div>
+                    <div class="material-modal-right">
+                        <div id="material-modal-title" class="material-modal-right-title">Title Here</div>
+                        <div id="material-modal-detail1" class="material-modal-details">Detail 1: Information</div>
+                        <div id="material-modal-detail2" class="material-modal-details">Detail 2: Information</div>
+                        <div id="material-modal-detail3" class="material-modal-details">Detail 3: Information</div>
+                        <div id="material-modal-detail4" class="material-modal-details">Detail 4: Information</div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
-
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
-    <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-    <img src="Assets/placeholder.jpg"> 
-        <div class="material-frame-title">Sample Title</div>
-        <div class="material-frame-subtitle">Sample Subtitle</div>
-        <div class="material-frame-description">Available</div>
-    </div>
-
-    
-
-    
-    
-    <!-- add more if kailangan -->
-
-
-</div>
-
-<div class="material-modal-overlay" id="material-modal">
-    <div class="material-modal">
-        <button class="material-modal-close" onclick="closeMaterialModal()">&times;</button>
-        <div class="material-modal-left">
-            <img src="Assets/placeholder2.jpg">
-            <div id="material-modal-status" class="material-modal-status">Available</div>
+            <div class="policies-container">
+                <h2 class="txtPolicies" id="section-policies"> Policies </h2>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">1. Booking Policy</h2>
+                    <div class="policy-item"><span>Advance Booking:</span> Appointments should be booked at least [X days/weeks] in advance to ensure availability.</div>
+                    <div class="policy-item"><span>Required Information:</span> Customers must provide accurate details during booking, including location, service type, and contact information.</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">2. Cancellation and Rescheduling Policy</h2>
+                    <div class="policy-item"><span>Cancellation Deadline:</span> Cancellations must be made at least [X hours/days] before the appointment. Failure to do so may result in a cancellation fee.</div>
+                    <div class="policy-item"><span>Rescheduling Policy:</span> Rescheduling is allowed with at least [X hours/days] notice, subject to availability.</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">3. Payment Policy</h2>
+                    <div class="policy-item"><span>Deposit:</span> A [percentage or fixed amount] deposit is required to secure your appointment, payable via [list payment methods].</div>
+                    <div class="policy-item"><span>Full Payment:</span> The remaining balance is due upon project completion or as per the agreement.</div>
+                    <div class="policy-item"><span>Accepted Payment Methods:</span> We accept cash, bank transfers, and online payment methods like [specific platforms].</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">4. Warranty Policy</h2>
+                    <div class="policy-item"><span>Workmanship Warranty:</span> We provide a [X-year] warranty on all installations for defects in materials and workmanship.</div>
+                    <div class="policy-item"><span>Exclusions:</span> The warranty does not cover damages caused by misuse, accidents, or natural wear and tear.</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">5. Service Area Policy</h2>
+                    <div class="policy-item"><span>Covered Areas:</span> We primarily serve [list of locations]. If you’re outside this area, additional charges may apply for travel.</div>
+                    <div class="policy-item"><span>Additional Fees:</span> Projects outside the service area may incur extra travel or transportation fees.</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">6. Project Preparation Policy</h2>
+                    <div class="policy-item"><span>Customer Responsibilities:</span> Customers must ensure the installation area is clear, accessible, and free of obstacles before the scheduled appointment.</div>
+                    <div class="policy-item"><span>Site Access:</span> If our team is unable to access the site, a rebooking fee may apply.</div>
+                </div>
+                <div class="policy-section">
+                    <h2 class="policy-section-header">7. Privacy Policy</h2>
+                    <div class="policy-item"><span>Data Usage:</span> We collect and store customer information solely for booking and service purposes. Your data will not be shared with third parties without consent.</div>
+                    <div class="policy-item"><span>Security Measures:</span> We use secure platforms to protect your personal and payment information.</div>
+                </div>
+            </div>
         </div>
-        <div class="material-modal-right">
-            <div id="material-modal-title" class="material-modal-right-title">Title Here (pero yung variable)</div>
-            <div id="material-modal-detail1" class="material-modal-details">Detail 1: Information</div>
-            <div id="material-modal-detail2" class="material-modal-details">Detail 2: Information</div>
-            <div id="material-modal-detail3" class="material-modal-details">Detail 3: Information</div>
-            <div id="material-modal-detail4" class="material-modal-details">Detail 4: Information</div>
-        </div>
-    </div>
-</div>
-
-<div class="policies-container">
-
-<h2 class="txtPolicies" id="section-policies"> Policies </h2>
-   
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">1. Booking Policy</h2>
-        <div class="policy-item"><span>Advance Booking:</span> Appointments should be booked at least [X days/weeks] in advance to ensure availability.</div>
-        <div class="policy-item"><span>Required Information:</span> Customers must provide accurate details during booking, including location, service type, and contact information.</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">2. Cancellation and Rescheduling Policy</h2>
-        <div class="policy-item"><span>Cancellation Deadline:</span> Cancellations must be made at least [X hours/days] before the appointment. Failure to do so may result in a cancellation fee.</div>
-        <div class="policy-item"><span>Rescheduling Policy:</span> Rescheduling is allowed with at least [X hours/days] notice, subject to availability.</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">3. Payment Policy</h2>
-        <div class="policy-item"><span>Deposit:</span> A [percentage or fixed amount] deposit is required to secure your appointment, payable via [list payment methods].</div>
-        <div class="policy-item"><span>Full Payment:</span> The remaining balance is due upon project completion or as per the agreement.</div>
-        <div class="policy-item"><span>Accepted Payment Methods:</span> We accept cash, bank transfers, and online payment methods like [specific platforms].</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">4. Warranty Policy</h2>
-        <div class="policy-item"><span>Workmanship Warranty:</span> We provide a [X-year] warranty on all installations for defects in materials and workmanship.</div>
-        <div class="policy-item"><span>Exclusions:</span> The warranty does not cover damages caused by misuse, accidents, or natural wear and tear.</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">5. Service Area Policy</h2>
-        <div class="policy-item"><span>Covered Areas:</span> We primarily serve [list of locations]. If you’re outside this area, additional charges may apply for travel.</div>
-        <div class="policy-item"><span>Additional Fees:</span> Projects outside the service area may incur extra travel or transportation fees.</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">6. Project Preparation Policy</h2>
-        <div class="policy-item"><span>Customer Responsibilities:</span> Customers must ensure the installation area is clear, accessible, and free of obstacles before the scheduled appointment.</div>
-        <div class="policy-item"><span>Site Access:</span> If our team is unable to access the site, a rebooking fee may apply.</div>
-    </div>
-
-    <div class="policy-section">
-        <h2 class="policy-section-header">7. Privacy Policy</h2>
-        <div class="policy-item"><span>Data Usage:</span> We collect and store customer information solely for booking and service purposes. Your data will not be shared with third parties without consent.</div>
-        <div class="policy-item"><span>Security Measures:</span> We use secure platforms to protect your personal and payment information.</div>
-    </div>
-
-</div>
-
-
-
-</div>
-
-
     </center>
-
     
-      
     </div>
 </div>
-
 
     <div class="Footer-container">
-
         <div class="text-container">
             <h1>Book a <br> consultation <br> now.</h1>
             <p>Still got questions? <a href="#"> Email us. </a> </p>
@@ -519,6 +448,56 @@ function showConsultAlert() {
     });
 }
 
+function showConsultAlert() {
+    // Check if the user is logged in
+    <?php if ($isLoggedIn): ?>
+        Swal.fire({
+            title: 'Are we the perfect fit for you?',
+            text: 'Please visit the FAQs page before proceeding!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Proceed to Form',
+            cancelButtonText: 'Visit FAQs',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_FormsPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_InquiryPage.php';
+            }
+        });
+    <?php else: ?>
+        Swal.fire({
+            title: 'Please Log In or Sign Up first',
+            text: 'You need to be logged in to proceed with the consultation.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Log In',
+            cancelButtonText: 'Sign Up',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_LoginPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_SignupPage.php'; // Redirect to signup page
+            }
+        });
+    <?php endif; ?>
+}
 
 </script>
 </html>
