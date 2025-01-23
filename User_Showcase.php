@@ -121,6 +121,33 @@
       
     </div>
 
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+    
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+
 
 </div>
 
@@ -200,6 +227,7 @@
     </div>
 </div>
 
+
 </div>
 </div>
 
@@ -217,7 +245,7 @@
   </blockquote>
   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample3.jpg" alt="sq-sample3" />
   <div class="author">
-    <h5>Pelican Steve <span> LIttleSnippets.net</span></h5>
+  <h5>Max Conversion<span> Property Owner </span></h5>
   </div>
 </figure>
 
@@ -228,7 +256,7 @@
   </blockquote>
   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample27.jpg" alt="sq-sample27" />
   <div class="author">
-    <h5>Max Conversion<span> LIttleSnippets.net</span></h5>
+    <h5>Max Conversion<span> Property Owner </span></h5>
   </div>
 </figure>
 
@@ -239,7 +267,7 @@
   </blockquote>
   <img src="Assets/client1.jpg" alt="sq-sample17" />
   <div class="author">
-    <h5>Eleanor Faint<span> LIttleSnippets.net</span></h5>
+    <h5>Eleanor Faint<span> Property Owner </span></h5>
   </div>
 </figure>
 
@@ -249,7 +277,7 @@
   </blockquote>
   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
   <div class="author">
-    <h5>Eleanor Faint<span> LIttleSnippets.net</span></h5>
+    <h5>Eleanor Faint<span> Property Owner </span></h5>
   </div>
 </figure>
 
@@ -259,7 +287,7 @@
   </blockquote>
   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
   <div class="author">
-    <h5>Eleanor Faint<span> LIttleSnippets.net</span></h5>
+    <h5>Eleanor Faint<span> Property Owner </span></h5>
   </div>
 </figure>
 
@@ -269,7 +297,7 @@
   </blockquote>
   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
   <div class="author">
-    <h5>Eleanor Faint<span> LIttleSnippets.net</span></h5>
+    <h5>Eleanor Faint<span> Property Owner </span></h5>
   </div>
 </figure>
 

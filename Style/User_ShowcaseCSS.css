@@ -80,17 +80,16 @@ body {
 /* Frame container */
 .frames-container {
     width: 80%;
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
+    gap: 20px; /* Space between the frames */
     margin: 20px 0;
 }
 
 .frame {
-    border:#ddd;
+    border: #ddd;
     padding: 20px;
     text-align: center;
-    width: 20%;
-    height:30%;
     background-color: transparent;
     border-radius: 8px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
@@ -132,21 +131,7 @@ body {
     margin-top: -1vw;
 }
 
-.learn-more-btn {
-    background-color: #1e271f;
-    color: white;
-    border-radius: 20px;
-    padding: 5px 20px;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-    font-family: louis;
-}
 
-.learn-more-btn:hover {
-    background-color: #333;
-}
 
 /* Modal Styling */
 .modal {
@@ -765,15 +750,19 @@ figure.snip1157 {
     -webkit-transform: translateY(50%);
     transform: translateY(50%);
   }
-  figure.snip1157 .author h5 {
+  .author h5 {
+    font-family: nexa;
     opacity: 0.8;
     margin: 0;
     font-weight: 800;
+    color: #1e271f;
   }
-  figure.snip1157 .author h5 span {
-    font-weight: 400;
+ .author h5 span {
+    font-family: louis;
+    font-weight: 100;
     text-transform: none;
     padding-left: 5px;
+    color: #1e271f;
   }
 
   .wrapper {
