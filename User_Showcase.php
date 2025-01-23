@@ -91,52 +91,39 @@
 
         <h2 class="works-title"> Works </h2>
 <center> 
-<div class="material-scroll-container" >
 
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder2.jpg"> 
-<div class="material-frame-title">Company Name </div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
+<div class="frames-container">
+    
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+    
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder1.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+
+    <div class="frame" id="frame1">
+        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
+   
+        <p class="frame-description"> Company Name </p>
+        <p class="frame-date"> mm/yy/dd </p>
+        <p class="frame-info"> short description here. </p>
+      
+    </div>
+
+
 </div>
 
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder1.jpg"> 
-<div class="material-frame-title">Company Name</div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
-</div>
-
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder3.jpg"> 
-<div class="material-frame-title">Company Name</div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
-</div>
-
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder.jpg"> 
-<div class="material-frame-title">Company Name</div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
-</div>
-
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder.jpg"> 
-<div class="material-frame-title">Company Name</div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
-</div>
-
-<div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-<img src="Assets/placeholder.jpg"> 
-<div class="material-frame-title">Company Name</div>
-<div class="material-frame-subtitle">mm/dd/yyyy</div>
-<div class="material-frame-description">short description here</div>
-</div>
-
-<!-- add more if kailangan -->
-</div>
 
 <div class="material-modal-overlay" id="material-modal">
 <div class="material-modal">
@@ -168,74 +155,51 @@
       
 </center> 
 
-<h2 class="works-title" id ="section-clients"> Prominent Figures We've Worked With </h2>
+<h2 class="clients-title" id ="section-clients"> Prominent Figures We've Worked With </h2>
 
 <div class = "clients-container">
-<div class="wrapper2">
-  <div class="card">
-    <img src="Assets/client1.jpg" />
-    <h2 class="card-title">Pikachu</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/TkBFwhX/alakazam.png" />
-    <h2 class="card-title">Alakazam</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/fXsLm23/arbok.png" />
-    <h2 class="card-title">Arbok</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/gwdv5nV/bulbasaur.png" />
-    <h2 class="card-title">Bulbasaur</h2>
-  </div>
-  <div class="card"><img src="https://i.ibb.co/ZKqChM6/butterfree.png" />
-    <h2 class="card-title">Butterfree</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/89F8Kct/charmander.png" />
-    <h2 class="card-title">Charmander</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/b6WPmYn/exeggutor.png" />
-    <h2 class="card-title">Exeguttor</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/51SCFG1/voltorb.png" />
-    <h2 class="card-title">Voltorb</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/r7j7Tq7/jigglypuff.png" />
-    <h2 class="card-title">Jigglypuff</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/mcFQ5jZ/magikarp.png" />
-    <h2 class="card-title">Magikarp</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/4VysCs0/meowth.png" />
-    <h2 class="card-title">Meowth</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/zXz0LZ7/pidgeotto.png" />
-    <h2 class="card-title">Pidgeotto</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/xmz6Q7b/snorlax.png" />
-    <h2 class="card-title">Snorlax</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/8Y9v7tF/squirtle.png" />
-    <h2 class="card-title">Squirtle</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/Y3287sv/starmie.png" />
-    <h2 class="card-title">Starmie</h2>
-  </div>
-  <div class="card">
-    <img src="https://i.ibb.co/x3cBmSZ/venonat.png" />
-    <h2 class="card-title">Venonat</h2>
-  </div>
+<div class = "wrapper2">
   
+<div class="card">
+    <img src="Assets/client1.jpg" />
+    <div class = "card-descriptions">
+    <h2 class="card-title">Client Name</h2>
+    <h3 class="card-subtitle">Property Owner</h3>
+    <br>
+    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
+    </div>
+</div>
+
+<div class="card">
+    <img src="Assets/client2.jpg" />
+    <div class = "card-descriptions">
+    <h2 class="card-title">Client Name</h2>
+    <h3 class="card-subtitle">Property Owner</h3>
+    <br>
+    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
+    </div>
+</div>
+
+<div class="card">
+    <img src="Assets/client3.jpg" />
+    <div class = "card-descriptions">
+    <h2 class="card-title">Client Name</h2>
+    <h3 class="card-subtitle">Property Owner</h3>
+    <br>
+    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
+    </div>
+</div>
+
+<div class="card">
+    <img src="Assets/client4.jpg" />
+    <div class = "card-descriptions">
+    <h2 class="card-title">Client Name</h2>
+    <h3 class="card-subtitle">Property Owner</h3>
+    <br>
+    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
+    </div>
+</div>
+
 </div>
 </div>
 

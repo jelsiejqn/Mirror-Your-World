@@ -79,6 +79,7 @@ body {
 
 /* Frame container */
 .frames-container {
+    width: 80%;
     display: flex;
     justify-content: space-around;
     margin: 20px 0;
@@ -89,9 +90,10 @@ body {
     padding: 20px;
     text-align: center;
     width: 20%;
+    height:30%;
     background-color: transparent;
     border-radius: 8px;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .frame:hover {
@@ -99,8 +101,8 @@ body {
 }
 
 .frame-icon {
-    width: 60px;
-    height: 60px;
+    width: 15vw;
+    height: 15vw;
 }
 
 .frame-title {
@@ -110,9 +112,24 @@ body {
 }
 
 .frame-description {
+    text-align: left;
     font-family: louis;
     font-size: 1rem;
     margin-top: 10px;
+}
+
+.frame-date {
+    text-align: left;
+    font-family: louis;
+    font-size: 1rem;
+    margin-top: -1vw;
+}
+
+.frame-info {
+    text-align: left;
+    font-family: louis;
+    font-size: 1rem;
+    margin-top: -1vw;
 }
 
 .learn-more-btn {
@@ -468,8 +485,13 @@ p {
     font-family: louis;
 }
 
+.clients-title {
+    margin-top: 20vh;
+    font-family: louis;
+}
+
 .reviews-title {
-    margin-top: 10vh;
+    margin-top: 20vh;
     font-family: louis;
 }
 .material-frame {
@@ -775,51 +797,73 @@ figure.snip1157 {
   }
   
   .card {
+    z-index: 1;
     margin: 0 3vw;
-    width: 20vw;
+    width: 30vw;
+    height: 18vw;
     flex-shrink: 0;
     padding: 2vw;
     box-sizing: border-box;
-    position: relative;
-   border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+    position: relative;  /* Makes the card a reference point for absolute positioning */
+    border-radius: 20px;
+    display: flex;  /* Enables flexbox layout */
+    justify-content: flex-start;  /* Aligns children to the left */
+    align-items: center;  /* Vertically centers children */
+    flex-direction: row;  /* Places items side by side (left to right) */
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
   }
   
-  .card-title {
-    transition: .3s;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    margin: 2vw 0 0;
-    font-size: 2.8vw;
-    opacity: 0;
-    transform: scale(.7);
+  .card img {
+    z-index: 10;
+    max-width: 40%;  /* Adjust width of the image as needed */
+    max-height: 50vh;
+    margin-right: 20;  /* Removes any margin */
+    display: block;
+    object-fit: cover;  /* Ensures image covers the area without distortion */
   }
   
-  .card img {
-    z-index: 999;
-    max-width: 70%;
-    max-height: 50vh;
-    opacity: 0;
-    margin: auto;
-    display: block;
-    transition: .35s;
-    transform: rotate(6deg) translate(0, 40px) scaleY(.6);
+  .card-description {
+    z-index: 10;  /* Ensures they appear above the image */
+    color: gray;
+    text-align: left;  /* Align text to the left */
+    font-family: louis;
+    margin: 0;
+    font-size: 1.4vw;
+    left: 2vw;  /* Adds some padding to the left to separate text from image */
   }
+
+  .card-title {
+    text-align: left; 
+    font-size: 1.5vw;
+    font-family: louis;
+  }
+  
+  .card-subtitle {
+   transform: translate(0%, -100%);
+    text-align: left; 
+    font-size: 1vw;  /* Adjust the subtitle font size */
+    font-family: louis;
+  }
+
+  .card-info {
+    transform: translate(0%, -100%);
+     text-align: left; 
+     font-size: 1vw;  /* Adjust the subtitle font size */
+     font-family: louis;
+   }
+  
 
   
   .card:last-child:after {
     content: "";
-    width: 6vw;
+    width: 1vw;
     position: absolute;
     height: 100%;
-    right: -6vw;
+    right: -1vw;
     top: 0;
   }
   
   .card:first-child {
-    margin-left: 6vw;
+    margin-left: 1vw;
   }
   
