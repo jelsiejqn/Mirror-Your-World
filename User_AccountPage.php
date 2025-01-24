@@ -73,6 +73,8 @@
         <h3>Full Name: John Doe</h3>
         <h3>Email: email*****@gmail.com</h3>
         <h3>Username: @johndoe</h3>
+        <h3>Company: UST</h3>
+        <h3>Contact Number: 09153628520</h3>
     </div>
 </div>
 
