@@ -18,7 +18,7 @@ $username = $_SESSION['username'];
 include 'dbconnect.php';
 
 // Fetch additional user information from the database
-$query = "SELECT first_name, last_name, email, company_name,contact_number FROM userstbl WHERE user_id = ?"; // Use 'user_id' instead of 'id'
+$query = "SELECT first_name, last_name, email, company_name, contact_number, username FROM userstbl WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $user_id); // 'i' indicates integer type for 'user_id'
 $stmt->execute();
@@ -34,6 +34,133 @@ if ($result->num_rows > 0) {
     exit;
 }
 
+// Handle form submission to update user details
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Update Basic Information (Full Name, Email, Company Name, Contact Number)
+    if (isset($_POST['update_basic_info'])) {
+        $full_name = $_POST['full_name'];
+        $email = $_POST['email'];
+        $company_name = $_POST['company_name'];
+        $contact_number = $_POST['contact_number'];
+
+        // Split the full name into first and last names
+        list($first_name, $last_name) = explode(" ", $full_name, 2); 
+
+        // Update query for basic information
+        $update_query = "UPDATE userstbl SET first_name = ?, last_name = ?, email = ?, company_name = ?, contact_number = ? WHERE user_id = ?";
+        $stmt = $conn->prepare($update_query);
+        $stmt->bind_param('sssssi', $first_name, $last_name, $email, $company_name, $contact_number, $user_id);
+
+        if ($stmt->execute()) {
+            // If update successful, refresh the page to reflect changes
+            header('Location: User_AccountPage.php');
+            exit;
+        } else {
+            // Handle error
+            echo "Error updating record: " . $conn->error;
+        }
+    }
+
+    // Update Username
+    if (isset($_POST['update_username'])) {
+        $new_username = $_POST['new_username'];
+
+        // Update query for username
+        $update_username_query = "UPDATE userstbl SET username = ? WHERE user_id = ?";
+        $stmt = $conn->prepare($update_username_query);
+        $stmt->bind_param('si', $new_username, $user_id);
+
+        if ($stmt->execute()) {
+            // If update successful, refresh the page to reflect changes
+            header('Location: User_AccountPage.php');
+            exit;
+        } else {
+            echo "Error updating username: " . $conn->error;
+        }
+    }
+
+    // Update Password
+    if (isset($_POST['update_password'])) {
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        if ($new_password === $confirm_password) {
+            // Check if current password is correct
+            $password_check_query = "SELECT password FROM userstbl WHERE user_id = ?";
+            $stmt = $conn->prepare($password_check_query);
+            $stmt->bind_param('i', $user_id);
+            $stmt->execute();
+            $stmt->bind_result($stored_password);
+            $stmt->fetch();
+
+            // Verify the password
+            if (password_verify($current_password, $stored_password)) {
+                // Update query for password
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $update_password_query = "UPDATE userstbl SET password = ? WHERE user_id = ?";
+                $stmt = $conn->prepare($update_password_query);
+                $stmt->bind_param('si', $hashed_password, $user_id);
+
+                if ($stmt->execute()) {
+                    // If update successful, refresh the page to reflect changes
+                    header('Location: User_AccountPage.php');
+                    exit;
+                } else {
+                    echo "Error updating password: " . $conn->error;
+                }
+            } else {
+                echo "Current password is incorrect!";
+            }
+        } else {
+            echo "New passwords do not match!";
+        }
+    }
+
+    // Handle Profile Picture Update (if necessary)
+    if (isset($_FILES['profile_picture'])) {
+        $profile_picture = $_FILES['profile_picture']['name'];
+        $target_dir = "uploads/"; // Specify your target directory
+        $target_file = $target_dir . basename($profile_picture);
+        $upload_ok = 1;
+
+        // Check file size (limit to 2MB)
+        if ($_FILES["profile_picture"]["size"] > 2000000) {
+            echo "Sorry, your file is too large.";
+            $upload_ok = 0;
+        }
+
+        // Allow certain file formats
+        $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        if ($image_file_type != "jpg" && $image_file_type != "png" && $image_file_type != "jpeg") {
+            echo "Sorry, only JPG, JPEG, and PNG files are allowed.";
+            $upload_ok = 0;
+        }
+
+        // Check if upload is allowed
+        if ($upload_ok == 0) {
+            echo "Sorry, your file was not uploaded.";
+        } else {
+            if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file)) {
+                // Update query for profile picture
+                $update_picture_query = "UPDATE userstbl SET profile_picture = ? WHERE user_id = ?";
+                $stmt = $conn->prepare($update_picture_query);
+                $stmt->bind_param('si', $target_file, $user_id);
+
+                if ($stmt->execute()) {
+                    // If update successful, refresh the page to reflect changes
+                    header('Location: User_AccountPage.php');
+                    exit;
+                } else {
+                    echo "Error updating profile picture: " . $conn->error;
+                }
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
+    }
+}
 ?>
 
 <html lang="en">
