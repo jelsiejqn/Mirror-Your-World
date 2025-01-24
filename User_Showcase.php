@@ -41,7 +41,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <?php if ($isLoggedIn): ?>
                 <li style="list-style: none; margin: 0; padding: 10px;">
-                    <a href="User_ViewProfile.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
+                    <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
                 </li>
                 <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
                     <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>

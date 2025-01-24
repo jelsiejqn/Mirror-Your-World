@@ -1,3 +1,41 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+$isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
+
+if (!$isLoggedIn) {
+    // If not logged in, redirect to the login page
+    header('Location: User_LoginPage.php');
+    exit;
+}
+
+// Fetch user data from the session
+$user_id = $_SESSION['user_id']; // Assuming the session stores 'user_id'
+$username = $_SESSION['username'];
+
+// Include database connection file
+include 'dbconnect.php';
+
+// Fetch additional user information from the database
+$query = "SELECT first_name, last_name, email, company_name,contact_number FROM userstbl WHERE user_id = ?"; // Use 'user_id' instead of 'id'
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $user_id); // 'i' indicates integer type for 'user_id'
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if the user exists
+if ($result->num_rows > 0) {
+    // Fetch the user data from the result
+    $user = $result->fetch_assoc();
+} else {
+    // If no user found, redirect to login page
+    header('Location: User_LoginPage.php');
+    exit;
+}
+
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -70,11 +108,13 @@
             <div class="about-me-info">
     <img src="Assets/client2.jpg" alt="Profile Image">
     <div>
-        <h3>Full Name: John Doe</h3>
-        <h3>Email: email*****@gmail.com</h3>
-        <h3>Username: @johndoe</h3>
-        <h3>Company: UST</h3>
-        <h3>Contact Number: 09153628520</h3>
+    <h3><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></h3>
+    <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
+    <h3><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></h3>
+    <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
+    <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
+
+
     </div>
 </div>
 
