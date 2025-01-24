@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Prepare the query to insert consultation data
-    $query = "INSERT INTO consultationstbl (user_id, consultation_type, appointment_date, appointment_time, special_requests) 
+    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, special_requests) 
               VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('issss', $user_id, $consultation_type, $appointment_date, $appointment_time, $special_requests);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Execute and handle success/error
     if ($stmt->execute()) {
         // Log the action in the logstbl
-        $action_type = 'Consultation Submission';
+        $action_type = 'Appointment';
         $log_query = "INSERT INTO logstbl (user_id, action_type, action_timestamp) VALUES (?, ?, NOW())";
         $log_stmt = $conn->prepare($log_query);
         $log_stmt->bind_param('is', $user_id, $action_type);

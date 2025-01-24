@@ -1,3 +1,10 @@
+<?php
+session_start();
+// Check if the user is logged in
+$isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
+
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,12 +39,27 @@
         
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="User_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
-            </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
-            </li>
+            <?php if ($isLoggedIn): ?>
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="User_ViewProfile.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
+                </li>
+                <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
+                    <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+                </li>
+                
+                <form method="POST" action="User_Homepage.php">
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+                </form>
+            <?php else: ?>
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="User_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
+                </li>
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="User_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign Up</a>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 
@@ -473,32 +495,55 @@ function showConsultAlert() {
     });
 }
 
-// const cards = document.querySelectorAll(".card");
-
-// function isElementInViewport(el) {
-//   const rect = el.getBoundingClientRect();
-//   return (
-//     rect.top >= 0 &&
-//     rect.left >= 0 &&
-//     rect.bottom <=
-//       (window.innerHeight || document.documentElement.clientHeight) &&
-//     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-//   );
-// }
-
-// function isCardVisible() {
-//   for (card of cards) {
-//     isElementInViewport(card)
-//       ? card.classList.add("isVisible")
-//       : card.classList.remove("isVisible");
-//   }
-// }
-
-// document.addEventListener("DOMContentLoaded", isCardVisible);
-// window.addEventListener("scroll", isCardVisible);
-// window.addEventListener("resize", isCardVisible);
-
-
-
+function showConsultAlert() {
+    // Check if the user is logged in
+    <?php if ($isLoggedIn): ?>
+        Swal.fire({
+            title: 'Are we the perfect fit for you?',
+            text: 'Please visit the FAQs page before proceeding!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Proceed to Form',
+            cancelButtonText: 'Visit FAQs',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_FormsPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_InquiryPage.php';
+            }
+        });
+    <?php else: ?>
+        Swal.fire({
+            title: 'Please Log In or Sign Up first',
+            text: 'You need to be logged in to proceed with the consultation.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Log In',
+            cancelButtonText: 'Sign Up',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_LoginPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_SignupPage.php'; // Redirect to signup page
+            }
+        });
+    <?php endif; ?>
+}
 </script>
 </html>
