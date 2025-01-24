@@ -285,7 +285,6 @@ function showConsultAlert() {
         }
     });
 }
-s
 
 
 </script>
