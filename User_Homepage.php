@@ -251,33 +251,54 @@ window.onclick = function(event) {
 }
 
 function showConsultAlert() {
-    Swal.fire({
-        title: 'Are we the perfect fit for you?',
-        text: 'Please visit the FAQs page before proceeding!',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Proceed to Form',
-        cancelButtonText: 'Visit FAQs',
-        reverseButtons: true,
-        customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            content: 'custom-swal-text',
-            confirmButton: 'custom-swal-confirm',
-            cancelButton: 'custom-swal-cancel'
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect to the form page
-            window.location.href = 'User_FormsPage.php';
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Redirect to the FAQs page
-            window.location.href = 'User_InquiryPage.php';
-        }
-    });
+    // Check if the user is logged in
+    <?php if ($isLoggedIn): ?>
+        Swal.fire({
+            title: 'Are we the perfect fit for you?',
+            text: 'Please visit the FAQs page before proceeding!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Proceed to Form',
+            cancelButtonText: 'Visit FAQs',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_FormsPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_InquiryPage.php';
+            }
+        });
+    <?php else: ?>
+        Swal.fire({
+            title: 'Please Log In or Sign Up first',
+            text: 'You need to be logged in to proceed with the consultation.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Log In',
+            cancelButtonText: 'Sign Up',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                content: 'custom-swal-text',
+                confirmButton: 'custom-swal-confirm',
+                cancelButton: 'custom-swal-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'User_LoginPage.php';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = 'User_SignupPage.php'; // Redirect to signup page
+            }
+        });
+    <?php endif; ?>
 }
-s
-
-
 </script>
 </html>
