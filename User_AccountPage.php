@@ -75,7 +75,7 @@ if ($result->num_rows > 0) {
                 <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_Homepage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
             </li>
         </ul>
     </div>
