@@ -1,3 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | Mirror Your World </title>
+    <link rel="stylesheet" href="Style/User_AccountPageCSS.css" />
+    <link rel="stylesheet" href="Style/Required.css" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+</head>
+
+<body>
+
 <?php
 session_start();
 
@@ -18,7 +32,12 @@ $username = $_SESSION['username'];
 include 'dbconnect.php';
 
 // Fetch additional user information from the database
-$query = "SELECT first_name, last_name, email, company_name, contact_number, username FROM userstbl WHERE user_id = ?";
+$query = "SELECT first_name, last_name, email, company_name, contact_number, username, profile_picture FROM userstbl WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $user_id); // 'i' indicates integer type for 'user_id'
 $stmt->execute();
@@ -37,15 +56,13 @@ if ($result->num_rows > 0) {
 // Handle form submission to update user details
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Update Basic Information (Full Name, Email, Company Name, Contact Number)
+    // Update Basic Information (First Name, Last Name, Email, Company Name, Contact Number)
     if (isset($_POST['update_basic_info'])) {
-        $full_name = $_POST['full_name'];
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
         $email = $_POST['email'];
         $company_name = $_POST['company_name'];
         $contact_number = $_POST['contact_number'];
-
-        // Split the full name into first and last names
-        list($first_name, $last_name) = explode(" ", $full_name, 2); 
 
         // Update query for basic information
         $update_query = "UPDATE userstbl SET first_name = ?, last_name = ?, email = ?, company_name = ?, contact_number = ? WHERE user_id = ?";
@@ -61,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error updating record: " . $conn->error;
         }
     }
+
 
     // Update Username
     if (isset($_POST['update_username'])) {
@@ -163,29 +181,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings | Mirror Your World </title>
-
-
-    <link rel="stylesheet" href="Style/User_AccountPageCSS.css" />
-    <link rel="stylesheet" href="Style/Required.css" />
-
-</head>
-<body>
-    
-   <!-- Required -->
-
-   <div class="navbar">
+    <div class="navbar">
         <a href="User_Homepage.php">About</a>
         <a href="User_Contactpage.php">Contact</a>
         <a href="User_Showcase.php">Showcase</a>
     </div>
 
     <div class="logo">
-          <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px"> 
+        <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px"> 
     </div>
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
@@ -199,9 +202,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">My Appointments</a>
+                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
             </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
+            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
                 <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
             </li>
         </ul>
@@ -211,9 +214,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
     </a>
 
-    <!-- Required -->
-
-
 <div class="dashboard-container">
     <!-- Sidebar (Options) -->
     <div class="sidebar">
@@ -221,113 +221,113 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#about-me">About Me</a>
         <a href="#change-profile-picture">Change Profile Picture</a>
         <a href="#change-basic-info">Change Basic Information</a>
+        <a href="#change-address">Change Address</a>
         <a href="#change-username">Change Username</a>
         <a href="#change-password">Change Password</a>
     </div>
 
-    <!-- Main Content (Forms to edit) -->
-    <div class="content">
-        <!-- About Me -->
+        <div class="content">
+            <div class="section" id="about-me">
+                <h2>Personal Information</h2>
+                <div class="about-me-info">
+                <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Profile Image" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+                    <div>
+                        <h3><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></h3>
+                        <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
+                        <h3><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></h3>
+                        <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
+                        <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
+                    </div>
+                </div>
+            </div>
 
-        <div class="section" id="about-me">
-            <h2>Personal Information</h2>
-            <div class="about-me-info">
-    <img src="Assets/client2.jpg" alt="Profile Image">
-    <div>
-    <h3><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></h3>
-    <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
-    <h3><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></h3>
-    <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
-    <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
+            <div class="section" id="change-profile-picture">
+                <h2>Change Profile Picture</h2>
+                <form action="User_AccountPage.php" method="POST" enctype="multipart/form-data">
+                    <label for="profile-picture">Upload New Picture</label>
+                    <input type="file" id="profile-picture" name="profile_picture">
+                    <button type="submit" name="update_profile_picture">Update Picture</button>
+                </form>
+            </div>
 
-
-    </div>
-</div>
-
-        </div>
-
-        <!-- Change Profile Picture -->
-        <div class="section" id="change-profile-picture">
-            <h2>Change Profile Picture</h2>
-            <form>
-                <label for="profile-picture">Upload New Picture</label>
-                <input type="file" id="profile-picture" name="profile-picture">
-                <button type="submit">Update Picture</button>
-            </form>
-        </div>
-
-        <!-- Change Basic Information -->
-        <div class="section" id="change-basic-info">
+            <div class="section" id="change-basic-info">
             <h2>Change Basic Information</h2>
-            <form>
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" value="John Doe">
+            <form action="User_AccountPage.php" method="POST">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
+
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>">
 
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="johndoe@example.com">
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
 
                 <button type="submit">Update Information</button>
             </form>
         </div>
 
-        <!-- Change Username -->
-        <div class="section" id="change-username">
-            <h2>Change Username</h2>
+        <!-- Change Address -->
+        <div class="section" id="change-address">
+            <h2>Change Address</h2>
             <form>
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="john_doe_123">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" value="123 Main St, Springfield">
 
-                <button type="submit">Update Username</button>
+                <button type="submit">Update Address</button>
             </form>
         </div>
 
-        <!-- Change Password -->
-        <div class="section" id="change-password">
-            <h2>Change Password</h2>
-            <form>
-                <label for="current-password">Current Password</label>
-                <input type="password" id="current-password" name="current-password">
+            <div class="section" id="change-username">
+                <h2>Change Username</h2>
+                <form action="User_AccountPage.php" method="POST">
+                    <label for="new_username">New Username</label>
+                    <input type="text" id="new_username" name="new_username" value="<?php echo htmlspecialchars($user['username']); ?>">
 
-                <label for="new-password">New Password</label>
-                <input type="password" id="new-password" name="new-password">
+                    <button type="submit" name="update_username">Update Username</button>
+                </form>
+            </div>
 
-                <label for="confirm-password">Confirm New Password</label>
-                <input type="password" id="confirm-password" name="confirm-password">
+            <div class="section" id="change-password">
+                <h2>Change Password</h2>
+                <form action="User_AccountPage.php" method="POST">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password">
 
-                <button type="submit">Update Password</button>
-            </form>
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="new_password">
+
+                    <label for="confirm_password">Confirm New Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password">
+
+                    <button type="submit" name="update_password">Update Password</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
 </body>
 
 <script>
-
     // Function to toggle the visibility of the dropdown content
-function toggleDropdown() {
-    var dropdown = document.getElementById('dropdown1');
-    // Toggle the display of the dropdown menu
-    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
-        dropdown.style.display = 'block';
-    } else {
-        dropdown.style.display = 'none';
+    function toggleDropdown() {
+        var dropdown = document.getElementById('dropdown1');
+        // Toggle the display of the dropdown menu
+        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+            dropdown.style.display = 'block';
+        } else {
+            dropdown.style.display = 'none';
+        }
     }
-}
 
-// Close the dropdown if the user clicks anywhere outside the dropdown
-window.onclick = function(event) {
-    // Check if the click is outside the dropdown or icon
-    if (!event.target.matches('.dropdown-trigger') && !event.target.matches('.dropdown-trigger img')) {
-        var dropdowns = document.querySelectorAll('.dropdown-content');
-        dropdowns.forEach(function(dropdown) {
-            dropdown.style.display = 'none'; // Close the dropdown
-        });
-    }
-};
-
-   
+    // Close the dropdown if the user clicks anywhere outside the dropdown
+    window.onclick = function(event) {
+        // Check if the click is outside the dropdown or icon
+        if (!event.target.matches('.dropdown-trigger') && !event.target.matches('.dropdown-trigger img')) {
+            var dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(function(dropdown) {
+                dropdown.style.display = 'none'; // Close the dropdown
+            });
+        }
+    };
 </script>
-    
 
 </html>
