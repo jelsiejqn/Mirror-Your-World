@@ -538,7 +538,8 @@ p {
 }
 
 .uparrow:hover {
- opacity: 80%;
+ opacity: 70%;
+ transition: 0.3s;
 }
 
 

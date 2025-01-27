@@ -142,8 +142,8 @@ select:focus + label, select:not(:placeholder-shown) + label {
 }
 
 .input-wrapper2 {
-    width: 40%;
-    margin-bottom: 20px;
+    width: 30%;
+    margin-bottom: 10px;
 }
 
 .consultation-fields {

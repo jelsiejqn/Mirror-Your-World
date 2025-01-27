@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">My Appointments</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
                 <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
@@ -221,7 +221,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#about-me">About Me</a>
         <a href="#change-profile-picture">Change Profile Picture</a>
         <a href="#change-basic-info">Change Basic Information</a>
-        <a href="#change-address">Change Address</a>
         <a href="#change-username">Change Username</a>
         <a href="#change-password">Change Password</a>
     </div>
@@ -268,17 +267,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="email" id="email" name="email" value="johndoe@example.com">
 
                 <button type="submit">Update Information</button>
-            </form>
-        </div>
-
-        <!-- Change Address -->
-        <div class="section" id="change-address">
-            <h2>Change Address</h2>
-            <form>
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" value="123 Main St, Springfield">
-
-                <button type="submit">Update Address</button>
             </form>
         </div>
 

@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
         </li>
         <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-            <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+            <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">My Appointments</a>
         </li>
         <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
             <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
@@ -143,16 +143,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p id="full-name" style="font-weight: bold;">
                     <?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?>
                 </p>
+
+                <label for="email">Email</label>
+            <p id="email" style="font-weight: bold;">
+                <?= htmlspecialchars($user['email']) ?>
+            </p>
             </div>
         </div>
 
         <!-- Email -->
-        <div class="input-wrapper">
+        <!-- <div class="input-wrapper">
             <label for="email">Email</label>
             <p id="email" style="font-weight: bold;">
                 <?= htmlspecialchars($user['email']) ?>
             </p>
-        </div>
+        </div> -->
 
         <!-- Consultation Type -->
         <div class="consultation-fields">
@@ -182,6 +187,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="3:00 PM">3:00 PM</option>
                     <option value="6:00 PM">6:00 PM</option>
                 </select>
+            </div>
+        </div>
+
+         <!-- Special Requests -->
+         <div class="request-field">
+            <div class="input-wrapper">
+                <label for="request">Consultation Site</label>
+                <input type="text" id="request" name="address-houseNo" placeholder="Full Address" required>
+                <input type="text" id="request" name="address-city" placeholder="Full Address" required>
+                <input type="text" id="request" name="address-province" placeholder="Full Address" required>
             </div>
         </div>
 

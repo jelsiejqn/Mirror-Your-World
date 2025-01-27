@@ -161,6 +161,10 @@ body {
    transition: 0.3s;
   }
 
+  a:hover {
+    opacity: 60%;
+  }
+
   
 /* Media Queries for Responsiveness */
 

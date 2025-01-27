@@ -42,7 +42,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
                     <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">View Profile</a>
                 </li>
                 <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                    <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
+                    <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">My Appointments</a>
                 </li>
                 <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
                     <a href="User_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
