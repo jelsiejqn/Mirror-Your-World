@@ -1,0 +1,309 @@
+/* Global Styles */
+body {
+    background-image: url('../Assets/bg_HomePage.png');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start; 
+    padding: 0;
+    margin-top: 80px; 
+    font-family: louis;
+}
+
+/* Container for the dashboard */
+.dashboard-container {
+    margin-top: 5%;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+    scroll-behavior: smooth;
+    width: 15vw;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    height: 100%;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+    border-radius: 25px;
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Content */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    height: 80vh;
+    max-width: calc(100% - 250px);
+}
+
+.content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.content .section {
+    margin-bottom: 30px;
+}
+
+/* Form Fields (Narrowed down) */
+.content label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.content input[type="text"],
+.content input[type="email"],
+.content input[type="file"],
+.content input[type="password"] {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content input[type="text"]:focus,
+.content input[type="email"]:focus,
+.content input[type="password"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Buttons */
+.content button {
+    padding: 12px 20px;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.content button:hover {
+    background-color: #ff6464;
+    transform: scale(1.05);
+}
+
+/* Custom Scrollbar Design */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Prevent horizontal scrolling */
+body {
+    overflow-x: hidden;
+}
+
+/* Responsive layout for screens < 1024px */
+@media screen and (max-width: 1024px) {
+    .dashboard-container {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+    }
+
+    .content {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Responsive layout for smaller screens < 768px (Mobile devices) */
+@media screen and (max-width: 768px) {
+    /* Turn sidebar into a navbar on top */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        font-size: 14px;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        border-radius: 0; /* Remove border-radius for full-width navbar */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+        padding: 15px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .sidebar h3 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .content {
+        padding: 20px;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+    }
+
+    /* Navbar toggle button (Hamburger) */
+    .navbar-toggle {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* Hide the sidebar links by default on mobile */
+    .sidebar a {
+        display: none;
+    }
+
+    /* Show sidebar links when navbar is clicked */
+    .sidebar.open a {
+        display: block;
+    }
+}
+
+/* Styling for the sortby-container and booking-container */
+.sortby-container {
+    padding-right: 10%;
+}
+
+.sortby-icon {
+    top: -9;
+    position: relative;
+    margin-left: 10;
+    height: 20px;
+    width: 25px;
+}
+
+.booking-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    max-width: 850px;
+    margin-bottom: 10px;
+}
+
+.td-date {
+    text-align: center;
+    width: 20%;
+}
+
+.td-details {
+    line-height: 3px;
+}
+
+.td-booker {
+    line-height: 3px;
+}
+
+.td-booker {
+    line-height: 1px;
+}
+
+.booking-container td {
+    padding: 10px 10px 0px 10px;
+}
+
+.cancel-btn {
+    max-width: 1000px;
+    background-color: rgb(224, 78, 78);
+}
+
+/* Responsive adjustments for booking-container */
+@media screen and (max-width: 768px) {
+    .booking-container {
+        width: 100%;
+    }
+
+    .td-date, .td-details, .td-booker {
+        width: 100%; /* Stack table cells */
+        text-align: left;
+    }
+
+    .cancel-btn {
+        width: 100%; /* Full-width buttons */
+    }
+}
+
+.completed-icon {
+    width: 3vw;
+}
