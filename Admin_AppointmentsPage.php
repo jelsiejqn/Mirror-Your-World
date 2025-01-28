@@ -47,8 +47,8 @@
     <div class="sidebar">
         <h3>Dashboard</h3>
         <a href="#" onclick="showContent('active-bookings')">Pending Appointments</a>
-        <a href="#" onclick="showContent('past-bookings')">Confirmed Bookings</a>
-        <a href="#" onclick="showContent('cancelled')">Cancelled</a>
+        <a href="#" onclick="showContent('past-bookings')">Confirmed Appointments</a>
+        <a href="#" onclick="showContent('cancelled')">Cancelled </a>
     </div>
 
     <!-- Main Content (Forms to edit) -->
@@ -138,44 +138,6 @@
 
             <table class = "booking-container"> 
             <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <img src ="Assets/icon_Check.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
-
-        <!-- Cancelled -->
-        <div class="section" id="cancelled" style="display: none;">
-            <h2>Cancelled Appointments</h2>
-    
-
-            <table class = "sortby-container">
-            <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-            </table>
-
-            <table class = "booking-container"> 
-            <tr>
                 <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
 
                 <td class = "td-details"> 
@@ -191,7 +153,46 @@
                 </td>
 
                 <td class = "td-buttons"> 
-                <img src ="Assets/icon_X.png" class = "completed-icon">
+                <img src ="Assets/icon_check.png" class = "completed-icon">
+                </td>
+                
+            </tr>
+            </table>
+
+        </div>
+
+        <!-- Cancelled -->
+        <div class="section" id="cancelled" style="display: none;">
+            <h2>Cancelled Appointments</h2>
+            
+    
+
+            <table class = "sortby-container">
+            <tr>
+                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
+                <td> <h4> Sort by: Most Recent </h4> </td>
+                
+            </tr>
+            </table>
+
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Reason of Cancellation:  </h5>
+                    <h5> Reason Here  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                    <img src ="Assets/icon_X.png" class = "completed-icon">
                 </td>
                 
             </tr>

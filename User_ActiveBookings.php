@@ -256,9 +256,8 @@
                 </td>
 
                 <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
+                    <h5> Reason of Cancellation </h5>
+                    <h5> Reason Here </h5>
                 </td>
 
                 <td class = "td-buttons"> 
