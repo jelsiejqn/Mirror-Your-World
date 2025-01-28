@@ -194,9 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          <div class="request-field">
             <div class="input-wrapper">
                 <label for="request">Consultation Site</label>
-                <input type="text" id="request" name="address-houseNo" placeholder="Full Address" required>
-                <input type="text" id="request" name="address-city" placeholder="Full Address" required>
-                <input type="text" id="request" name="address-province" placeholder="Full Address" required>
+                <input type="text" class = "address1" id="request" name="address-houseNo" placeholder="Full Address" required>
             </div>
         </div>
 

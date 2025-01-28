@@ -90,59 +90,106 @@
                 </td>
 
                 <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> Cancel Appointment </button>
+                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
                 </td>
                 
             </tr>
-            </table>
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 21 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Manila  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> Cancel Appointment </button>
-                </td>
-                
-            </tr>
-            </table>
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 22 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Cubao  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> Cancel Appointment </button>
-                </td>
-                
-            </tr>
-            </table>
+            </table>  
 
             
+            
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Consultation Type: Glass  </h5>
+                    <h5> Time of Appointment: 3PM  </h5>
+                    <h5> Site of Appointment: Makati  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
+                </td>
+                
+            </tr>
+            </table>       
+            
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Consultation Type: Glass  </h5>
+                    <h5> Time of Appointment: 3PM  </h5>
+                    <h5> Site of Appointment: Makati  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
+                </td>
+                
+            </tr>
+            </table>       
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Consultation Type: Glass  </h5>
+                    <h5> Time of Appointment: 3PM  </h5>
+                    <h5> Site of Appointment: Makati  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
+                </td>
+                
+            </tr>
+            </table>          
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Consultation Type: Glass  </h5>
+                    <h5> Time of Appointment: 3PM  </h5>
+                    <h5> Site of Appointment: Makati  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
+                </td>
+                
+            </tr>
+            </table>          
+
             
 
         </div>
@@ -200,7 +247,7 @@
 
             <table class = "booking-container"> 
             <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
 
                 <td class = "td-details"> 
                     <h5> Consultation Type: Glass  </h5>

@@ -19,7 +19,7 @@ body {
     scroll-behavior: smooth;
     display: flex;
     flex-wrap: wrap;
-    width: 80%;
+    width: 180vh; /* Full width to ensure responsiveness */
     height: 85vh;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
@@ -31,7 +31,7 @@ body {
 /* Sidebar */
 .sidebar {
     scroll-behavior: smooth;
-    width: 15vw;
+    width: 15vw; /* 15% of the screen width */
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     padding: 20px;
@@ -41,6 +41,7 @@ body {
     top: 0;
     flex-shrink: 0;
     border-radius: 25px;
+    z-index: 100; /* Keep sidebar in front */
 }
 
 .sidebar h3 {
@@ -75,8 +76,9 @@ body {
     border-radius: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
-    height: 80vh;
+    height: calc(100vh - 130px); /* Adjust height to make sure it stays visible */
     max-width: calc(100% - 250px);
+   
 }
 
 .content h2 {
@@ -121,7 +123,8 @@ body {
 
 /* Buttons */
 .content button {
-    padding: 12px 20px;
+    
+    width: 6vw;   
     color: white;
     border: none;
     border-radius: 25px;
@@ -160,87 +163,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Responsive layout for screens < 1024px */
-@media screen and (max-width: 1024px) {
-    .dashboard-container {
-        flex-direction: column;
-        height: 100vh;
-    }
-
-    .sidebar {
-        width: 100%;
-        padding: 15px;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        position: relative;
-    }
-
-    .content {
-        padding: 20px;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-    }
-}
-
-/* Responsive layout for smaller screens < 768px (Mobile devices) */
-@media screen and (max-width: 768px) {
-    /* Turn sidebar into a navbar on top */
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 10px;
-        font-size: 14px;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        border-radius: 0; /* Remove border-radius for full-width navbar */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar a {
-        padding: 15px;
-        font-size: 16px;
-        text-align: center;
-    }
-
-    .sidebar h3 {
-        text-align: center;
-        margin-bottom: 10px;
-        font-size: 20px;
-    }
-
-    .dashboard-container {
-        flex-direction: column;
-    }
-
-    .content {
-        padding: 20px;
-        width: 100%;
-        height: auto;
-        max-width: 100%;
-    }
-
-    /* Navbar toggle button (Hamburger) */
-    .navbar-toggle {
-        display: block;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 24px;
-        cursor: pointer;
-    }
-
-    /* Hide the sidebar links by default on mobile */
-    .sidebar a {
-        display: none;
-    }
-
-    /* Show sidebar links when navbar is clicked */
-    .sidebar.open a {
-        display: block;
-    }
-}
 
 /* Styling for the sortby-container and booking-container */
 .sortby-container {
@@ -255,10 +177,10 @@ body {
     width: 25px;
 }
 
+
 .booking-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    max-width: 850px;
     margin-bottom: 10px;
 }
 
@@ -267,8 +189,16 @@ body {
     width: 20%;
 }
 
+h1 {
+    font-size: 2vw;
+}
+
 .td-details {
     line-height: 3px;
+}
+
+h5 {
+    font-size: 1vw;
 }
 
 .td-booker {
@@ -284,26 +214,73 @@ body {
 }
 
 .cancel-btn {
-    max-width: 1000px;
+   
     background-color: rgb(224, 78, 78);
 }
 
-/* Responsive adjustments for booking-container */
-@media screen and (max-width: 768px) {
-    .booking-container {
-        width: 100%;
-    }
-
-    .td-date, .td-details, .td-booker {
-        width: 100%; /* Stack table cells */
-        text-align: left;
-    }
-
-    .cancel-btn {
-        width: 100%; /* Full-width buttons */
-    }
+.txt-cancel {
+    font-family: louis;
+    font-size: 1vw;
 }
 
 .completed-icon {
     width: 3vw;
+}
+
+
+
+/* Mobile Responsiveness: Sidebar moves to the top */
+@media screen and (max-width: 768px) {
+
+    .dashboard-container {
+        height: auto;
+        overflow-y: visible;
+        align-items: center;
+        flex-direction: column; /* Stack the sidebar and content vertically */
+    }
+
+    .sidebar {
+        height: 20%;
+        width: 100%; /* Make sidebar take full width on small screens */
+        padding: 10px;
+        border-right: none;
+        position: relative; /* Sidebar will be at the top of the screen */
+        top: unset;
+        margin: 0;
+        flex-shrink: 0;
+        box-shadow: none;
+    }
+
+    .content {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        height: calc(100vh - 20%); /* Make content take up remaining space */
+        margin-left: 0;
+        overflow-y: auto; /* Allow scrolling if content overflows */
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        padding: 10px 20px;
+        font-size: 2vw;
+        display: inline-block;
+    }
+}
+
+/* Adjust font sizes and layout for even smaller screens */
+@media screen and (max-width: 480px) {
+    .content h2 {
+        font-size: 22px;
+    }
+
+    .content label,
+    .content input,
+    .content button {
+        font-size: 14px;
+    }
+
+    .booking-container {
+        max-width: 100%;
+    }
 }

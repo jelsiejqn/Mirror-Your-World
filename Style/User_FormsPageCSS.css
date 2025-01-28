@@ -218,6 +218,14 @@ input::placeholder {
         width: 100%;
     }
 
+    .input-wrapper {
+        max-width: 20px;
+    }
+
+    .address1 {
+        max-width: 10px;
+    }
+
     .btnConsult {
         font-size: 0.9rem;
         padding: 5px 30px;
