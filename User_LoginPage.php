@@ -120,9 +120,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input id="password" name="password" type="password" placeholder="Password" required>
                     </div>
 
+                    <!-- Forgot password link -->
+                    <p class="forgot-password">
+                        <a href="User_ForgotPasswordPage.php"> Forgot Password? </a>
+                    </p>
+
                     <button class="btn_login" type="submit" name="action" id="login">
                         Login
                     </button>
+
+
+
                     <p class="existingacc"> Don't have an account? <a href="User_SignupPage.php" class="a1"> Sign Up.</a> </p>
 
                     <br /><br />
