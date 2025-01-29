@@ -17,6 +17,7 @@
         <a href="Admin_ShowcasePage.php">Showcase</a>
         <a href="Admin_AppointmentsPage.php">Appointments</a>
         <a href="Admin_ReviewsPage.php">Reviews</a>
+        <a href="Admin_FAQPage.php">FAQ</a>
     </div>
 
    <div class="logo">
@@ -54,7 +55,7 @@
 
         <!-- Active Bookings -->
         <div class="section" id="active-bookings">
-            <h2>Pending Appointments</h2> 
+            <h2>Client Reviews</h2> 
             <!-- Yung 12 hours pagitan na pwede silamagcancel both client and user -->
             
             <table class = "sortby-container">
@@ -94,7 +95,9 @@
 
             <tr>
 
-            <td class = "td-date">  </td>
+            <td class = "td-date"> 
+                
+            </td>
 
             <td class = "td-details"> 
                 <h6> Company Name </h6>
