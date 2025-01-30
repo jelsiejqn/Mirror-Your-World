@@ -68,8 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="navbar">
         <a href="Admin_ShowcasePage.php">Showcase</a>
         <a href="Admin_AppointmentsPage.php">Appointments</a>
-        <a href="Admin_ReviewsPage.php">Reviews</a>
         <a href="Admin_FAQPage.php">FAQ</a>
+        <a href="Admin_ReviewsPage.php">Reviews</a>
+        
     </div>
 
     <div class="logo">

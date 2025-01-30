@@ -1,0 +1,23 @@
+.editable-container {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 20px 0;
+  }
+  .editable-description {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+
+.company-name::placeholder {
+    border: none;
+    font-family: louis;
+  }
+
+textarea::content {
+    border: none;
+    font-family: louis;
+}

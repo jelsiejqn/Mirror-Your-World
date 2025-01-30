@@ -16,8 +16,9 @@
    <div class="navbar">
         <a href="Admin_ShowcasePage.php">Showcase</a>
         <a href="Admin_AppointmentsPage.php">Appointments</a>
-        <a href="Admin_ReviewsPage.php">Reviews</a>
         <a href="Admin_FAQPage.php">FAQ</a>
+        <a href="Admin_ReviewsPage.php">Reviews</a>
+      
     </div>
 
    <div class="logo">
@@ -69,50 +70,49 @@
 
                 <!-- Review Container -->
 
+                <center>
+
             <table class = "booking-container"> 
             <tr>
+                <td>
+                    <h1> 01 </h1>
+</td>
                 <td class = "td-date"> 
                 <form action="upload.php" method="POST" enctype="multipart/form-data">
-                <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*" required>
-                <br><br>
-                <button type="submit" name="submit" style="background-color:green">Upload</button>
-</form> </td>
+                <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
+                <button type="submit" name="submit">Upload</button>
+</form>
+                <br>    
+               </td>
 
                 <td class = "td-details"> 
-                    <h5> Company Name </h5>
+                     <form>
+                        <textarea name="company-name" class="company-name"> Company Name </textarea>
+                        <br> <button type="submit" name="update-company">Update</button>
+                    </form>
                 </td>
 
                 <td class = "td-booker"> 
-                    <h5> MM/DD/YY <br> </h5>
+                    <form>
+                        <textarea name="date" class="date"> MM/DD/YYYY </textarea>
+                        <br><button type="submit" name="update-date">Update</button>
+                    </form>
                 </td>
 
                 <td class = "td-review"> 
-                    <h5> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                     </h5>
+
+                <form>
+                        <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
+                        </textarea>
+                        <br> <button type="submit" name="update-desc">Update</button>
+                    </form>
+                    
                     
                 </td>
             </tr>
-
-            <tr>
-
-            <td class = "td-date">  </td>
-
-            <td class = "td-details"> 
-                <h6> Edit </h6>
-            </td>
-
-            <td class = "td-booker"> 
-                <h6>  Edit </h6>
-            </td>
-
-            <td class = "td-review"> 
-                <h6> Edit </h6>
-            </td>  
-
-            </tr>
             </table>  
 
-             <!-- End Review Container -->
+             <!-- End Showcase Container -->
             
 
         </div>
@@ -120,6 +120,108 @@
         <!-- Past Bookings -->
         <div class="section" id="past-bookings" style="display: none;">
             <h2>People We've Worked With</h2>
+
+            <table class = "sortby-container">
+            <tr>
+                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
+                <td> <h4> Sort by: Most Recent </h4> </td>
+                
+            </tr>
+            </table>
+
+            
+                <!-- Review Container -->
+
+                <center>
+
+            <table class = "booking-container"> 
+            <tr>
+                <td>
+                    <h1> 01 </h1>
+</td>
+                <td class = "td-date"> 
+                <form action="upload.php" method="POST" enctype="multipart/form-data">
+                <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
+                <button type="submit" name="submit">Upload</button>
+</form>
+                <br>    
+               </td>
+
+                <td class = "td-details"> 
+                     <form>
+                        <textarea name="company-name" class="company-name"> Client Name /n and Company </textarea>
+                        <br> <button type="submit" name="update-company">Update</button>
+                    </form>
+                </td>
+
+                <td class = "td-booker"> 
+                    <form>
+                        <textarea name="date" class="date"> MM/DD/YYYY </textarea>
+                        <br><button type="submit" name="update-date">Update</button>
+                    </form>
+                </td>
+
+                <td class = "td-review"> 
+
+                <form>
+                        <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
+                        </textarea>
+                        <br> <button type="submit" name="update-desc">Update</button>
+                    </form>
+                    
+                    
+                </td>
+            </tr>
+            </table>  
+
+             <!-- End Showcase Container -->
+
+             <!-- Review Container -->
+
+             <center>
+
+<table class = "booking-container"> 
+<tr>
+    <td>
+        <h1> 02 </h1>
+</td>
+    <td class = "td-date"> 
+    <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
+    <button type="submit" name="submit">Upload</button>
+</form>
+    <br>    
+   </td>
+
+    <td class = "td-details"> 
+         <form>
+            <textarea name="company-name" class="company-name"> Client Name /n and Company </textarea>
+            <br> <button type="submit" name="update-company">Update</button>
+        </form>
+    </td>
+
+    <td class = "td-booker"> 
+        <form>
+            <textarea name="date" class="date"> MM/DD/YYYY </textarea>
+            <br><button type="submit" name="update-date">Update</button>
+        </form>
+    </td>
+
+    <td class = "td-review"> 
+
+    <form>
+            <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
+            </textarea>
+            <br> <button type="submit" name="update-desc">Update</button>
+        </form>
+        
+        
+    </td>
+</tr>
+</table>  
+
+ <!-- End Showcase Container -->
+
 
 
         

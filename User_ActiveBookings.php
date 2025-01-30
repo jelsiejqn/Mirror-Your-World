@@ -73,6 +73,8 @@
             </tr>
             </table>
 
+            <center>
+
             <table class = "booking-container"> 
             <tr>
                 <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
