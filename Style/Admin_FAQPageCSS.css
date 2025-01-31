@@ -1,0 +1,427 @@
+/* Global Styles */
+body {
+    background-image: url('../Assets/bg_HomePage.png');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start; 
+    padding: 0;
+    margin-top: 80px; 
+    font-family: louis;
+}
+
+.calendar {
+    position: fixed;
+    top: 30px;
+    left: -10px;
+    z-index: 20;
+    width: 10px;
+}
+
+.cal_img {
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+}
+
+.cal_img:hover {
+    transition: 0.3s;
+   opacity: 60%;
+}
+
+/* Container for the dashboard */
+.dashboard-container {
+    margin-top: 5%;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    width: 180vh; /* Full width to ensure responsiveness */
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+    scroll-behavior: smooth;
+    width: 15vw; /* 15% of the screen width */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    height: 100%;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+    border-radius: 25px;
+    z-index: 100; /* Keep sidebar in front */
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Content */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    height: calc(100vh - 130px); /* Adjust height to make sure it stays visible */
+    max-width: calc(100% - 250px);
+   
+}
+
+.content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.content .section {
+    margin-bottom: 30px;
+}
+
+/* Form Fields (Narrowed down) */
+.content label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.content input[type="text"],
+.content input[type="email"],
+.content input[type="file"],
+.content input[type="password"] {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content input[type="text"]:focus,
+.content input[type="email"]:focus,
+.content input[type="password"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Buttons */
+.content button {
+    
+    width: 6vw;   
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.content button:hover {
+    background-color: #ff6464;
+    transform: scale(1.05);
+}
+
+/* Custom Scrollbar Design */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Prevent horizontal scrolling */
+body {
+    overflow-x: hidden;
+}
+
+
+/* Styling for the sortby-container and booking-container */
+.sortby-container {
+    padding-right: 10%;
+}
+
+.sortby-icon {
+    top: -9;
+    position: relative;
+    margin-left: 10;
+    height: 20px;
+    width: 25px;
+}
+
+.add-icon-avail {
+    top: -9;
+    position: relative;
+    margin-left: 10;
+    height: 1vw;
+    width: 1vw;
+}
+
+
+.booking-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.td1 {
+    width: 20%;
+}
+
+.td-date {
+    text-align: center;
+    width: 20%;
+}
+
+h1 {
+    font-size: 2vw;
+}
+
+.td-details {
+    line-height: 3px;
+}
+
+h5 {
+    font-size: 1vw;
+}
+
+.td-booker {
+    line-height: 3px;
+}
+
+.td-booker {
+    line-height: 1px;
+}
+
+.booking-container td {
+    padding: 10px 10px 0px 10px;
+}
+
+.cancel-btn {
+   
+    background-color: rgb(224, 78, 78);
+}
+
+.txt-cancel {
+    font-family: louis;
+    font-size: 1vw;
+}
+
+.completed-icon {
+    width: 3vw;
+}
+
+
+/* Mobile Responsiveness: Sidebar moves to the top */
+@media screen and (max-width: 768px) {
+
+    .dashboard-container {
+        height: auto;
+        overflow-y: visible;
+        align-items: center;
+        flex-direction: column; /* Stack the sidebar and content vertically */
+    }
+
+    .sidebar {
+        height: 20%;
+        width: 100%; /* Make sidebar take full width on small screens */
+        padding: 10px;
+        border-right: none;
+        position: relative; /* Sidebar will be at the top of the screen */
+        top: unset;
+        margin: 0;
+        flex-shrink: 0;
+        box-shadow: none;
+    }
+
+    .content {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        height: calc(100vh - 20%); /* Make content take up remaining space */
+        margin-left: 0;
+        overflow-y: auto; /* Allow scrolling if content overflows */
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        padding: 10px 20px;
+        font-size: 2vw;
+        display: inline-block;
+    }
+}
+
+/* Adjust font sizes and layout for even smaller screens */
+@media screen and (max-width: 480px) {
+    .content h2 {
+        font-size: 22px;
+    }
+
+    .content label,
+    .content input,
+    .content button {
+        font-size: 14px;
+    }
+
+    .booking-container {
+        max-width: 100%;
+    }
+}
+
+
+/* Basic styles */
+.add-icon-avail {
+    cursor: pointer;
+    width: 1.5vw;
+    height: 1.5vw;
+    transition: transform 0.3s ease;
+  }
+  
+  .add-icon-avail:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Modal styles */
+  .modal-avail {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+  }
+  
+  .modal-content-avail {
+    background-color: #fff;
+    margin: 1% auto;
+    padding: 20px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  .close-avail {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-avail:hover,
+  .close-avail:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Form and Input styles */
+  form {
+    max-height: 60%;
+    display: column;
+    flex-direction: column;
+    padding-bottom: 10px;
+
+  }
+  
+  input, textarea, select {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  textarea {
+    resize: vertical;
+    height: 60px;
+  }
+  
+  .submit-btn-avail {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: louis;
+  }
+  
+  .submit-btn-avail:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsive design */
+  @media screen and (max-width: 600px) {
+    .modal-content-avail {
+      width: 90%;
+      padding: 15px;
+    }
+  
+    .add-icon-avail {
+      width: 35px;
+      height: 35px;
+    }
+  
+    input, textarea, select {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .submit-btn-avail {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+  }
+  
+

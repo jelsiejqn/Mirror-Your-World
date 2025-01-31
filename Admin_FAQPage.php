@@ -2,10 +2,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointments | Mirror Your World </title>
+    <title>FAQs and Inquiries | Mirror Your World </title>
 
 
-    <link rel="stylesheet" href="Style/Admin_AppointmentsPageCSS.css" />
+    <link rel="stylesheet" href="Style/Admin_FAQPageCSS.css" />
     <link rel="stylesheet" href="Style/Required.css" />
 
 </head>
@@ -48,9 +48,10 @@
     <!-- Sidebar (Options) -->
     <div class="sidebar">
         <h3>Dashboard</h3>
-        <a href="#" onclick="showContent('active-bookings')">Pending Appointments</a>
-        <a href="#" onclick="showContent('past-bookings')">Confirmed Appointments</a>
-        <a href="#" onclick="showContent('cancelled')">Cancelled </a>
+        <a href="#" onclick="showContent('active-bookings')">FAQs</a>
+        <a href="#" onclick="showContent('past-bookings')">Services Offered</a>
+        <a href="#" onclick="showContent('cancelled')">Available Materials </a>
+        <a href="#" onclick="showContent('policies')">Policies </a>
     </div>
 
     <!-- Main Content (Forms to edit) -->
@@ -58,7 +59,7 @@
 
         <!-- Active Bookings -->
         <div class="section" id="active-bookings">
-            <h2>Pending Appointments</h2> 
+            <h2>FAQs</h2> 
             <!-- Yung 12 hours pagitan na pwede silamagcancel both client and user -->
             
             <table class = "sortby-container">
@@ -92,34 +93,6 @@
         <h5 class="txt-cancel"> Cancel </h5>
     </button>
 </td>
-
-                <div id="cancelModal" class="modal">
-    <div class="modal-content">
-        <h3>Please select the reason for cancellation:</h3>
-        <form id="cancelReasonForm">
-            <label>
-                <input name="reason" type="radio" value="Scheduling Conflicts" />
-                Scheduling Conflicts
-            </label><br>
-            <label>
-                <input name="reason" type="radio" value="Material Requested Not Available" />
-                Material Requested Not Available
-            </label><br>
-            <label>
-                <input name="reason" type="radio" value="Project out of Scope" />
-                Project out of Scope
-            </label><br>
-            <label>
-                <input name="reason" type="radio" value="Client needs to Rebook" />
-                Client needs to Rebook
-            </label><br>
-        </form>
-        <div class="modal-buttons">
-            <button class="submit-btn" onclick="submitCancel()">Submit</button>
-            <button class="close-btn" onclick="closeModal()">Cancel</button>
-        </div>
-    </div>
-</div>
                 
             </tr>
             </table>  
@@ -129,7 +102,115 @@
 
         <!-- Past Bookings -->
         <div class="section" id="past-bookings" style="display: none;">
-            <h2>Confirmed Appointments</h2>
+            <h2>Services Offered</h2>
+
+
+            <table class = "sortby-container">
+            <tr>
+                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
+                <td> <h4> Sort by: Most Recent </h4> </td>
+                
+            </tr>
+
+            </table>
+
+            <center>
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Consultation Type: Glass  </h5>
+                    <h5> Time of Appointment: 3PM  </h5>
+                    <h5> Site of Appointment: Makati  </h5>
+                </td>
+
+                <td class = "td-booker"> 
+                    <h5> Name: Dionne Blacer  </h5>
+                    <h5> Email: hello@gmail.com  </h5>
+                    <h5> Contact Number: 09153628520  </h5>
+                </td>
+
+                <td class = "td-buttons"> 
+                <img src ="Assets/icon_check.png" class = "completed-icon">
+                </td>
+                
+            </tr>
+            </table>
+
+        </div>
+
+        <!-- Available Materials -->
+        <div class="section" id="cancelled" style="display: none;">
+            <h2>Available Materials</h2>
+            
+    
+
+            <table class = "sortby-container">
+            <tr>
+                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
+                <td> <h4> Sort by: Most Recent </h4> </td>
+
+                <td>
+  <img src="Assets/icon_Add.png" class="add-icon-avail" onclick="openModal()">
+</td>
+
+
+<!-- Modal Here -->
+                
+            </tr>
+            </table>
+
+            <center>
+
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date">  <img src ="Assets/icon_X.png" class = "completed-icon"> </td>
+
+                <td class = "td1"> 
+                   
+                    <h5> Material Name  </h5>
+
+                </td>
+
+                <td class = "td1">
+            
+                    <h5> Material Details  </h5>
+                  
+                </td>
+
+                <td class = "td1">
+           
+                    <h5> Material Benefits  </h5>
+                  
+                </td>
+
+
+                <td class = "td1">
+              
+                    <h5> Price </h5>
+                  
+                </td>
+
+                <td class = "td-buttons"> 
+           
+                <label for="availability-avail">Availability:</label>
+      <select id="availability-avail" name="availability-avail" required form-control>
+        <option value="inStock">In Stock</option>
+        <option value="outOfStock">Out of Stock</option>
+      </select><br><br>
+                </td>
+                
+            </tr>
+            </table>
+
+        </div>
+
+             <!-- Policies -->
+             <div class="section" id="policies" style="display: none;">
+            <h2>Policies</h2>
 
 
             <table class = "sortby-container">
@@ -167,50 +248,41 @@
 
         </div>
 
-        <!-- Cancelled -->
-        <div class="section" id="cancelled" style="display: none;">
-            <h2>Cancelled Appointments</h2>
-            
-    
-
-            <table class = "sortby-container">
-            <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-            </table>
-
-            <center>
-
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Reason of Cancellation:  </h5>
-                    <h5> Reason Here  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <img src ="Assets/icon_X.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
-
     </div>
 </div>
 
+<!-- Modal -->
+<div id="addProductModal-avail" class="modal-avail">
+  <div class="modal-content-avail">
+    <span class="close-avail" onclick="closeModal()">&times;</span>
+    <h2>Add Materials</h2>
+    <form>
+      <label for="picture-avail">Picture:</label>
+      <input type="file" id="picture-avail" name="picture-avail" required form-control><br><br>
+
+      <label for="materialName-avail">Material Name:</label>
+      <input type="text" id="materialName-avail" name="materialName-avail" required form-control><br><br>
+
+      <label for="productDetail-avail">Product Detail:</label>
+      <textarea id="productDetail-avail" name="productDetail-avail" required form-control></textarea><br><br>
+
+      <label for="productBenefits-avail">Product Benefits:</label>
+      <textarea id="productBenefits-avail" name="productBenefits-avail" required form-control></textarea><br><br>
+
+      <label for="productPrice-avail">Product Price:</label>
+      <input type="number" id="productPrice-avail" name="productPrice-avail" required form-control><br><br>
+
+      <label for="availability-avail">Availability:</label>
+      <select id="availability-avail" name="availability-avail" required form-control>
+        <option value="inStock">In Stock</option>
+        <option value="outOfStock">Out of Stock</option>
+      </select><br><br>
+
+      <center>
+      <button type="submit" class="submit-btn-avail">Submit</button>
+    </form>
+  </div>
+</div>
 
 
 </body>
@@ -271,6 +343,21 @@ function openModal() {
             alert('Please select a reason before submitting.');
         }
     }
+
+    function openModal() {
+  document.getElementById("addProductModal-avail").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("addProductModal-avail").style.display = "none";
+}
+
+// Close the modal if clicked outside the modal content
+window.onclick = function(event) {
+  if (event.target === document.getElementById("addProductModal-avail")) {
+    closeModal();
+  }
+}
 
    
 </script>
