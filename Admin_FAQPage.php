@@ -65,7 +65,7 @@
             <table class = "sortby-container">
             <tr>
                 <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
+                <td> <h4> Sort by: All / Unanswered / Answered </h4> </td>
                 
             </tr>
             </table>
@@ -74,27 +74,82 @@
 
             <table class = "booking-container"> 
             <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+                <td class = "td-date"> <h1> 1 </h1> </td>
 
                 <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
+                    <h5> Question Here  </h5>
+                  
                 </td>
 
                 <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Answer Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
+    </td></`center>
                 </td>
 
                 <td class="td-buttons">
-    <button class="cancel-btn" onclick="openModal()">
-        <h5 class="txt-cancel"> Cancel </h5>
+    <button class="post-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Post </h5>
     </button>
-</td>
+                </td>
+
+                <td class="td-buttons">
+    <button class="delete-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Delete </h5>
+    </button>
+                </td>
+
+                
+                <td class = "td-details"> 
+                    <h5> Status: <br> Answered  </h5>
+                  
+                </td>
                 
             </tr>
+
+            </table>  
+
+            <table class = "booking-container"> 
+            <tr>
+                <td class = "td-date"> <h1> 2 </h1> </td>
+
+                <td class = "td-details"> 
+                    <h5> Question Here  </h5>
+                  
+                </td>
+
+                <td class = "td-booker"> 
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Answer Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
+    </td></`center>
+                </td>
+
+                <td class="td-buttons">
+    <button class="post-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Post </h5>
+    </button>
+                </td>
+
+                <td class="td-buttons">
+    <button class="delete-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Delete </h5>
+    </button>
+                </td>
+
+                
+                <td class = "td-details"> 
+                    <h5> Status: <br> Unanswered  </h5>
+                  
+                </td>
+                
+            </tr>
+            
             </table>  
             
 
@@ -167,41 +222,47 @@
 
             <table class = "booking-container"> 
             <tr>
-                <td class = "td-date">  <img src ="Assets/icon_X.png" class = "completed-icon"> </td>
+                <td class = "td-date">    <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
+    <button type="submit" name="submit" class="update">Upload</button> </td>
 
+
+            
                 <td class = "td1"> 
                    
-                    <h5> Material Name  </h5>
+                <form>
+                <center>
+            <textarea name="company-name" class="company-name"> Material Name </textarea>
+            <br> <button type="submit" name="update-company" class="update">Update</button>
+        </form>
 
-                </td>
-
-                <td class = "td1">
-            
-                    <h5> Material Details  </h5>
-                  
-                </td>
-
-                <td class = "td1">
-           
-                    <h5> Material Benefits  </h5>
-                  
-                </td>
-
-
-                <td class = "td1">
-              
-                    <h5> Price </h5>
-                  
                 </td>
 
                 <td class = "td-buttons"> 
            
+                <center>
                 <label for="availability-avail">Availability:</label>
       <select id="availability-avail" name="availability-avail" required form-control>
         <option value="inStock">In Stock</option>
         <option value="outOfStock">Out of Stock</option>
       </select><br><br>
                 </td>
+
+                <td class="td-buttons1">
+                    <center>
+    <button class="post-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Edit </h5>
+    </button>
+                </td>
+
+                <td class="td-buttons1">
+                    <center>
+    <button class="delete-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Delete </h5>
+    </button>
+                </td>
+
+                
                 
             </tr>
             </table>

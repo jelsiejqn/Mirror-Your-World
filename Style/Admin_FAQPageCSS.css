@@ -85,6 +85,7 @@ body {
     background-color: #007bff;
     color: white;
     transform: scale(1.05);
+    
 }
 
 /* Content */
@@ -114,14 +115,18 @@ body {
 /* Form Fields (Narrowed down) */
 .content label {
     display: block;
-    font-size: 16px;
+    font-size: 1vw;
     margin-bottom: 8px;
     color: #555;
 }
 
+.content input[type="file"] {
+    width: 80%;
+}
+
 .content input[type="text"],
 .content input[type="email"],
-.content input[type="file"],
+
 .content input[type="password"] {
     width: 80%;
     max-width: 500px;
@@ -141,7 +146,7 @@ body {
 }
 
 /* Buttons */
-.content button {
+/* .content button {
     
     width: 6vw;   
     color: white;
@@ -155,7 +160,41 @@ body {
 .content button:hover {
     background-color: #ff6464;
     transform: scale(1.05);
+} */
+
+.delete-btn {
+    
+    width: 6vw;   
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color:  #cd6060;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+.delete-btn:hover {
+    opacity: 60%;
+    background-color: #cd6060;
+    transform: scale(1.05); }
+
+    .post-btn {
+    
+        width: 6vw;   
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #52834e;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .post-btn:hover {
+        opacity: 60%;
+        background-color: #52834e;
+        transform: scale(1.05); }
 
 /* Custom Scrollbar Design */
 ::-webkit-scrollbar {
@@ -212,7 +251,7 @@ body {
 }
 
 .td1 {
-    width: 20%;
+    width: 5%;
 }
 
 .td-date {
@@ -225,15 +264,22 @@ h1 {
 }
 
 .td-details {
-    line-height: 3px;
+    line-height: 13px;
 }
+
+.td-buttons1 {
+    max-width: 30px;
+    gap: 10px;
+}
+
 
 h5 {
     font-size: 1vw;
 }
 
+
 .td-booker {
-    line-height: 3px;
+    line-height: 10%;
 }
 
 .td-booker {
@@ -371,24 +417,23 @@ h5 {
     max-height: 60%;
     display: column;
     flex-direction: column;
-    padding-bottom: 10px;
+    padding-bottom: 10px; }
 
-  }
   
   input, textarea, select {
     border: 1px solid #ccc;
     border-radius: 20px;
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
   }
   
   textarea {
     resize: vertical;
-    height: 60px;
+    height: 10px;
   }
   
   .submit-btn-avail {
-    padding: 10px 20px;
+    padding: 5px 20px;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -425,3 +470,48 @@ h5 {
   }
   
 
+  textarea {
+    font-size: 1vw;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    font-family: louis;
+    height: auto;
+}
+
+.update {
+        text-align: center;
+        background-color: transparent;
+        align-items: center;
+        margin-top:1vw;
+        font-family: louis;
+        width: 6vw;   
+        color: gray;
+        border: none;
+        border-radius: 25px;
+        font-size: 0.8vw;
+        cursor: pointer;
+        transition: 0.3s ease, transform 0.3s ease;
+  
+}
+
+
+.update:hover {
+    /* background-color: #ff6464; */
+    transform: scale(1.05);
+    opacity: 60%;
+}
+
+
+textarea {
+    font-size: 1vw;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    font-family: louis;
+    height: auto;
+}
+
+form {
+    align-items: center;
+}
