@@ -49,7 +49,7 @@
     <div class="sidebar">
         <h3>Dashboard</h3>
         <a href="#" onclick="showContent('active-bookings')">FAQs</a>
-        <a href="#" onclick="showContent('past-bookings')">Services Offered</a>
+        <!-- <a href="#" onclick="showContent('past-bookings')">Services Offered</a> -->
         <a href="#" onclick="showContent('cancelled')">Available Materials </a>
         <a href="#" onclick="showContent('policies')">Policies </a>
     </div>
@@ -57,7 +57,26 @@
     <!-- Main Content (Forms to edit) -->
     <div class="content">
 
-        <!-- Active Bookings -->
+    
+<div class = "modal-bg">
+<!-- Modal Structure -->
+<div id="questionModal" class="modal-question">
+    <div class="modal-content-question">
+        <h3>Ask a Question</h3>
+        <label for="question-input">Question:</label>
+        <input type="text" id="question-input" class="input-question" placeholder="Enter your question here" required><br><br>
+
+        <label for="answer-input">Answer:</label>
+        <input type="text" id="answer-input" class="input-question" placeholder="Enter your answer here" required><br><br>
+
+        <button class="add-button-question" onclick="addQuestion()">Add</button>
+        <button class="cancel-button-question" onclick="closeQuestionModal()">Cancel</button>
+    </div>
+</div>
+
+</div>
+
+        <!-- FAQs -->
         <div class="section" id="active-bookings">
             <h2>FAQs</h2> 
             <!-- Yung 12 hours pagitan na pwede silamagcancel both client and user -->
@@ -66,8 +85,16 @@
             <tr>
                 <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
                 <td> <h4> Sort by: All / Unanswered / Answered </h4> </td>
+                <td>
+    <img src="Assets/icon_Add.png" class="add-icon-avail" onclick="openQuestionModal()">
+</td>
                 
             </tr>
+
+
+
+            
+
             </table>
 
             <center>
@@ -77,7 +104,11 @@
                 <td class = "td-date"> <h1> 1 </h1> </td>
 
                 <td class = "td-details"> 
-                    <h5> Question Here  </h5>
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Question Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
                   
                 </td>
 
@@ -87,7 +118,7 @@
             <textarea name="company-name" class="company-name"> Answer Here </textarea>
             <br> <button type="submit" name="update-company" class = "update">Update</button>
         </form>
-    </td></`center>
+    </td></center>
                 </td>
 
                 <td class="td-buttons">
@@ -117,7 +148,11 @@
                 <td class = "td-date"> <h1> 2 </h1> </td>
 
                 <td class = "td-details"> 
-                    <h5> Question Here  </h5>
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Question Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
                   
                 </td>
 
@@ -155,46 +190,7 @@
 
         </div>
 
-        <!-- Past Bookings -->
-        <div class="section" id="past-bookings" style="display: none;">
-            <h2>Services Offered</h2>
-
-
-            <table class = "sortby-container">
-            <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-
-            </table>
-
-            <center>
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                <img src ="Assets/icon_check.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
+    
 
         <!-- Available Materials -->
         <div class="section" id="cancelled" style="display: none;">
@@ -205,7 +201,7 @@
             <table class = "sortby-container">
             <tr>
                 <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
+                <td> <h4> Sort by: All / Available / Unavailable </h4> </td>
 
                 <td>
   <img src="Assets/icon_Add.png" class="add-icon-avail" onclick="openModal()">
@@ -278,34 +274,73 @@
             <tr>
                 <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
                 <td> <h4> Sort by: Most Recent </h4> </td>
+
+                <td>
+    <img src="Assets/icon_Add.png" class="add-icon-avail" onclick="openPolicyModal()">
+</td>
                 
             </tr>
             </table>
+
+            <!-- Modal structure -->
+<div id="modal-policy" class="modal-policy">
+    <div class="modal-content-policy">
+        <span class="close-policy" onclick="closePolicyModal()">&times;</span>
+        <h2>Enter Policy Information</h2>
+        
+        <label for="policy-title">Policy Title:</label>
+        <input type="text" id="policy-title" class="policy-input" placeholder="Enter policy title" />
+
+        <label for="policy-description">Policy Description:</label>
+        <textarea id="policy-description" class="policy-input" placeholder="Enter policy description"></textarea>
+
+        <div class="modal-buttons">
+            <button class="btn-policy" onclick="addPolicy()">Add</button>
+            <button class="btn-policy" onclick="closePolicyModal()">Cancel</button>
+        </div>
+    </div>
+</div>
 
             <center>
 
             <table class = "booking-container"> 
             <tr>
-                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
+                <td class = "td-date"> <h1> 1 </h1> </td>
 
                 <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Policy Title Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
+                  
                 </td>
 
                 <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
+                <form>
+                    <center>
+            <textarea name="company-name" class="company-name"> Policy Desc Here </textarea>
+            <br> <button type="submit" name="update-company" class = "update">Update</button>
+        </form>
+    </td></center>
                 </td>
 
-                <td class = "td-buttons"> 
-                <img src ="Assets/icon_check.png" class = "completed-icon">
+                <td class="td-buttons">
+    <button class="post-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Post </h5>
+    </button>
                 </td>
+
+                <td class="td-buttons">
+    <button class="delete-btn" onclick="openModal()">
+        <h5 class="txt-cancel"> Delete </h5>
+    </button>
+                </td>
+
                 
             </tr>
-            </table>
+
+            </table>  
 
         </div>
 
@@ -419,6 +454,69 @@ window.onclick = function(event) {
     closeModal();
   }
 }
+
+
+// Function to open the modal
+function openQuestionModal() {
+    document.getElementById("questionModal").style.display = "block";
+}
+
+// Function to close the modal
+function closeQuestionModal() {
+    document.getElementById("questionModal").style.display = "none";
+}
+
+// Function to handle the "Add" button
+function addQuestion() {
+    const question = document.getElementById("question-input").value;
+    const answer = document.getElementById("answer-input").value;
+
+    if (question && answer) {
+        // You can handle the question and answer here, e.g., log it or store it
+        console.log("Question: " + question);
+        console.log("Answer: " + answer);
+        
+        // Close the modal after adding
+        closeQuestionModal();
+        
+        // Optionally, clear the inputs
+        document.getElementById("question-input").value = "";
+        document.getElementById("answer-input").value = "";
+    } else {
+        alert("Please enter both a question and an answer.");
+    }
+}
+
+// Close the modal if the user clicks outside of the modal content
+window.onclick = function(event) {
+    if (event.target == document.getElementById("questionModal")) {
+        closeQuestionModal();
+    }
+}
+
+// Open Modal Function
+function openPolicyModal() {
+    document.getElementById('modal-policy').style.display = 'block';
+}
+
+// Close Modal Function
+function closePolicyModal() {
+    document.getElementById('modal-policy').style.display = 'none';
+}
+
+// Add Policy Function (for demonstration purposes, you can modify as needed)
+function addPolicy() {
+    const policyTitle = document.getElementById('policy-title').value;
+    const policyDescription = document.getElementById('policy-description').value;
+    
+    // Handle the data (e.g., send to server or store)
+    console.log('Policy Title:', policyTitle);
+    console.log('Policy Description:', policyDescription);
+
+    // Close the modal after adding
+    closePolicyModal();
+}
+
 
    
 </script>

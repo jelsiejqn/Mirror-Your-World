@@ -431,6 +431,10 @@ h5 {
     resize: vertical;
     height: 10px;
   }
+
+  .service-icon {
+    width: 3vw;
+  }
   
   .submit-btn-avail {
     padding: 5px 20px;
@@ -514,4 +518,135 @@ textarea {
 
 form {
     align-items: center;
+}
+
+/* Modal Background */
+.modal-question {
+    display: none;  /* Hidden by default */
+    position: fixed;
+    z-index: 10;  /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);  /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content-question {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 20px; /* 20px border radius as requested */
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Input Fields */
+.input-question {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+ 
+/* Buttons */
+.add-button-question, .cancel-button-question {
+    font-family: louis;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+}
+
+.add-button-question:hover {
+    opacity: 60%;
+    transition: 0.3s;
+    background-color:#4CAF50;
+}
+
+.cancel-button-question {
+    opacity: 60%;
+    transition: 0.3s;
+    background-color: #d03f35;
+}
+
+.cancel-button-question:hover {
+    opacity: 60%;
+    transition: 0.3s;
+    background-color: #c75856;
+}
+
+/* Modal Background */
+.modal-policy {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content-policy {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Close Button */
+.close-policy {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-policy:hover,
+.close-policy:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Input fields */
+.policy-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Buttons */
+.modal-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-policy {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-policy:hover {
+    background-color: #45a049;
 }
