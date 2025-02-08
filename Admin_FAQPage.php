@@ -57,24 +57,6 @@
     <!-- Main Content (Forms to edit) -->
     <div class="content">
 
-    
-<div class = "modal-bg">
-<!-- Modal Structure -->
-<div id="questionModal" class="modal-question">
-    <div class="modal-content-question">
-        <h3>Ask a Question</h3>
-        <label for="question-input">Question:</label>
-        <input type="text" id="question-input" class="input-question" placeholder="Enter your question here" required><br><br>
-
-        <label for="answer-input">Answer:</label>
-        <input type="text" id="answer-input" class="input-question" placeholder="Enter your answer here" required><br><br>
-
-        <button class="add-button-question" onclick="addQuestion()">Add</button>
-        <button class="cancel-button-question" onclick="closeQuestionModal()">Cancel</button>
-    </div>
-</div>
-
-</div>
 
         <!-- FAQs -->
         <div class="section" id="active-bookings">
@@ -282,24 +264,7 @@
             </tr>
             </table>
 
-            <!-- Modal structure -->
-<div id="modal-policy" class="modal-policy">
-    <div class="modal-content-policy">
-        <span class="close-policy" onclick="closePolicyModal()">&times;</span>
-        <h2>Enter Policy Information</h2>
-        
-        <label for="policy-title">Policy Title:</label>
-        <input type="text" id="policy-title" class="policy-input" placeholder="Enter policy title" />
-
-        <label for="policy-description">Policy Description:</label>
-        <textarea id="policy-description" class="policy-input" placeholder="Enter policy description"></textarea>
-
-        <div class="modal-buttons">
-            <button class="btn-policy" onclick="addPolicy()">Add</button>
-            <button class="btn-policy" onclick="closePolicyModal()">Cancel</button>
-        </div>
-    </div>
-</div>
+            <!-- Modal structure Policy-->
 
             <center>
 
@@ -378,6 +343,43 @@
       <button type="submit" class="submit-btn-avail">Submit</button>
     </form>
   </div>
+</div>
+
+ <!-- Modal structure Policy-->
+ <div id="modal-policy" class="modal-policy">
+    <div class="modal-content-policy">
+        <span class="close-policy" onclick="closePolicyModal()">&times;</span>
+        <h2>Enter Policy Information</h2>
+        
+        <label for="policy-title">Policy Title:</label>
+        <input type="text" id="policy-title" class="policy-input" placeholder="Enter policy title" />
+
+        <label for="policy-description">Policy Description:</label>
+        <textarea id="policy-description" class="policy-input" placeholder="Enter policy description"></textarea>
+
+        <div class="modal-buttons">
+            <button class="btn-policy" onclick="addPolicy()">Add</button>
+            <button class="btn-policy" onclick="closePolicyModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class = "modal-bg">
+<!-- Modal Structure Question -->
+<div id="questionModal" class="modal-question">
+    <div class="modal-content-question">
+        <h3>Ask a Question</h3>
+        <label for="question-input">Question:</label>
+        <input type="text" id="question-input" class="input-question" placeholder="Enter your question here" required><br><br>
+
+        <label for="answer-input">Answer:</label>
+        <input type="text" id="answer-input" class="input-question" placeholder="Enter your answer here" required><br><br>
+
+        <button class="add-button-question" onclick="addQuestion()">Add</button>
+        <button class="cancel-button-question" onclick="closeQuestionModal()">Cancel</button>
+    </div>
+</div>
+
 </div>
 
 
