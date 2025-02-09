@@ -10,7 +10,6 @@
 
 </head>
 <body>
-    
    <!-- Required -->
 
    <div class="navbar">

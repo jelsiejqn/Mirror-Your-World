@@ -148,17 +148,49 @@ body {
   }
 
   .inquiry-icon {
-   
     width: 6vw;
     position: fixed;
     z-index: 999;
     bottom: 4%;
     right: 2%;
+    cursor: pointer;
   }
 
   .inquiry-icon:hover {
-   opacity: 70%;
-   transition: 0.3s;
+    opacity: 90%;
+   transition: 0.3s ease;
+  }
+
+  .inquiry-icon img {
+    width: 6vw;
+    position: fixed;
+    z-index: 999;
+    bottom: 4%;
+    right: 2%;
+    cursor: pointer;
+  }
+
+  .uparrow2 {
+    width: 3vw;
+    position: fixed;
+    z-index: 999;
+    bottom: 4%;
+    left: 2%;
+    cursor: pointer;
+  }
+
+  .uparrow2:hover {
+    opacity: 90%;
+   transition: 0.3s ease;
+  }
+
+  .uparrow2 img {
+    width: 3vw;
+    position: fixed;
+    z-index: 999;
+    bottom: 4%;
+    left: 2%;
+    cursor: pointer;
   }
 
   a:hover {

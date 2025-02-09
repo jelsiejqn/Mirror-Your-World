@@ -58,8 +58,8 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
         </ul>
     </div>
 
-    <a href="User_InquiryPage.php">
-        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
+    <a href="User_InquiryPage.php" class="inquiry-icon">
+        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon1"/>
     </a>
 
     
@@ -78,10 +78,10 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
     <!-- Required -->
 
-    <a href="#" class="back-to-top" title="Go back to top"> 
-    <img src="Assets/icon_uparrow.png" class ="uparrow">
+    <a href="#" title="Go back to top" class ="uparrow2"> 
+    <img src="Assets/icon_uparrow.png" class ="uparrow3">
     <span class="tooltip">Go back to top</span>
-</a>
+    </a>
 
     <!-- Page 2 -->
 
