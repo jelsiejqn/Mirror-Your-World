@@ -12,100 +12,66 @@
 
 <body>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 session_start();
 
 // Check if the user is logged in
-$isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
-
-if (!$isLoggedIn) {
-    // If not logged in, redirect to the login page
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
     header('Location: User_LoginPage.php');
     exit;
 }
 
-// Fetch user data from the session
-$user_id = $_SESSION['user_id']; // Assuming the session stores 'user_id'
-$username = $_SESSION['username'];
-
-// Include database connection file
 include 'dbconnect.php';
+$user_id = $_SESSION['user_id'];
 
-// Fetch additional user information from the database
 $query = "SELECT first_name, last_name, email, company_name, contact_number, username, profile_picture FROM userstbl WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
-$stmt = $conn->prepare($query);
-$stmt->bind_param('i', $user_id); // 'i' indicates integer type for 'user_id'
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Check if the user exists
-if ($result->num_rows > 0) {
-    // Fetch the user data from the result
-    $user = $result->fetch_assoc();
-} else {
-    // If no user found, redirect to login page
-    header('Location: User_LoginPage.php');
+function showAlert($message) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '$message',
+            confirmButtonText: 'OK'
+        }).then(() => { window.location.href = 'User_AccountPage.php'; });
+    </script>";
     exit;
 }
 
-// Handle form submission to update user details
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Update Basic Information (First Name, Last Name, Email, Company Name, Contact Number)
     if (isset($_POST['update_basic_info'])) {
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $email = $_POST['email'];
-        $company_name = $_POST['company_name'];
-        $contact_number = $_POST['contact_number'];
+        $company_name = $_POST['company_name'] ?? '';
+        $contact_number = $_POST['contact_number'] ?? '';
 
-        // Update query for basic information
         $update_query = "UPDATE userstbl SET first_name = ?, last_name = ?, email = ?, company_name = ?, contact_number = ? WHERE user_id = ?";
         $stmt = $conn->prepare($update_query);
         $stmt->bind_param('sssssi', $first_name, $last_name, $email, $company_name, $contact_number, $user_id);
-
-        if ($stmt->execute()) {
-            // If update successful, refresh the page to reflect changes
-            header('Location: User_AccountPage.php');
-            exit;
-        } else {
-            // Handle error
-            echo "Error updating record: " . $conn->error;
-        }
+        if ($stmt->execute()) showAlert('Your information has been updated successfully.');
     }
 
-
-    // Update Username
     if (isset($_POST['update_username'])) {
         $new_username = $_POST['new_username'];
-
-        // Update query for username
         $update_username_query = "UPDATE userstbl SET username = ? WHERE user_id = ?";
         $stmt = $conn->prepare($update_username_query);
         $stmt->bind_param('si', $new_username, $user_id);
-
-        if ($stmt->execute()) {
-            // If update successful, refresh the page to reflect changes
-            header('Location: User_AccountPage.php');
-            exit;
-        } else {
-            echo "Error updating username: " . $conn->error;
-        }
+        if ($stmt->execute()) showAlert('Your username has been updated successfully.');
     }
 
-    // Update Password
     if (isset($_POST['update_password'])) {
         $current_password = $_POST['current_password'];
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
 
         if ($new_password === $confirm_password) {
-            // Check if current password is correct
             $password_check_query = "SELECT password FROM userstbl WHERE user_id = ?";
             $stmt = $conn->prepare($password_check_query);
             $stmt->bind_param('i', $user_id);
@@ -113,69 +79,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($stored_password);
             $stmt->fetch();
 
-            // Verify the password
             if (password_verify($current_password, $stored_password)) {
-                // Update query for password
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                 $update_password_query = "UPDATE userstbl SET password = ? WHERE user_id = ?";
                 $stmt = $conn->prepare($update_password_query);
                 $stmt->bind_param('si', $hashed_password, $user_id);
-
-                if ($stmt->execute()) {
-                    // If update successful, refresh the page to reflect changes
-                    header('Location: User_AccountPage.php');
-                    exit;
-                } else {
-                    echo "Error updating password: " . $conn->error;
-                }
+                if ($stmt->execute()) showAlert('Your password has been updated successfully.');
             } else {
-                echo "Current password is incorrect!";
+                echo "<script>Swal.fire('Error', 'Current password is incorrect!', 'error');</script>";
             }
         } else {
-            echo "New passwords do not match!";
+            echo "<script>Swal.fire('Error', 'New passwords do not match!', 'error');</script>";
         }
     }
 
-    // Handle Profile Picture Update (if necessary)
     if (isset($_FILES['profile_picture'])) {
         $profile_picture = $_FILES['profile_picture']['name'];
-        $target_dir = "uploads/"; // Specify your target directory
+        $target_dir = "uploads/";
         $target_file = $target_dir . basename($profile_picture);
         $upload_ok = 1;
-
-        // Check file size (limit to 2MB)
-        if ($_FILES["profile_picture"]["size"] > 2000000) {
-            echo "Sorry, your file is too large.";
-            $upload_ok = 0;
-        }
-
-        // Allow certain file formats
         $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        if ($image_file_type != "jpg" && $image_file_type != "png" && $image_file_type != "jpeg") {
-            echo "Sorry, only JPG, JPEG, and PNG files are allowed.";
+        
+        if ($_FILES["profile_picture"]["size"] > 2000000) {
+            echo "<script>Swal.fire('Error', 'File is too large.', 'error');</script>";
             $upload_ok = 0;
         }
-
-        // Check if upload is allowed
-        if ($upload_ok == 0) {
-            echo "Sorry, your file was not uploaded.";
-        } else {
-            if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file)) {
-                // Update query for profile picture
-                $update_picture_query = "UPDATE userstbl SET profile_picture = ? WHERE user_id = ?";
-                $stmt = $conn->prepare($update_picture_query);
-                $stmt->bind_param('si', $target_file, $user_id);
-
-                if ($stmt->execute()) {
-                    // If update successful, refresh the page to reflect changes
-                    header('Location: User_AccountPage.php');
-                    exit;
-                } else {
-                    echo "Error updating profile picture: " . $conn->error;
-                }
-            } else {
-                echo "Sorry, there was an error uploading your file.";
-            }
+        if (!in_array($image_file_type, ["jpg", "png", "jpeg"])) {
+            echo "<script>Swal.fire('Error', 'Only JPG, JPEG, and PNG files are allowed.', 'error');</script>";
+            $upload_ok = 0;
+        }
+        if ($upload_ok && move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file)) {
+            $update_picture_query = "UPDATE userstbl SET profile_picture = ? WHERE user_id = ?";
+            $stmt = $conn->prepare($update_picture_query);
+            $stmt->bind_param('si', $target_file, $user_id);
+            if ($stmt->execute()) showAlert('Your profile picture has been updated successfully.');
         }
     }
 }
@@ -221,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#about-me">About Me</a>
         <a href="#change-profile-picture">Change Profile Picture</a>
         <a href="#change-basic-info">Change Basic Information</a>
-        <a href="#change-address">Change Address</a>
         <a href="#change-username">Change Username</a>
         <a href="#change-password">Change Password</a>
     </div>
@@ -236,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
                         <h3><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></h3>
                         <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
-                        <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
+                        <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>  
                     </div>
                 </div>
             </div>
@@ -251,31 +187,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="section" id="change-basic-info">
-            <h2>Change Basic Information</h2>
-            <form action="User_AccountPage.php" method="POST">
-                <label for="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
+    <h2>Change Basic Information</h2>
+    <form action="User_AccountPage.php" method="POST">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
 
-                <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>">
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>">
 
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
 
-                <button type="submit">Update Information</button>
-            </form>
-        </div>
+        <label for="company_name">Company Name</label>
+        <input type="text" id="company_name" name="company_name" value="<?php echo htmlspecialchars($user['company_name']); ?>">
 
-        <!-- Change Address -->
-        <div class="section" id="change-address">
-            <h2>Change Address</h2>
-            <form>
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" value="123 Main St, Springfield">
+        <label for="contact_number">Contact Number</label>
+        <input type="text" id="contact_number" name="contact_number" value="<?php echo htmlspecialchars($user['contact_number']); ?>">
 
-                <button type="submit">Update Address</button>
-            </form>
-        </div>
+        <button type="submit" name="update_basic_info">Update Information</button>
+    </form>
+</div>
+
 
             <div class="section" id="change-username">
                 <h2>Change Username</h2>
