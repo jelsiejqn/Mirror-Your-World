@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $appointment_date = $_POST['appointment-date'];
     $appointment_time = $_POST['time'];
     $special_requests = $_POST['request'];
+    $address = $_POST['address'];
 
     // Validate input
     if (empty($consultation_type) || empty($appointment_date) || empty($appointment_time)) {
@@ -62,13 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Check if the selected timeslot is already booked
     $check_query = "SELECT * FROM timeslotstbl WHERE appointment_date = ? AND appointment_time = ? AND is_booked = 1";
     $check_stmt = $conn->prepare($check_query);
     $check_stmt->bind_param('ss', $appointment_date, $appointment_time);
     $check_stmt->execute();
     $check_result = $check_stmt->get_result();
-    
-    // If a record exists where is_booked = 1, the slot is already taken
+
     if ($check_result->num_rows > 0) {
         echo "<script>
             Swal.fire({
@@ -82,21 +83,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </script>";
         exit;
     }
-    
+
+    // Insert the booked timeslot into timeslotstbl
+    $insert_timeslot_query = "INSERT INTO timeslotstbl (appointment_date, appointment_time, is_booked) VALUES (?, ?, 1)";
+    $insert_timeslot_stmt = $conn->prepare($insert_timeslot_query);
+    $insert_timeslot_stmt->bind_param('ss', $appointment_date, $appointment_time);
+    $insert_timeslot_stmt->execute();
+    $insert_timeslot_stmt->close();
+
     // Insert into appointmentstbl
-    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, special_requests) 
-              VALUES (?, ?, ?, ?, ?)";
+    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, address, special_requests, status) 
+              VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('issss', $user_id, $consultation_type, $appointment_date, $appointment_time, $special_requests);
+    $stmt->bind_param('isssss', $user_id, $consultation_type, $appointment_date, $appointment_time, $address, $special_requests);
 
     if ($stmt->execute()) {
-        // Mark timeslot as booked
-        $update_query = "UPDATE timeslotstbl SET is_booked = 1 WHERE appointment_date = ? AND appointment_time = ?";
-        $update_stmt = $conn->prepare($update_query);
-        $update_stmt->bind_param('ss', $appointment_date, $appointment_time);
-        $update_stmt->execute();
-        $update_stmt->close();
-
         // Log the action
         $action_type = 'Appointment Booked Successfully';
         $log_query = "INSERT INTO logstbl (user_id, action_type, action_timestamp) VALUES (?, ?, NOW())";
@@ -108,21 +109,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Send confirmation email
         $mail = new PHPMailer(true);
         try {
-            // Server settings
-            $mail->isSMTP();                                            // Send using SMTP
-            $mail->Host       = $smtp_host;                           // Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = $smtp_username;                        // SMTP username
-            $mail->Password   = $smtp_password;                        // SMTP password
-            $mail->SMTPSecure = $smtp_secure;                          // Enable TLS encryption
-            $mail->Port       = $smtp_port;                            // TCP port to connect to
+            $mail->isSMTP();
+            $mail->Host       = $smtp_host;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $smtp_username;
+            $mail->Password   = $smtp_password;
+            $mail->SMTPSecure = $smtp_secure;
+            $mail->Port       = $smtp_port;
 
-            // Recipients
-            $mail->setFrom($smtp_sender, 'Mirror Your World');         // Sender's email and name
-            $mail->addAddress($user['email'], $user['first_name']);   // Add a recipient
+            $mail->setFrom($smtp_sender, 'Mirror Your World');
+            $mail->addAddress($user['email'], $user['first_name']);
 
-            // Content
-            $mail->isHTML(true);                                       // Set email format to HTML
+            $mail->isHTML(true);
             $mail->Subject = 'Appointment Confirmation';
             $mail->Body    = "Dear " . htmlspecialchars($user['first_name']) . ",<br><br>Your appointment has been successfully booked for " . htmlspecialchars($appointment_date) . " at " . htmlspecialchars($appointment_time) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Special Requests: " . htmlspecialchars($special_requests) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
 
@@ -144,8 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>
         Swal.fire({
             icon: 'error',
-            title: 'Time Slot Unavailable',
-            text: 'This timeslot is already booked. Please choose another.',
+            title: 'Error',
+            text: 'An error occurred while booking your appointment. Please try again.',
         }).then(() => { window.history.back(); });
       </script>";
     }
@@ -153,75 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 
-// Update available dates logic
-$today = date('Y-m-d');
+$conn->close();
 
-// ** Delete timeslots older than 30 days **
-$delete_query = "DELETE FROM timeslotstbl WHERE appointment_date < NOW() - INTERVAL 30 DAY";
-$delete_stmt = $conn->prepare($delete_query);
-$delete_stmt->execute();
-$delete_stmt->close();
-
-// ** Reset booked status for past dates **
-$query = "UPDATE timeslotstbl SET is_booked = 0 WHERE appointment_date < ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $today);
-$stmt->execute();
-$stmt->close(); // Close the statement after execution
-
-// Define available times
-$available_times = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
-
-// Get today's date
-$today = date('Y-m-d');
-
-// ** Delete timeslots older than 30 days **
-$delete_query = "DELETE FROM timeslotstbl WHERE appointment_date < NOW() - INTERVAL 30 DAY";
-$delete_stmt = $conn->prepare($delete_query);
-$delete_stmt->execute();
-$delete_stmt->close();
-
-// ** Reset booked status for past dates **
-$query = "UPDATE timeslotstbl SET is_booked = 0 WHERE appointment_date < ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $today);
-$stmt->execute();
-$stmt->close(); // Close the statement after execution
-
-// Loop through the next 7 days
-for ($i = 1; $i <= 7; $i++) {
-    $new_date = date('Y-m-d', strtotime("+$i days"));
-
-    // Loop through each available time
-    foreach ($available_times as $time) {
-        // Check if the specific timeslot already exists
-        $check_query = "SELECT COUNT(*) FROM timeslotstbl WHERE appointment_date = ? AND appointment_time = ?";
-        $check_stmt = $conn->prepare($check_query);
-        $check_stmt->bind_param('ss', $new_date, $time);
-        $check_stmt->execute();
-        $check_stmt->bind_result($count);
-        $check_stmt->fetch();
-        $check_stmt->close();
-
-        // If the timeslot does not exist, insert it
-        if ($count === 0) {
-            $insert_query = "INSERT INTO timeslotstbl (appointment_date, appointment_time, is_booked) VALUES (?, ?, 0)";
-            $insert_stmt = $conn->prepare($insert_query);
-            $insert_stmt->bind_param('ss', $new_date, $time);
-            $insert_stmt->execute();
-            $insert_stmt->close(); // Close the insert statement after execution
-        }
-    }
-}
-
-// Remove timeslots that are older than today
-$delete_query = "DELETE FROM timeslotstbl WHERE appointment_date < ?";
-$delete_stmt = $conn->prepare($delete_query);
-$delete_stmt->bind_param('s', $today);
-$delete_stmt->execute();
-$delete_stmt->close(); // Close the delete statement after execution
-
-$conn->close(); // Close the database connection
 ?>
 
 <!-- Required -->
@@ -322,7 +253,7 @@ $conn->close(); // Close the database connection
         <div class="request-field">
             <div class="input-wrapper">
                 <label for="request">Consultation Site</label>
-                <input type="text" class="address1" id="request" name="address-houseNo" placeholder="Full Address" required>
+                <input type="text" class="address1" id="request" name="address" placeholder="Full Address" required>
             </div>
         </div>
 

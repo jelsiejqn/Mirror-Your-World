@@ -1,3 +1,45 @@
+<?php
+session_start();
+include 'dbconnect.php'; // Include your database connection file
+
+// Redirect to login if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: User_LoginPage.php');
+    exit;
+}
+
+// Fetch user ID from session
+$user_id = $_SESSION['user_id'];
+
+// Fetch active and cancelled bookings for the logged-in user
+$query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, 
+                 a.consultation_type, a.address, 
+                 u.first_name, u.last_name, u.email, u.contact_number,
+                 a.is_cancelled, a.cancellation_reason
+          FROM appointmentstbl a 
+          JOIN timeslotstbl t ON a.appointment_date = t.appointment_date 
+                             AND a.appointment_time = t.appointment_time 
+          JOIN userstbl u ON a.user_id = u.user_id 
+          WHERE a.user_id = ?";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Categorize bookings
+$activeBookings = [];
+$cancelledBookings = [];
+
+while ($row = $result->fetch_assoc()) {
+    if ($row['is_cancelled'] == 1) {
+        $cancelledBookings[] = $row;
+    } else {
+        $activeBookings[] = $row;
+    }
+}
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,7 +76,7 @@
                 <a href="User_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">My Appointments</a>
+                <a href="User_ActiveBookings.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Active Bookings</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
                 <a href="User_Homepage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
@@ -63,138 +105,46 @@
 
         <!-- Active Bookings -->
         <div class="section" id="active-bookings">
-            <h2>Active Bookings</h2>
-            
-            <table class = "sortby-container">
-            <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-            </table>
+    <h2>Active Bookings</h2>
+    
+    <table class="sortby-container">
+        <tr>
+            <td> <img src="Assets/icon_sortBy.png" class="sortby-icon"> </td>
+            <td> <h4> Sort by: Most Recent </h4> </td>
+        </tr>
+    </table>
 
-            <center>
 
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+        <?php if (!empty($activeBookings)): ?>
+            <?php foreach ($activeBookings as $row): ?>
+                <table class="booking-container">
+                    <tr>
+                        <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
+                        <td class="td-details">
+                            <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
+                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
+                            <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                        </td>
+                        <td class="td-booker">
+                            <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                            <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
+                            <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                        </td>
+                        <td class="td-buttons">
+                            <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
+                                <h5 class="txt-cancel">Cancel</h5>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <h5>No active bookings found.</h5>
+        <?php endif; ?>
 
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
+</div>
 
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
 
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
-                </td>
-                
-            </tr>
-            </table>  
-
-            
-            
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
-                </td>
-                
-            </tr>
-            </table>       
-            
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
-                </td>
-                
-            </tr>
-            </table>       
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
-                </td>
-                
-            </tr>
-            </table>          
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <button class = "cancel-btn"> <h5 class = "txt-cancel"> Cancel </h5> </button>
-                </td>
-                
-            </tr>
-            </table>          
-
-            
-
-        </div>
 
         <!-- Past Bookings -->
         <div class="section" id="past-bookings" style="display: none;">
@@ -236,43 +186,125 @@
 
         <!-- Cancelled -->
         <div class="section" id="cancelled" style="display: none;">
-            <h2>Cancelled</h2>
-    
+    <h2>Cancelled</h2>
 
-            <table class = "sortby-container">
-            <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-            </table>
+    <table class="sortby-container">
+        <tr>
+            <td> <img src="Assets/icon_sortBy.png" class="sortby-icon"> </td>
+            <td> <h4> Sort by: Most Recent </h4> </td>
+        </tr>
+    </table>
 
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
+    <center>
+        <?php if (!empty($cancelledBookings)): ?>
+            <?php foreach ($cancelledBookings as $row): ?>
+                <table class="booking-container">
+                    <tr>
+                    <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
+                        <td class="td-details">
+                            <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
+                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
+                            <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                        </td>
+                        <td class="td-booker">
+                            <h5>Reason for Cancellation</h5>
+                            <h5><?= htmlspecialchars($row['cancellation_reason']) ?></h5>
+                        </td>
+                        <td class="td-buttons">
+                            <img src="Assets/icon_X.png" class="completed-icon">
+                        </td>
+                    </tr>
+                </table>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <h5>No cancelled bookings found.</h5>
+        <?php endif; ?>
+    </center>
+</div>
 
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
 
-                <td class = "td-booker"> 
-                    <h5> Reason of Cancellation </h5>
-                    <h5> Reason Here </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                <img src ="Assets/icon_X.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
-
+<div id="cancelPopup" class="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closeCancelPopup()">&times;</span>
+        <h2>Cancel Appointment</h2>
+        <form id="cancelForm" method="POST" action="cancel_appointment.php">
+            <input type="hidden" name="appointment_id" id="appointmentId">
+            <label for="reason">Reason for Cancellation</label>
+            <textarea name="reason" id="reason" required></textarea>
+            <br>
+            <br>
+            <button type="submit" class="confirm-btn">Confirm Cancellation</button>
+        </form>
     </div>
 </div>
+<style>
+    .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.popup-content {
+    text-align: center;
+    position: relative;
+}
+
+.popup h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-size: 14px;
+}
+
+.confirm-btn {
+    background-color: #FF5C5C;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 50%;
+    font-size: 16px;
+}
+
+.confirm-btn:hover {
+    background-color: #cc4b4b;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+</style>
 
 </body>
 
@@ -313,6 +345,22 @@ function showContent(sectionId) {
     if (activeSection) {
         activeSection.style.display = 'block';
     }
+}
+function openCancelPopup(appointmentId) {
+    document.getElementById('appointmentId').value = appointmentId;
+    let popup = document.getElementById('cancelPopup');
+    popup.style.display = 'block';
+    popup.style.opacity = '1';
+    popup.style.transform = 'translate(-50%, -50%) scale(1)';
+}
+
+function closeCancelPopup() {
+    let popup = document.getElementById('cancelPopup');
+    popup.style.opacity = '0';
+    popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 200);
 }
 
    
