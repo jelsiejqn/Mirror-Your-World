@@ -91,9 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </ul>
     </div>
 
-    <a href="User_InquiryPage.php">
-        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
+    <a href="User_InquiryPage.php" class="inquiry-icon">
+        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon1"/>
     </a>
+
 
     <div class="BGhome-container">
         <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">

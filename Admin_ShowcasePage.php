@@ -7,6 +7,11 @@
 
     <link rel="stylesheet" href="Style/Admin_ShowcasePageCSS.css" />
     <link rel="stylesheet" href="Style/Required.css" />
+    <link rel="stylesheet" href="Style/Calendar.css" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 </head>
 <body>
@@ -20,9 +25,35 @@
       
     </div>
 
-   <div class="logo">
-    <img src="Assets/icon_calendar.png" class="cal_img" alt="calendar" style="width: 30px" onclick="openCalModal()">
-</div>
+
+    
+
+     <!-- Calendar -->
+
+     <div class="logo">
+        <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 30px; cursor: pointer;">
+    </div>
+
+    <div id="calntime-modal" class="calntime-modal" style="display: none;">
+        <div class="calntime-modal-content">
+            <span class="calntime-close">&times;</span>
+            <h2 class = "calntime-title">Calendar Availability
+                <br> <p class = "calntime-description"> Please block off unavailable dates. </p> 
+
+            </h2>
+            
+            <center>
+            <div id="calntime-datepicker"></div>
+            <div class="calntime-buttons">
+                <button id="calntime-block">Block Date</button>
+                <button id="calntime-unblock">Unblock Date</button>
+                <button id="calntime-update">Update</button>
+            </div>
+        </div>
+    </div>
+   
+
+     <!-- Calendar -->
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
         <button class="btn dropdown-trigger" data-target="dropdown1" style=" border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
@@ -290,6 +321,33 @@ function openModal() {
         }
     }
 
+    // Calendar
+
+    document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("calntime-modal");
+            const img = document.querySelector(".calntime-cal_img");
+            const closeBtn = document.querySelector(".calntime-close");
+            
+            flatpickr("#calntime-datepicker", {
+                inline: true,
+                enableTime: false,
+                dateFormat: "Y-m-d"
+            });
+            
+            img.onclick = function() {
+                modal.style.display = "flex";
+            }
+            
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
    
 </script>
     

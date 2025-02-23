@@ -65,14 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Required -->
 
-    <div class="navbar">
-        <a href="Admin_ShowcasePage.php">Showcase</a>
-        <a href="Admin_AppointmentsPage.php">Appointments</a>
-        <a href="Admin_FAQPage.php">FAQ</a>
-        <a href="Admin_ReviewsPage.php">Reviews</a>
-        
-    </div>
-
     <div class="logo">
         <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px">
     </div>
@@ -85,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
+                <a href="Admin_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Sign-Up</a>
             </li>
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="Admin_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Log-Out</a>
+                <a href="Admin_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Login</a>
             </li>
         </ul>
     </div>

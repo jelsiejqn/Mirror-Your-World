@@ -1,4 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment | Mirror Your World</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="Style/Required.css" />
+    <link rel="stylesheet" href="Style/User_FormsPageCSS.css" />
+</head>
+<body>
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'User_EmailAPI.php'; 
+include 'dbconnect.php';
+
 session_start();
 
 // Redirect to login if not logged in
@@ -8,22 +25,27 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch user details from the database
-include 'dbconnect.php';
 $query = "SELECT first_name, last_name, email FROM userstbl WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $_SESSION['user_id']);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
+
 if (!$user) {
     header('Location: User_LoginPage.php');
     exit;
 }
 
-// Ensure user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: User_LoginPage.php');
-    exit;
+// Fetch booked dates and times
+$booked_dates = [];
+$booked_slots = [];
+
+$query = "SELECT appointment_date, appointment_time FROM timeslotstbl WHERE is_booked = 1";
+$result = $conn->query($query);
+while ($row = $result->fetch_assoc()) {
+    $booked_dates[] = $row['appointment_date'];
+    $booked_slots[$row['appointment_date']][] = $row['appointment_time'];
 }
 
 // Check if form is submitted
@@ -33,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $appointment_date = $_POST['appointment-date'];
     $appointment_time = $_POST['time'];
     $special_requests = $_POST['request'];
+    $address = $_POST['address'];
 
     // Validate input
     if (empty($consultation_type) || empty($appointment_date) || empty($appointment_time)) {
@@ -40,51 +63,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Prepare the query to insert consultation data
-    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, special_requests) 
-              VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('issss', $user_id, $consultation_type, $appointment_date, $appointment_time, $special_requests);
+    // Check if the selected timeslot is already booked
+    $check_query = "SELECT * FROM timeslotstbl WHERE appointment_date = ? AND appointment_time = ? AND is_booked = 1";
+    $check_stmt = $conn->prepare($check_query);
+    $check_stmt->bind_param('ss', $appointment_date, $appointment_time);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
 
-    // Execute and handle success/error
+    if ($check_result->num_rows > 0) {
+        echo "<script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Timeslot Unavailable',
+                text: 'This timeslot is already booked. Please choose another.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.history.back();
+            });
+        </script>";
+        exit;
+    }
+
+    // Insert the booked timeslot into timeslotstbl
+    $insert_timeslot_query = "INSERT INTO timeslotstbl (appointment_date, appointment_time, is_booked) VALUES (?, ?, 1)";
+    $insert_timeslot_stmt = $conn->prepare($insert_timeslot_query);
+    $insert_timeslot_stmt->bind_param('ss', $appointment_date, $appointment_time);
+    $insert_timeslot_stmt->execute();
+    $insert_timeslot_stmt->close();
+
+    // Insert into appointmentstbl
+    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, address, special_requests, status) 
+              VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('isssss', $user_id, $consultation_type, $appointment_date, $appointment_time, $address, $special_requests);
+
     if ($stmt->execute()) {
-        // Log the action in the logstbl
-        $action_type = 'Appointment';
+        // Log the action
+        $action_type = 'Appointment Booked Successfully';
         $log_query = "INSERT INTO logstbl (user_id, action_type, action_timestamp) VALUES (?, ?, NOW())";
         $log_stmt = $conn->prepare($log_query);
         $log_stmt->bind_param('is', $user_id, $action_type);
         $log_stmt->execute();
         $log_stmt->close();
 
-        // Confirmation message and redirect
-        echo "<script>
-                alert('Your consultation request has been submitted successfully!');
-                window.location.href = 'User_Homepage.php';
-              </script>";
+        // Send confirmation email
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = $smtp_host;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $smtp_username;
+            $mail->Password   = $smtp_password;
+            $mail->SMTPSecure = $smtp_secure;
+            $mail->Port       = $smtp_port;
+
+            $mail->setFrom($smtp_sender, 'Mirror Your World');
+            $mail->addAddress($user['email'], $user['first_name']);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Appointment Confirmation';
+            $mail->Body    = "Dear " . htmlspecialchars($user['first_name']) . ",<br><br>Your appointment has been successfully booked for " . htmlspecialchars($appointment_date) . " at " . htmlspecialchars($appointment_time) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Special Requests: " . htmlspecialchars($special_requests) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
+
+            $mail->send();
+            echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Your consultation request has been submitted successfully! A confirmation email has been sent to you.',
+            }).then(() => { window.location.href = 'User_Homepage.php'; });
+          </script>";
+        } catch (Exception $e) {
+            echo "<script>
+                    alert('Your consultation request has been submitted successfully! However, there was an error sending the confirmation email: {$mail->ErrorInfo}');
+                    window.location.href = 'User_Homepage.php';
+                  </script>";
+        }
     } else {
         echo "<script>
-                alert('Failed to submit your consultation request. Please try again later.');
-                window.history.back();
-              </script>";
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while booking your appointment. Please try again.',
+        }).then(() => { window.history.back(); });
+      </script>";
     }
 
     $stmt->close();
-    $conn->close();
 }
+
+$conn->close();
+
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book an Appointment | Mirror Your World</title>
-
-    <link rel="stylesheet" href="Style/Required.css" />
-    <link rel="stylesheet" href="Style/User_FormsPageCSS.css" />
-</head>
-<body>
 
 <!-- Required -->
 
@@ -126,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="BGhome-container">
         <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">
         <div class="txt_Tite">
-            <br><br><br>
+            <br <br><br>
             <h2 class="txt_MYW"> Mirror Your World. </h2>
             <h4 class="txt_Desc"> Appointment and Consultation </h4>
         </div>
@@ -138,26 +207,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Full Name -->
         <div class="name-fields">
-            <div class="input-wrapper1">
                 <label for="full-name">Full Name</label>
                 <p id="full-name" style="font-weight: bold;">
                     <?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?>
                 </p>
 
                 <label for="email">Email</label>
-            <p id="email" style="font-weight: bold;">
-                <?= htmlspecialchars($user['email']) ?>
-            </p>
-            </div>
+                <p id="email" style="font-weight: bold;">
+                    <?= htmlspecialchars($user['email']) ?>
+                </p>
         </div>
-
-        <!-- Email -->
-        <!-- <div class="input-wrapper">
-            <label for="email">Email</label>
-            <p id="email" style="font-weight: bold;">
-                <?= htmlspecialchars($user['email']) ?>
-            </p>
-        </div> -->
 
         <!-- Consultation Type -->
         <div class="consultation-fields">
@@ -174,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Appointment Date -->
             <div class="input-wrapper2">
                 <label for="appointment-date">Date of Appointment</label>
-                <input type="date" id="appointment-date" name="appointment-date" required>
+                <input type="date" id="appointment-date" name="appointment-date" required min="<?= date('Y-m-d'); ?>">
             </div>
 
             <!-- Appointment Time -->
@@ -182,23 +241,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="time">Time of Appointment</label>
                 <select id="time" name="time" required>
                     <option value="" disabled selected>Select Time</option>
-                    <option value="9:00 AM">9:00 AM</option>
-                    <option value="12:00 PM">12:00 PM</option>
-                    <option value="3:00 PM">3:00 PM</option>
-                    <option value="6:00 PM">6:00 PM</option>
+                    <option value="09:00:00">09:00 AM</option>
+                    <option value="12:00:00">12:00 PM</option>
+                    <option value="15:00:00">03:00 PM</option>
+                    <option value="18:00:00">06:00 PM</option>
                 </select>
             </div>
         </div>
 
-         <!-- Special Requests -->
-         <div class="request-field">
+        <!-- Special Requests -->
+        <div class="request-field">
             <div class="input-wrapper">
                 <label for="request">Consultation Site</label>
-                <input type="text" class = "address1" id="request" name="address-houseNo" placeholder="Full Address" required>
+                <input type="text" class="address1" id="request" name="address" placeholder="Full Address" required>
             </div>
         </div>
 
-        <!-- Special Requests -->
         <div class="request-field">
             <div class="input-wrapper">
                 <label for="request">Special Requests</label>
@@ -218,11 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Function to toggle the visibility of the dropdown content
 function toggleDropdown() {
     var dropdown = document.getElementById('dropdown1');
-    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
-        dropdown.style.display = 'block';
-    } else {
-        dropdown.style.display = 'none';
-    }
+    dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
 }
 
 // Close the dropdown if the user clicks anywhere outside the dropdown
@@ -234,6 +288,54 @@ window.onclick = function(event) {
         });
     }
 };
+
+document.getElementById('appointment-date').addEventListener('change', function() {
+    const selectedDate = this.value;
+    fetch(`get_available_slots.php?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            const timeSelect = document.getElementById('time');
+            timeSelect.innerHTML = '<option value="" disabled selected>Select Time</option>'; // Reset the dropdown
+
+            // Populate dropdown with available slots
+            data.available_times.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = slot;
+                timeSelect.appendChild(option);
+            });
+
+            // Disable booked slots (optional)
+            data.booked_slots.forEach(slot => {
+                let option = timeSelect.querySelector(`option[value="${slot}"]`);
+                if (option) {
+                    option.disabled = true;
+                    option.style .color = 'gray';
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching available slots:', error);
+        });
+});
+document.querySelector('.btn-submit').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    Swal.fire({
+        title: 'Confirm Booking',
+        text: 'Are you sure you want to request this appointment?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, confirm it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.querySelector('form').submit(); // Submit the form
+        }
+    });
+});
+
 </script>
 
 </body>

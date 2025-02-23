@@ -200,70 +200,6 @@ body {
   
 /* Media Queries for Responsiveness */
 
-/* Mobile Devices (portrait) */
-@media screen and (max-width: 480px) {
-    .scrollable-container {
-        flex-direction: column;  /* Stack the frames vertically */
-        gap: 10px;
-    }
-
-    .scroll-frame {
-        width: 90%;  /* Make the frames take up 90% of the screen */
-        max-width: 90%;  /* Ensuring they stay responsive */
-    }
-
-    .frame-title2 {
-        font-size: 1.2rem;  /* Smaller title on mobile */
-    }
-
-    .frame-text {
-        font-size: 1rem;  /* Smaller text for better mobile readability */
-    }
-}
-
-/* Tablet Devices (portrait and landscape) */
-@media screen and (min-width: 481px) and (max-width: 768px) {
-    .scrollable-container {
-        flex-direction: row;  /* Keep frames in a row, but add some space */
-        gap: 15px;
-    }
-
-    .scroll-frame {
-        width: 30%;  /* Use 30% of the screen width for each frame */
-        max-width: 30%;  /* Ensure they fit nicely */
-    }
-
-    .frame-title2 {
-        font-size: 1.3rem;  /* Adjust title size for tablet */
-    }
-
-    .frame-text {
-        font-size: 1.1rem;  /* Slightly smaller text for tablets */
-    }
-}
-
-/* Larger Devices (Desktops and Laptops) */
-@media screen and (min-width: 769px) {
-    .scrollable-container {
-        flex-direction: row;  /* Keep the frames in a row */
-        gap: 20px;
-    }
-
-    .scroll-frame {
-        width: 300px;  /* Keep the original width for larger screens */
-        max-width: 350px;
-    }
-
-    .frame-title2 {
-        font-size: 1.5rem;  /* Larger title for desktop */
-    }
-
-    .frame-text {
-        font-size: 1.2rem;  /* Adjust text size for larger screens */
-    }
-}
-
-
 /* Responsive for smaller screens */
 @media (max-width: 768px) {
     .modal-body {
@@ -400,7 +336,7 @@ body {
 
     /* Text Container */
     .text-container h1 {
-        font-size: 3rem;
+        font-size: 1rem;
     }
 
     .text-container p {

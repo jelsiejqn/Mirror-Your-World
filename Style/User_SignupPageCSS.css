@@ -5,6 +5,7 @@
     border-radius: 40px;
     padding-left: 50px;
     padding-right: 50px;
+    padding-bottom: 50px
 }
 
 /* Text styling */
@@ -84,53 +85,4 @@ input {
     top: 0;
     width: 20px;
     opacity: 80%;
-}
-
-/* Media queries for responsiveness */
-@media (max-width: 1200px) {
-    .loginForm {
-        max-width: 60%; /* Adjust form width for medium screens */
-    }
-}
-
-@media (max-width: 992px) {
-    .loginForm {
-        max-width: 80%; /* Adjust form width for tablets and smaller screens */
-    }
-}
-
-@media (max-width: 768px) {
-    .loginForm {
-        max-width: 90%; /* Further adjust form width for mobile screens */
-    }
-    .txt_MYW {
-        font-size: 2.5rem; /* Adjust title font size for smaller screens */
-    }
-    .btn_login {
-        padding: 10px 30px; /* Adjust button padding for smaller screens */
-    }
-    input {
-        height: 2rem; /* Increase input height for better usability on mobile */
-    }
-}
-
-@media (max-width: 480px) {
-    .loginForm {
-        margin-top: 10%;
-        max-width: 100%; /* Full width on very small screens */
-        padding-left: 15px; /* Reduce padding for small screens */
-        padding-right: 15px; /* Reduce padding for small screens */
-    }
-    .txt_MYW {
-        font-size: 2rem; /* Reduce font size on very small screens */
-    }
-    .txt_Desc {
-        font-size: 1rem; /* Adjust description font size for smaller screens */
-    }
-    .btn_login {
-        padding: 10px 25px; /* Smaller padding for buttons */
-    }
-    input {
-        height: 2rem; /* Make inputs easier to interact with */
-    }
 }
