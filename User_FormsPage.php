@@ -54,9 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $consultation_type = $_POST['consultation-type'];
     $appointment_date = $_POST['appointment-date'];
     $appointment_time = $_POST['time'];
-    $address = $_POST['address'];
     $special_requests = $_POST['request'];
-
+    $address = $_POST['address'];
 
     // Validate input
     if (empty($consultation_type) || empty($appointment_date) || empty($appointment_time)) {
@@ -85,25 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Check if the appointment is at least one day in advance
-    $current_time = new DateTime();
-    $appointment_datetime = new DateTime($appointment_date . ' ' . $appointment_time);
-    $interval = $current_time->diff($appointment_datetime);
-
-    if ($interval->days < 1) {
-        echo "<script>
-            Swal.fire({
-                icon: 'warning',
-                title: 'Booking Error',
-                text: 'You can only book an appointment at least one day in advance!',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                window.history.back();
-            });
-        </script>";
-        exit;
-    }
-
     // Insert the booked timeslot into timeslotstbl
     $insert_timeslot_query = "INSERT INTO timeslotstbl (appointment_date, appointment_time, is_booked) VALUES (?, ?, 1)";
     $insert_timeslot_stmt = $conn->prepare($insert_timeslot_query);
@@ -112,12 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $insert_timeslot_stmt->close();
 
     // Insert into appointmentstbl
-    $status = 'Pending';
-    $appointment_time = $appointment_datetime->format('H:i:s');
-    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, special_requests, status, address) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO appointmentstbl (user_id, consultation_type, appointment_date, appointment_time, address, special_requests, status) 
+              VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('issssss', $user_id, $consultation_type, $appointment_date, $appointment_time, $special_requests, $status, $address);
+    $stmt->bind_param('isssss', $user_id, $consultation_type, $appointment_date, $appointment_time, $address, $special_requests);
 
     if ($stmt->execute()) {
         // Log the action
@@ -144,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $mail->isHTML(true);
             $mail->Subject = 'Appointment Confirmation';
-            $mail->Body    = "Dear " . htmlspecialchars($user['first_name']) . ",<br><br><h1>Your appointment has been successfully booked for " . htmlspecialchars($appointment_date) . " </h1>at " . htmlspecialchars($appointment_time) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Special Requests: " . htmlspecialchars($special_requests) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
+            $mail->Body    = "Dear " . htmlspecialchars($user['first_name']) . ",<br><br>Your appointment has been successfully booked for " . htmlspecialchars($appointment_date) . " at " . htmlspecialchars($appointment_time) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Special Requests: " . htmlspecialchars($special_requests) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
 
             $mail->send();
             echo "<script>
@@ -173,11 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 
-// Automatically update appointment statuses
-$conn->query("UPDATE appointmentstbl SET status = 'Confirmed' WHERE status = 'Pending' AND appointment_date <= NOW() - INTERVAL 1 DAY");
-$conn->query("UPDATE appointmentstbl SET status = 'Completed' WHERE appointment_date < NOW() AND status != 'Completed'");
-
 $conn->close();
+
 ?>
 
 <!-- Required -->
@@ -314,6 +289,35 @@ window.onclick = function(event) {
     }
 };
 
+document.getElementById('appointment-date').addEventListener('change', function() {
+    const selectedDate = this.value;
+    fetch(`get_available_slots.php?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            const timeSelect = document.getElementById('time');
+            timeSelect.innerHTML = '<option value="" disabled selected>Select Time</option>'; // Reset the dropdown
+
+            // Populate dropdown with available slots
+            data.available_times.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = slot;
+                timeSelect.appendChild(option);
+            });
+
+            // Disable booked slots (optional)
+            data.booked_slots.forEach(slot => {
+                let option = timeSelect.querySelector(`option[value="${slot}"]`);
+                if (option) {
+                    option.disabled = true;
+                    option.style .color = 'gray';
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching available slots:', error);
+        });
+});
 document.querySelector('.btn-submit').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent form submission
 

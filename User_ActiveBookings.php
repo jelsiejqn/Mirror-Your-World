@@ -119,10 +119,10 @@ while ($row = $result->fetch_assoc()) {
             <?php foreach ($activeBookings as $row): ?>
                 <table class="booking-container">
                     <tr>
-                    <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+                        <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
                         <td class="td-details">
                             <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                            <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
+                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
                             <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
                         </td>
                         <td class="td-booker">
@@ -200,10 +200,10 @@ while ($row = $result->fetch_assoc()) {
             <?php foreach ($cancelledBookings as $row): ?>
                 <table class="booking-container">
                     <tr>
-                    <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+                    <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
                         <td class="td-details">
                             <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                            <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
+                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
                             <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
                         </td>
                         <td class="td-booker">
@@ -229,40 +229,16 @@ while ($row = $result->fetch_assoc()) {
         <h2>Cancel Appointment</h2>
         <form id="cancelForm" method="POST" action="cancel_appointment.php">
             <input type="hidden" name="appointment_id" id="appointmentId">
-            <label for="reason">Reason for Cancellation</label><br>
-            
-            <div class="radio-group">
-                <label class="radio-option">
-                    <input type="radio" name="reason" value="Personal Reasons" required>
-                    <span>Personal Reasons</span>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="reason" value="Scheduling Conflict" required>
-                    <span>Scheduling Conflict</span>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="reason" value="Health Issues" required>
-                    <span>Health Issues</span>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="reason" value="Other" required>
-                    <span>Other</span>
-                </label>
-            </div>
-
-            <button type="submit" class="cancel-btn">
-                <h5 class="txt-cancel">Cancel</h5>
-            </button>
+            <label for="reason">Reason for Cancellation</label>
+            <textarea name="reason" id="reason" required></textarea>
+            <br>
+            <br>
+            <button type="submit" class="confirm-btn">Confirm Cancellation</button>
         </form>
     </div>
 </div>
-
 <style>
-
-.popup {
+    .popup {
     display: none;
     position: fixed;
     top: 50%;
@@ -283,33 +259,37 @@ while ($row = $result->fetch_assoc()) {
     position: relative;
 }
 
-.radio-group {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    margin-top: 10px;
-    gap: 10px;
-}
-
-.radio-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.radio-option input[type="radio"] {
-    accent-color: #FF5C5C; 
-    transform: scale(1.2);
-}
-
 .popup h2 {
     font-size: 20px;
     margin-bottom: 15px;
     color: #333;
 }
 
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-size: 14px;
+}
+
+.confirm-btn {
+    background-color: #FF5C5C;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 50%;
+    font-size: 16px;
+}
+
+.confirm-btn:hover {
+    background-color: #cc4b4b;
+}
 
 .close-btn {
     position: absolute;
@@ -324,7 +304,6 @@ while ($row = $result->fetch_assoc()) {
 .close-btn:hover {
     color: #333;
 }
-
 </style>
 
 </body>
