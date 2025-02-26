@@ -1,3 +1,49 @@
+<?php
+include 'dbconnect.php';
+
+
+// Check if the update button was clicked
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Automatically update appointment statuses
+    $conn->query("UPDATE appointmentstbl SET status = 'Confirmed' WHERE status = 'Pending' AND appointment_date <= NOW() - INTERVAL 1 DAY");
+    $conn->query("UPDATE appointmentstbl SET status = 'Completed' WHERE appointment_date < NOW() AND status != 'Completed'");
+
+
+    // Redirect back to the admin page with a success message
+    header("Location: Admin_AppointmentsPage.php?status=success");
+    exit;
+}
+
+
+// Fetch booked appointments with user details
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Pending'";
+$pending_appointments = $conn->query($query);
+
+
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Confirmed'";
+$confirmed_appointments = $conn->query($query);
+
+
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Cancelled'";
+$cancelled_appointments = $conn->query($query);
+
+
+$conn->close();
+
+
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -100,30 +146,34 @@
             </table>
 
             <center>
+    <?php while ($row = $pending_appointments->fetch_assoc()): ?>
+    <table class="booking-container">
+        <tr>
+            <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+            <td class="td-details">
+                <h5>Consultation Type: <?php echo $row['consultation_type']; ?></h5>
+                <h5>Time of Appointment: <?php echo $row['appointment_time']; ?></h5>
+                <h5>Site of Appointment: <?php echo $row['address']; ?></h5>
+            </td>
+            <td class="td-booker">
+                <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                <h5>Email: <?php echo $row['email']; ?></h5>
+                <h5>Contact Number: <?php echo $row['contact_number']; ?></h5>
+            </td>
+            <td class="td-buttons">
+                <button class="cancel-btn" onclick="openModal()">
+                    <h5 class="txt-cancel"> Cancel </h5>
+                </button>
+            </td>
+            </center>
+        </tr>
 
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
+    </table>
 
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
+    <br> 
+    <?php endwhile; ?>
 
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class="td-buttons">
-    <button class="cancel-btn" onclick="openModal()">
-        <h5 class="txt-cancel"> Cancel </h5>
-    </button>
-</td>
-
-                <div id="cancelModal" class="modal">
+<div id="cancelModal" class="modal">
     <div class="modal-content">
         <h3>Please select the reason for cancellation:</h3>
         <form id="cancelReasonForm">
@@ -157,86 +207,86 @@
 
         </div>
 
-        <!-- Past Bookings -->
-        <div class="section" id="past-bookings" style="display: none;">
-            <h2>Confirmed Appointments</h2>
+ <!-- Past Bookings -->
+<div class="section" id="past-bookings" style="display: none;">
+    <h2>Confirmed Appointments</h2>
+    <table class="sortby-container">
+        <tr>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
+        </tr>
+    </table>
 
-
-            <table class = "sortby-container">
+    <center>
+    <table class="booking-container">
+        <?php if ($confirmed_appointments && $confirmed_appointments->num_rows > 0): ?>
+            <?php while ($row = $confirmed_appointments->fetch_assoc()): ?>
             <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
+                <td class="td-date">
+                    <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                </td>
+                <td class="td-details">
+                    <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?></h5>
+                    <h5>Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?></h5>
+                    <h5>Site of Appointment: <?php echo htmlspecialchars($row['address']); ?></h5>
+                </td>
+                <td class="td-booker">
+                    <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                    <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
+                    <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                </td>
+                <td class="td-buttons">
+                    <img src="Assets/icon_check.png" class="completed-icon">
+                </td>
             </tr>
-            </table>
-
-            <center>
-
-            <table class = "booking-container"> 
+            <?php endwhile; ?>
+        <?php else: ?>
             <tr>
-                <td class = "td-date"> <h1> Jan 20 2025 </h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                <img src ="Assets/icon_check.png" class = "completed-icon">
-                </td>
-                
+                <td colspan="4" style="text-align:center;"><h5>No confirmed appointments.</h5></td>
             </tr>
-            </table>
+        <?php endif; ?>
+    </table>
+    </center>
+</div>
 
-        </div>
 
-        <!-- Cancelled -->
-        <div class="section" id="cancelled" style="display: none;">
-            <h2>Cancelled Appointments</h2>
-            
-    
 
-            <table class = "sortby-container">
+   <!-- Cancelled -->
+<div class="section" id="cancelled" style="display: none;">
+    <h2>Cancelled Appointments</h2>
+    <table class="sortby-container">
+        <tr>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
+        </tr>
+    </table>
+
+
+    <center>
+    <table class="booking-container">
+        <?php while ($row = $cancelled_appointments->fetch_assoc()): ?>
             <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
-            </tr>
-            </table>
+            <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+            <td class="td-details">
+                <h5>Consultation Type: <?php echo $row['consultation_type']; ?></h5>
+                <h5>Time of Appointment: <?php echo $row['appointment_time']; ?></h5>
+                <h5>Site of Appointment: <?php echo $row['address']; ?></h5>
+            </td>
+            <td class="td-booker">
+                <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                <h5>Email: <?php echo $row['email']; ?></h5>
+                <h5>Contact Number: <?php echo $row['contact_number']; ?></h5>
+                <h5><?php echo "Reason of Cancellation: " . $row['cancellation_reason']; ?></h5>
+            </td>
+            <td class="td-buttons">
+                <img src="Assets/icon_X.png" class="completed-icon">
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+    </center>
+</div>
 
-            <center>
-
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Reason of Cancellation:  </h5>
-                    <h5> Reason Here  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <img src ="Assets/icon_X.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
 
     </div>
 </div>
