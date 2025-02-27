@@ -114,23 +114,23 @@ $conn->close();
     <!-- Main Content (Forms to edit) -->
     <div class="content">
 
-        <!-- Active Bookings -->
-        <div class="section" id="active-bookings">
+ <!-- Active Bookings -->
+<div class="section" id="active-bookings">
     <h2>Active Bookings</h2>
     
     <table class="sortby-container">
         <tr>
-            <td> <img src="Assets/icon_sortBy.png" class="sortby-icon"> </td>
-            <td> <h4> Sort by: Most Recent </h4> </td>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
         </tr>
     </table>
 
-<center>
-        <?php if (!empty($activeBookings)): ?>
-            <?php foreach ($activeBookings as $row): ?>
+    <center>
+        <?php if ($activeBookings->num_rows > 0): ?>
+            <?php while ($row = $activeBookings->fetch_assoc()): ?>
                 <table class="booking-container">
                     <tr>
-                    <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+                        <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
                         <td class="td-details">
                             <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
                             <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
@@ -148,12 +148,13 @@ $conn->close();
                         </td>
                     </tr>
                 </table>
-            <?php endforeach; ?>
+                <br>
+            <?php endwhile; ?>
         <?php else: ?>
             <h5>No active bookings found.</h5>
         <?php endif; ?>
+    </center>
 </div>
-</center>
 
 
  <!-- Past Bookings -->
@@ -190,9 +191,7 @@ $conn->close();
             </tr>
             <?php endwhile; ?>
         <?php else: ?>
-            <tr>
-                <td colspan="4" style="text-align:center;"><h5>No confirmed appointments.</h5></td>
-            </tr>
+                <h5>No confirmed appointments.</h5>
         <?php endif; ?>
     </table>
     </center>
@@ -269,7 +268,7 @@ $conn->close();
                 </label>
             </div>
 
-            <button type="submit" class="cancel-btn">
+            <button type="submit" class="">
                 <h5 class="txt-cancel">Confirm Cancellation</h5>
             </button>
         </form>
@@ -340,6 +339,7 @@ $conn->close();
 .close-btn:hover {
     color: #333;
 }
+
 
 </style>
 
