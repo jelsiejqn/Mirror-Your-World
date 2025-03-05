@@ -24,6 +24,13 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$update_query = "UPDATE appointmentstbl 
+                 SET status = 'Confirmed' 
+                 WHERE status = 'Pending' 
+                 AND TIMESTAMPDIFF(HOUR, created_at, NOW()) >= 24";
+
+$conn->query($update_query);
+
 // Fetch user details from the database
 $query = "SELECT first_name, last_name, email FROM userstbl WHERE user_id = ?";
 $stmt = $conn->prepare($query);
@@ -60,6 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate input
     if (empty($consultation_type) || empty($appointment_date) || empty($appointment_time)) {
         echo "<script>alert('All fields are required!'); window.history.back();</script>";
+        exit;
+    }
+
+    // Combine date and time for comparison
+    $selected_datetime = new DateTime($appointment_date . ' ' . $appointment_time);
+    $current_datetime = new DateTime();
+
+    // Check if the selected appointment is at least one day in the future
+    if ($selected_datetime < $current_datetime->modify('+1 day')->setTime(0, 0)) {
+        echo "<script>alert('You must book at least one day in advance.'); window.history.back();</script>";
         exit;
     }
 
@@ -152,7 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-
 ?>
 
 <!-- Required -->

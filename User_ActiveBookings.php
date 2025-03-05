@@ -1,44 +1,55 @@
 <?php
 session_start();
-include 'dbconnect.php'; // Include your database connection file
+include 'dbconnect.php';
 
-// Redirect to login if not logged in
+// Redirect to login if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: User_LoginPage.php');
     exit;
 }
 
-// Fetch user ID from session
+// Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch active and cancelled bookings for the logged-in user
-$query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, 
-                 a.consultation_type, a.address, 
-                 u.first_name, u.last_name, u.email, u.contact_number,
-                 a.is_cancelled, a.cancellation_reason
-          FROM appointmentstbl a 
-          JOIN timeslotstbl t ON a.appointment_date = t.appointment_date 
-                             AND a.appointment_time = t.appointment_time 
-          JOIN userstbl u ON a.user_id = u.user_id 
-          WHERE a.user_id = ?";
-
+// Fetch pending appointments for the logged-in user
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Pending' AND a.user_id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('i', $user_id);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
-$result = $stmt->get_result();
+$activeBookings = $stmt->get_result();
+$stmt->close();
 
-// Categorize bookings
-$activeBookings = [];
-$cancelledBookings = [];
+// Fetch confirmed appointments for the logged-in user
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Confirmed' AND a.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$confirmed_appointments = $stmt->get_result();
+$stmt->close();
 
-while ($row = $result->fetch_assoc()) {
-    if ($row['is_cancelled'] == 1) {
-        $cancelledBookings[] = $row;
-    } else {
-        $activeBookings[] = $row;
-    }
-}
+// Fetch cancelled appointments for the logged-in user
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Cancelled' AND a.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$cancelledBookings = $stmt->get_result();
+$stmt->close();
+
+$conn->close();
 ?>
+
 
 <html lang="en">
 <head>
@@ -96,33 +107,33 @@ while ($row = $result->fetch_assoc()) {
     <div class="sidebar">
         <h3>My Appointments</h3>
         <a href="#" onclick="showContent('active-bookings')">Active Bookings</a>
-        <a href="#" onclick="showContent('past-bookings')">Past Bookings</a>
+        <a href="#" onclick="showContent('past-bookings')">Confirmed and Past Bookings</a>
         <a href="#" onclick="showContent('cancelled')">Cancelled</a>
     </div>
 
     <!-- Main Content (Forms to edit) -->
     <div class="content">
 
-        <!-- Active Bookings -->
-        <div class="section" id="active-bookings">
+ <!-- Active Bookings -->
+<div class="section" id="active-bookings">
     <h2>Active Bookings</h2>
     
     <table class="sortby-container">
         <tr>
-            <td> <img src="Assets/icon_sortBy.png" class="sortby-icon"> </td>
-            <td> <h4> Sort by: Most Recent </h4> </td>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
         </tr>
     </table>
 
-
-        <?php if (!empty($activeBookings)): ?>
-            <?php foreach ($activeBookings as $row): ?>
+    <center>
+        <?php if ($activeBookings->num_rows > 0): ?>
+            <?php while ($row = $activeBookings->fetch_assoc()): ?>
                 <table class="booking-container">
                     <tr>
-                        <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
+                        <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
                         <td class="td-details">
                             <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
+                            <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
                             <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
                         </td>
                         <td class="td-booker">
@@ -137,52 +148,56 @@ while ($row = $result->fetch_assoc()) {
                         </td>
                     </tr>
                 </table>
-            <?php endforeach; ?>
+                <br>
+            <?php endwhile; ?>
         <?php else: ?>
             <h5>No active bookings found.</h5>
         <?php endif; ?>
-
+    </center>
 </div>
 
 
+ <!-- Past Bookings -->
+<div class="section" id="past-bookings" style="display: none;">
+    <h2>Confirmed Appointments</h2>
+    <table class="sortby-container">
+        <tr>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
+        </tr>
+    </table>
 
-        <!-- Past Bookings -->
-        <div class="section" id="past-bookings" style="display: none;">
-            <h2>Past Bookings</h2>
-
-
-            <table class = "sortby-container">
+    <center>
+    <table class="booking-container">
+        <?php if ($confirmed_appointments && $confirmed_appointments->num_rows > 0): ?>
+            <?php while ($row = $confirmed_appointments->fetch_assoc()): ?>
             <tr>
-                <td> <img src = "Assets/icon_sortBy.png" class = "sortby-icon"> </td>
-                <td> <h4> Sort by: Most Recent </h4> </td>
-                
+                <td class="td-date">
+                    <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                </td>
+                <td class="td-details">
+                    <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?></h5>
+                    <h5>Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?></h5>
+                    <h5>Site of Appointment: <?php echo htmlspecialchars($row['address']); ?></h5>
+                </td>
+                <td class="td-booker">
+                    <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                    <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
+                    <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                </td>
+                <td class="td-buttons">
+                    <img src="Assets/icon_check.png" class="completed-icon">
+                </td>
             </tr>
-            </table>
+            <?php endwhile; ?>
+        <?php else: ?>
+                <h5>No confirmed appointments.</h5>
+        <?php endif; ?>
+    </table>
+    </center>
+</div>
 
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> Jan 20 2025</h1> </td>
 
-                <td class = "td-details"> 
-                    <h5> Consultation Type: Glass  </h5>
-                    <h5> Time of Appointment: 3PM  </h5>
-                    <h5> Site of Appointment: Makati  </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> Name: Dionne Blacer  </h5>
-                    <h5> Email: hello@gmail.com  </h5>
-                    <h5> Contact Number: 09153628520  </h5>
-                </td>
-
-                <td class = "td-buttons"> 
-                    <img src ="Assets/icon_Check.png" class = "completed-icon">
-                </td>
-                
-            </tr>
-            </table>
-
-        </div>
 
         <!-- Cancelled -->
         <div class="section" id="cancelled" style="display: none;">
@@ -200,10 +215,10 @@ while ($row = $result->fetch_assoc()) {
             <?php foreach ($cancelledBookings as $row): ?>
                 <table class="booking-container">
                     <tr>
-                    <td class="td-date"><h1><?= htmlspecialchars($row['appointment_date']) ?></h1></td>
+                    <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
                         <td class="td-details">
                             <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                            <h5>Time of Appointment: <?= htmlspecialchars($row['appointment_time']) ?></h5>
+                            <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
                             <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
                         </td>
                         <td class="td-booker">
@@ -229,16 +244,40 @@ while ($row = $result->fetch_assoc()) {
         <h2>Cancel Appointment</h2>
         <form id="cancelForm" method="POST" action="cancel_appointment.php">
             <input type="hidden" name="appointment_id" id="appointmentId">
-            <label for="reason">Reason for Cancellation</label>
-            <textarea name="reason" id="reason" required></textarea>
-            <br>
-            <br>
-            <button type="submit" class="confirm-btn">Confirm Cancellation</button>
+            <label for="reason">Reason for Cancellation</label><br>
+            
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Personal Reasons" required>
+                    <span>Personal Reasons</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Scheduling Conflict" required>
+                    <span>Scheduling Conflict</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Health Issues" required>
+                    <span>Health Issues</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Other" required>
+                    <span>Other</span>
+                </label>
+            </div>
+
+            <button type="submit" class="">
+                <h5 class="txt-cancel">Confirm Cancellation</h5>
+            </button>
         </form>
     </div>
 </div>
+
 <style>
-    .popup {
+
+.popup {
     display: none;
     position: fixed;
     top: 50%;
@@ -259,37 +298,33 @@ while ($row = $result->fetch_assoc()) {
     position: relative;
 }
 
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #FF5C5C; 
+    transform: scale(1.2);
+}
+
 .popup h2 {
     font-size: 20px;
     margin-bottom: 15px;
     color: #333;
 }
 
-textarea {
-    width: 100%;
-    height: 80px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
-    font-size: 14px;
-}
-
-.confirm-btn {
-    background-color: #FF5C5C;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 50%;
-    font-size: 16px;
-}
-
-.confirm-btn:hover {
-    background-color: #cc4b4b;
-}
 
 .close-btn {
     position: absolute;
@@ -304,6 +339,8 @@ textarea {
 .close-btn:hover {
     color: #333;
 }
+
+
 </style>
 
 </body>
