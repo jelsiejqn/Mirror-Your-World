@@ -24,7 +24,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
      <div class="navbar">
         <a href="User_Homepage.php">About</a>
-        <a href="User_Contactpage.php">Contact</a>
+        <a href="User_InquiryPage.php">FAQ</a>
         <a href="User_Showcase.php">Showcase</a>
     </div>
 
@@ -62,10 +62,6 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
             <?php endif; ?>
         </ul>
     </div>
-
-    <a href="User_InquiryPage.php" class="inquiry-icon">
-        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon1"/>
-    </a>
 
     
     <div class="BGhome-container">

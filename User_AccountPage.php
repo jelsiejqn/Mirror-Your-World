@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="navbar">
         <a href="User_Homepage.php">About</a>
-        <a href="User_Contactpage.php">Contact</a>
+        <a href="User_InquiryPage.php">FAQ</a>
         <a href="User_Showcase.php">Showcase</a>
     </div>
 
@@ -146,9 +146,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </ul>
     </div>
 
-    <a href="User_InquiryPage.php">
-        <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
-    </a>
 
 <div class="dashboard-container">
     <!-- Sidebar (Options) -->

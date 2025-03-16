@@ -175,7 +175,7 @@ $conn->close();
 
 <div class="navbar">
     <a href="User_Homepage.php">About</a>
-    <a href="User_Contactpage.php">Contact</a>
+    <a href="User_InquiryPage.php">FAQ</a>
     <a href="User_Showcase.php">Showcase</a>
 </div>
 
@@ -201,10 +201,6 @@ $conn->close();
         </li>
     </ul>
 </div>
-
-<a href="User_InquiryPage.php">
-    <img src="Assets/icon_FAQ.png" alt="Inquiry Icon" class="inquiry-icon" />
-</a>
 
 <!-- Required -->
 <center> 

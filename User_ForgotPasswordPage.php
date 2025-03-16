@@ -12,7 +12,7 @@
 <!-- Navbar -->
 <div class="navbar">
     <a href="User_Homepage.php">About</a>
-    <a href="User_Contactpage.php">Contact</a>
+    <a href="User_InquiryPage.php">FAQ</a>
     <a href="User_Showcase.php">Showcase</a>
 </div>
 
