@@ -344,6 +344,7 @@ $conn->close();
     </div>
 
     <!-- Action Buttons -->
+    
     <div class="invoice-modal-actions">
       <button class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
       <button class="btn-invoice-send" id="btn-send-invoice">Send</button>

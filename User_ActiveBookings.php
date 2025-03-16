@@ -102,17 +102,32 @@ $conn->close();
     <!-- Sidebar (Options) -->
     <div class="sidebar">
         <h3>My Appointments</h3>
-        <a href="#" onclick="showContent('active-bookings')">Active Bookings</a>
-        <a href="#" onclick="showContent('past-bookings')">Confirmed and Past Bookings</a>
+        <a href="#" onclick="showContent('pending')">Pending Bookings</a>
+        <a href="#" onclick="showContent('active-bookings')">Confirmed Bookings</a>
+        <a href="#" onclick="showContent('past-bookings')">Past Bookings</a>
         <a href="#" onclick="showContent('cancelled')">Cancelled</a>
     </div>
 
     <!-- Main Content (Forms to edit) -->
     <div class="content">
 
- <!-- Active Bookings -->
-<div class="section" id="active-bookings">
+    <!-- Pending Bookings -->
+<!-- <div class="section" id="pending">
     <h2>Active Bookings</h2>
+    
+    <table class="sortby-container">
+        <tr>
+            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+            <td><h4>Sort by: Most Recent</h4></td>
+        </tr>
+    </table>
+
+</div> -->
+
+
+ <!-- Confirmed Bookings -->
+<div class="section" id="active-bookings">
+    <h2>Confirmed Bookings</h2>
     
     <table class="sortby-container">
         <tr>

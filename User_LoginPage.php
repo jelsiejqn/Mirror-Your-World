@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: User_Homepage.php');
             exit;
         } else {
-            $error_message = "Incorrect password. Please try again.";
+            $error_message = 'Incorrect password. Please try again';
         }
     } else {
-        $error_message = "No user found with that username.";
+        $error_message = ' <h6 class = "error"> No user found with that username. </h6>';
     }
 
     // Close the statement
