@@ -1,0 +1,102 @@
+/* General Styling */
+body {
+    font-family: 'louis', sans-serif; /* Apply 'louis' font */
+    background-color: #f0f0f0; /* Light background for the body */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  .otp-container {
+    background-color: #fff; /* White background for the form container */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+    padding: 30px;
+    width: 100%;
+    max-width: 400px; /* Limit the width of the container */
+    text-align: center;
+  }
+  
+  .otp-container h2 {
+    font-size: 2rem; /* Larger font size for heading */
+    color: #333; /* Dark text color */
+    margin-bottom: 10px;
+  }
+  
+  .otp-container form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+    align-items: center;
+  }
+  
+  .otp-container label {
+    font-size: 1rem; /* Label font size */
+    color: #666; /* Lighter text color for label */
+    margin-bottom: 5px;
+  }
+  
+  .otp-container input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #f9f9f9; /* Light background for the input */
+  }
+  
+  .otp-container button {
+    background-color: #4CAF50; /* Green background for the button */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .otp-container button:hover {
+    background-color: #45a049; /* Darker green when hovered */
+  }
+  
+  @media (max-width: 600px) {
+    .otp-container {
+      width: 90%; /* Allow the form container to take up more space on small screens */
+      padding: 20px; /* Less padding on smaller screens */
+    }
+  
+    .otp-container h2 {
+      font-size: 1.5rem; /* Adjust heading font size */
+    }
+  
+    .otp-container input[type="text"] {
+      padding: 10px; /* Smaller padding for input fields */
+    }
+  
+    .otp-container button {
+      padding: 10px 15px; /* Adjust button padding for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .otp-container {
+      width: 95%; /* Take up more screen space on very small screens */
+    }
+  
+    .otp-container h2 {
+      font-size: 1.25rem; /* Further adjust heading font size */
+    }
+  
+    .otp-container input[type="text"] {
+      padding: 8px; /* Smaller padding for smaller screens */
+    }
+  
+    .otp-container button {
+      padding: 8px 12px; /* Smaller button padding for mobile */
+    }
+  }
+  

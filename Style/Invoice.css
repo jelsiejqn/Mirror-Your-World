@@ -1,0 +1,190 @@
+/* Modal Styling */
+.modal-invoice {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Black with transparency */
+  }
+  
+  /* Modal Title */
+  .invoice-title {
+    font-family: nexa, sans-serif;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 1.5rem; /* Use rem for responsiveness */
+  }
+  
+  /* Subtitle Styling */
+  .invoice-sub {
+    top: -10vh;
+    font-family: louis, sans-serif;
+    text-align: center;
+    font-size: 1rem; /* Smaller font size for small screens */
+  }
+  
+  /* Pre-filled Info */
+  #user-email, #user-name {
+    width: 100%;
+  }
+  
+  /* Modal Content */
+  .modal-invoice-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 2rem;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    --mask: 
+      conic-gradient(from 152.5deg at top,#0000,#000 1deg 54deg,#0000 55deg) top/31.23px 51% repeat-x,
+      conic-gradient(from -27.5deg at bottom,#0000,#000 1deg 54deg,#0000 55deg) bottom/31.23px 51% repeat-x;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+  }
+  
+  /* Close Button */
+  .modal-invoice-close {
+    color: #aaa;
+    font-size: 2rem; /* Adjusted font size for better visibility */
+    font-weight: bold;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .modal-invoice-close:hover,
+  .modal-invoice-close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Pre-filled Info */
+  .invoice-info label,
+  .invoice-manual-inputs label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem; /* Make font size responsive */
+  }
+  
+  .invoice-info input,
+  .invoice-manual-inputs input,
+  .invoice-manual-inputs textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /* Use relative units */
+  }
+  
+  .invoice-manual-inputs textarea {
+    resize: vertical;
+  }
+  
+  /* Action Buttons */
+  .invoice-modal-actions {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem; /* Add space between buttons */
+    flex-wrap: wrap; /* Allow buttons to stack on smaller screens */
+  }
+  
+  .btn-invoice-create {
+    border-radius: 2px;
+  }
+  
+  .btn-invoice-cancel,
+  .btn-invoice-send {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 1rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 1rem;
+    width: 100%; /* Full-width for mobile */
+  }
+  
+  .btn-invoice-cancel {
+    background-color: #b1362d; /* Red */
+  }
+  
+  .btn-invoice-send:hover,
+  .btn-invoice-cancel:hover {
+    opacity: 0.8;
+    transition: 0.3s ease;
+  }
+  
+  /* Responsive Design with Media Queries */
+  @media (max-width: 768px) {
+    .modal-invoice-content {
+      width: 90%;
+      padding: 1.5rem; /* Less padding on smaller screens */
+    }
+  
+    .invoice-title {
+      font-size: 1.25rem; /* Smaller title for mobile */
+    }
+  
+    .invoice-sub {
+      font-size: 0.875rem; /* Adjust subtitle size for mobile */
+    }
+  
+    .invoice-info label,
+    .invoice-manual-inputs label {
+      font-size: 0.875rem; /* Smaller label font size */
+    }
+  
+    .invoice-info input,
+    .invoice-manual-inputs input,
+    .invoice-manual-inputs textarea {
+      padding: 0.75rem; /* Smaller padding for smaller screens */
+    }
+  
+    .invoice-modal-actions {
+      flex-direction: column; /* Stack buttons vertically on small screens */
+      gap: 0.5rem; /* Smaller gap between buttons */
+    }
+  
+    .btn-invoice-send,
+    .btn-invoice-cancel {
+      width: 100%; /* Ensure buttons are full-width on smaller screens */
+      padding: 1rem; /* Adjust padding for better button usability */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .modal-invoice-content {
+      width: 95%; /* Take up more screen space on very small screens */
+    }
+  
+    .invoice-title {
+      font-size: 1.1rem; /* Adjust title size further */
+    }
+  
+    .invoice-sub {
+      font-size: 0.75rem; /* Further reduce subtitle size */
+    }
+  
+    .invoice-info input,
+    .invoice-manual-inputs input,
+    .invoice-manual-inputs textarea {
+      padding: 0.6rem; /* Smaller padding on very small screens */
+    }
+  
+    .btn-invoice-send,
+    .btn-invoice-cancel {
+      padding: 0.8rem; /* Smaller button padding */
+    }
+  }
+  
