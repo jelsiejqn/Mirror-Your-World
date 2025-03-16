@@ -45,9 +45,11 @@ $conn->close();
     <link rel="stylesheet" href="Style/Admin_AppointmentsPageCSS.css" />
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Calendar.css" />
+    <link rel="stylesheet" href="Style/Invoice.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 </head>
 <body>
 
@@ -104,6 +106,7 @@ $conn->close();
             <h3>Dashboard</h3>
             <a href="#" onclick="showContent('active-bookings')">Pending Appointments</a>
             <a href="#" onclick="showContent('past-bookings')">Confirmed Appointments</a>
+            <a href="#" onclick="showContent('completed')">Completed Appointments</a>
             <a href="#" onclick="showContent('cancelled')">Cancelled</a>
         </div>
 
@@ -188,6 +191,45 @@ $conn->close();
                 </center>
             </div>
 
+
+  <!-- Completed Bookings !!! HINDI PA NAPAPALITAN YUNG PHP!!! -->
+  <div class="section" id="completed" style="display: none;">
+                <h2>Completed</h2>
+                <table class="sortby-container">
+                    <tr>
+                        <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+                        <td><h4>Sort by: Most Recent</h4></td>
+                    </tr>
+                </table>
+                <center>
+                    <table class="booking-container">
+                
+                                <tr>
+                                    <td class="td-date">
+                                        <h1> 01 </h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5>Consultation Type: Acrylic</h5>
+                                        <h5>Time of Appointment: November 6, 2003</h5>
+                                        <h5>Site of Appointment: Makati City</h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>Name: Pwet </h5>
+                                        <h5>Email: rararara </h5>
+                                        <h5>Contact Number:  rararaar </h5>
+                                    </td>
+                                    <td class="td-buttons">
+                                    <button class="btn-invoice-create" id="btn-create-invoice">Create Invoice</button>
+                                    </td>
+                                </tr>
+                    </table>
+                </center>
+            </div>
+
+
+
+
+
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
                 <h2>Cancelled Appointments</h2>
@@ -260,6 +302,54 @@ $conn->close();
             </form>
         </div>
     </div>
+
+    <!-- Modal for Invoice Creation -->
+<div class="modal-invoice" id="modal-invoice">
+  <div class="modal-invoice-content">
+    <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
+    
+    <!-- Modal Title -->
+    <h1 class ="invoice-title">Mirror Your World <br> <p class ="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p> </h2>
+    
+    
+    <!-- Pre-filled Information -->
+    <div class="invoice-info">
+
+        <label for="user-name">Client:</label>
+        <input type="text" id="user-name" value="John Doe" disabled>
+
+        <label for="user-email">Email:</label>
+        <input type="email" id="user-email" value="johndoe@example.com" disabled>
+           
+      <label for="user-contact">Contact:</label>
+      <input type="text" id="user-contact" value="123-456-7890" disabled>
+      
+      <label for="service-type">Service Type:</label>
+      <input type="text" id="service-type" value="Glass Installation" disabled>
+      
+      <label for="consultation-date">Consultation Date:</label>
+      <input type="date" id="consultation-date" value="2025-03-15" disabled>
+    </div>
+
+    <!-- Manual Inputs by Admin -->
+    <div class="invoice-manual-inputs">
+      <label for="total-cost">Total Cost ($):</label>
+      <input type="number" id="total-cost" placeholder="Enter total cost" required>
+      
+      <label for="invoice-notes">Notes/Description:</label>
+      <textarea id="invoice-notes" placeholder="Add any notes"></textarea>
+      
+      <label for="tax-discount">Taxes/Discounts:</label>
+      <input type="number" id="tax-discount" placeholder="Enter tax/discount rate">
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="invoice-modal-actions">
+      <button class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+      <button class="btn-invoice-send" id="btn-send-invoice">Send</button>
+    </div>
+  </div>
+</div>
 
     <style>
         .popup {
@@ -426,6 +516,47 @@ $conn->close();
             popup.style.display = 'none';
         }, 200);
     }
+
+
+
+// Get modal and buttons INVOICE!!!
+var modal = document.getElementById("modal-invoice");
+var btnCreateInvoice = document.getElementById("btn-create-invoice");
+var btnCloseModal = document.getElementById("btn-close-modal");
+var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
+var btnSendInvoice = document.getElementById("btn-send-invoice");
+
+// Open the modal when the 'Create Invoice' button is clicked
+btnCreateInvoice.onclick = function() {
+  modal.style.display = "block";
+}
+
+// Close the modal when the 'X' is clicked
+btnCloseModal.onclick = function() {
+  modal.style.display = "none";
+}
+
+// Close the modal when the 'Cancel' button is clicked
+btnCancelInvoice.onclick = function() {
+  modal.style.display = "none";
+}
+
+// Action when the 'Send' button is clicked
+btnSendInvoice.onclick = function() {
+  var totalCost = document.getElementById("total-cost").value;
+  var notes = document.getElementById("invoice-notes").value;
+  var taxDiscount = document.getElementById("tax-discount").value;
+
+  // Do something with the data (e.g., generate the invoice, send email, etc.)
+  console.log("Invoice Generated with Total Cost:", totalCost);
+  console.log("Notes:", notes);
+  console.log("Tax/Discount:", taxDiscount);
+
+  // Close the modal after sending
+  modal.style.display = "none";
+}
+
+
 </script>
 
 </html>

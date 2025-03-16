@@ -144,17 +144,19 @@ body {
 .content button {
     
     width: 6vw;   
-    color: white;
+    color: gray;
     border: none;
-    border-radius: 25px;
+    padding: 2px;
+    border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .content button:hover {
-    background-color: #ff6464;
-    transform: scale(1.05);
+    color: white;
+    background-color: rgb(66, 125, 66);
+    transition: 0.3s ease;
 }
 
 /* Custom Scrollbar Design */
