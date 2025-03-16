@@ -22,7 +22,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
      <div class="navbar">
         <a href="User_Homepage.php">About</a>
-        <a href=User_InquiryPage.php">FAQ</a>
+        <a href="User_InquiryPage.php">FAQ</a>
         <a href="User_Showcase.php">Showcase</a>
     </div>
 

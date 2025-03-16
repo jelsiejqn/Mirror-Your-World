@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request OTP | Mirror Your World</title>
     <link rel="stylesheet" href="Style/Required.css" />
-    <link rel="stylesheet" href="Style/User_LoginPageCSS.css" />
+    <link rel="stylesheet" href="Style/User_ForgotPasswordPageCSS.css" />
 </head>
 <body>
 
@@ -31,18 +31,22 @@
 
                 <div class="txt_Title">
                     <br> <br>
+                    <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px">
                     <h2 class="txt_MYW"> Mirror Your World. </h2>
-                    <h4 class="txt_Desc"> Request OTP for Password Reset </h4>
+                    <h6 class="txt_Desc"> Request OTP for Password Reset </h4>
                 </div>
 
                 <div class="input-field">
-                    <label> <img src="Assets/icon_Email.png" class="field-icon"> </label>
+                    <!-- <label> <img src="Assets/icon_Email.png" class="field-icon"> </label> -->
                     <input id="email" name="email" type="email" placeholder="Enter your email" required>
                 </div>
 
                 <button class="btn_login" type="submit" name="action" id="requestOtp">
                     Request OTP
                 </button>
+
+                <br> <br>
+                <a href = "User_LoginPage.php" class = "backtologin" > Back to Login. </a>
 
                 <br /><br />
             </form>
