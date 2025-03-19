@@ -1,55 +1,47 @@
 <?php
-require_once 'dbconnect.php';
+session_start(); // Ensure session starts at the very top
+require 'dbconnect.php'; 
 
-session_start(); // Start the session to store user session
+// Enable error reporting for debugging (remove in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Declare error and success message variables
-$error_message = '';
-$success_message = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve and sanitize form inputs
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    if (!empty($username) && !empty($password)) {
+        // Prepare and execute SQL query
+        $query = "SELECT * FROM adminstbl WHERE username = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    // Check if the username exists in the database
-    $check_query = "SELECT * FROM userstbl WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $check_query);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+        if ($result->num_rows === 1) {
+            $admin = $result->fetch_assoc();
 
-    if (mysqli_num_rows($result) > 0) {
-        // User exists, now check the password
-        $user = mysqli_fetch_assoc($result);
-        if (password_verify($password, $user['password'])) {
-            // Password is correct, start session
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['username'] = $user['username'];
-            
-            // Log the login action
-            $log_query = "INSERT INTO logstbl (user_id, action_type) VALUES (?, 'Login')";
-            $log_stmt = mysqli_prepare($conn, $log_query);
-            mysqli_stmt_bind_param($log_stmt, "i", $user['user_id']);
-            mysqli_stmt_execute($log_stmt);
+            // Ensure the correct column name for password hash
+            if (password_verify($password, $admin["password_hash"])) { 
+                session_regenerate_id(true); // Prevent session fixation
 
-            // Redirect to user homepage after successful login
-            header('Location: User_Homepage.php');
-            exit;
+                $_SESSION["admin_id"] = $admin["admin_id"];
+                $_SESSION["admin_username"] = $admin["username"];
+
+                header("Location: Admin_AppointmentsPage.php");
+                exit();
+            } else {
+                $error_message = "Invalid password.";
+            }
         } else {
-            $error_message = "Incorrect password. Please try again.";
+            $error_message = "Admin not found.";
         }
     } else {
-        $error_message = "No user found with that username.";
+        $error_message = "Please fill in all fields.";
     }
-
-    // Close the statement
-    mysqli_stmt_close($stmt);
-
-    // Close the database connection
-    mysqli_close($conn);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Main Login Form -->
             <div class="loginDiv">
 
-                <form class="loginForm" method="POST" action="User_LoginPage.php">
+                <form class="loginForm" method="POST" action="Admin_LoginPage.php">
 
                     <div class="txt_Title">
                         <br> <br>
@@ -113,17 +105,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button class="btn_login" type="submit" name="action" id="login">
                         Login
                     </button>
-                    <p class="existingacc"> Can't Login? Contact your higher up. </p>
+                    <p class="existingacc"> Can't Login? Contact your higher-up. </p>
 
-                    <br /><br />
+                    <?php if (!empty($error_message)) { ?>
+                        <div class="error-message" style="color: red;">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php } ?>
+
+                    </br></br>
+
+
                 </form>
-
-                <!-- Display error or success messages -->
-                <?php if (!empty($error_message)) { ?>
-                    <div class="error-message" style="color: red;">
-                        <?php echo $error_message; ?>
-                    </div>
-                <?php } ?>
 
             </div>
 
@@ -132,30 +125,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <!-- Required -->
+     <!-- Include SweetAlert2 Library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Check if the logout flag is set in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('logout')) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Logged Out',
+            text: 'You have successfully logged out.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            // Remove the logout flag from URL
+            window.location.href = 'Admin_LoginPage.php';
+        });
+    }
+</script>
+
 
 </body>
 
-<script>
-    // Function to toggle the visibility of the dropdown content
-    function toggleDropdown() {
-        var dropdown = document.getElementById('dropdown1');
-        // Toggle the display of the dropdown menu
-        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
-            dropdown.style.display = 'block';
-        } else {
-            dropdown.style.display = 'none';
-        }
-    }
-
-    // Close the dropdown if the user clicks anywhere outside the dropdown
-    window.onclick = function(event) {
-        if (!event.target.matches('.dropdown-trigger') && !event.target.matches('.dropdown-trigger img')) {
-            var dropdowns = document.querySelectorAll('.dropdown-content');
-            dropdowns.forEach(function(dropdown) {
-                dropdown.style.display = 'none'; // Close the dropdown
-            });
-        }
-    };
-</script>
 
 </html>

@@ -13,6 +13,18 @@ body {
     font-family: louis;
 }
 
+.btn-add {
+    font-size: 12px;
+    font-family: louis;
+    color: white;
+    background-color: rgb(64, 110, 64);
+}
+
+.btn-add:hover {
+    opacity: 60%;
+    transition: 0.3s ease;
+}
+
 .calendar {
     position: fixed;
     top: 30px;
@@ -150,12 +162,12 @@ td {
 
 /* Buttons */
 .content button {
-    background-color: transparent;
+    background-color: rgb(93, 152, 93);
     align-items: center;
     margin-top:1vw;
     font-family: louis;
     width: 6vw;   
-    color: gray;
+    color: rgb(255, 255, 255);
     border: none;
     border-radius: 25px;
     font-size: 0.8vw;
