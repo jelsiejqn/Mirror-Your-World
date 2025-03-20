@@ -38,6 +38,7 @@ $conn->close();
 ?>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +52,7 @@ $conn->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 </head>
+
 <body>
 
     <!-- Required -->
@@ -118,38 +120,42 @@ $conn->close();
                 <table class="sortby-container">
                     <tr>
                         <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
-                        <td><h4>Sort by: Most Recent</h4></td>
+                        <td>
+                            <h4>Sort by: Most Recent</h4>
+                        </td>
                     </tr>
                 </table>
                 <center>
-                <?php if ($pending_appointments->num_rows > 0): ?>
-                    <?php while ($row = $pending_appointments->fetch_assoc()): ?>
-                        <table class="booking-container">
-                            <tr>
-                                <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
-                                <td class="td-details">
-                                    <h5>Consultation Type: <?php echo $row['consultation_type']; ?></h5>
-                                    <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
-                                    <h5>Site of Appointment: <?php echo $row['address']; ?></h5>
-                                </td>
-                                <td class="td-booker">
-                                    <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
-                                    <h5>Email: <?php echo $row['email']; ?></h5>
-                                    <h5>Contact Number: <?php echo $row['contact_number']; ?></h5>
-                                </td>
-                                <td class="td-buttons">
-                                    <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                        <h5 class="txt-cancel">Cancel</h5>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                        <br>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <h5>No pending bookings.</h5>
-                <?php endif; ?>
-            </center>
+                    <?php if ($pending_appointments->num_rows > 0): ?>
+                        <?php while ($row = $pending_appointments->fetch_assoc()): ?>
+                            <table class="booking-container">
+                                <tr>
+                                    <td class="td-date">
+                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5>Consultation Type: <?php echo $row['consultation_type']; ?></h5>
+                                        <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
+                                        <h5>Site of Appointment: <?php echo $row['address']; ?></h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                                        <h5>Email: <?php echo $row['email']; ?></h5>
+                                        <h5>Contact Number: <?php echo $row['contact_number']; ?></h5>
+                                    </td>
+                                    <td class="td-buttons">
+                                        <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
+                                            <h5 class="txt-cancel">Cancel</h5>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <h5>No pending bookings.</h5>
+                    <?php endif; ?>
+                </center>
             </div>
 
             <!-- Past Bookings -->
@@ -158,7 +164,9 @@ $conn->close();
                 <table class="sortby-container">
                     <tr>
                         <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
-                        <td><h4>Sort by: Most Recent</h4></td>
+                        <td>
+                            <h4>Sort by: Most Recent</h4>
+                        </td>
                     </tr>
                 </table>
                 <center>
@@ -192,36 +200,38 @@ $conn->close();
             </div>
 
 
-  <!-- Completed Bookings !!! HINDI PA NAPAPALITAN YUNG PHP!!! -->
-  <div class="section" id="completed" style="display: none;">
+            <!-- Completed Bookings !!! HINDI PA NAPAPALITAN YUNG PHP!!! -->
+            <div class="section" id="completed" style="display: none;">
                 <h2>Completed</h2>
                 <table class="sortby-container">
                     <tr>
                         <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
-                        <td><h4>Sort by: Most Recent</h4></td>
+                        <td>
+                            <h4>Sort by: Most Recent</h4>
+                        </td>
                     </tr>
                 </table>
                 <center>
                     <table class="booking-container">
-                
-                                <tr>
-                                    <td class="td-date">
-                                        <h1> 01 </h1>
-                                    </td>
-                                    <td class="td-details">
-                                        <h5>Consultation Type: Acrylic</h5>
-                                        <h5>Time of Appointment: November 6, 2003</h5>
-                                        <h5>Site of Appointment: Makati City</h5>
-                                    </td>
-                                    <td class="td-booker">
-                                        <h5>Name: Pwet </h5>
-                                        <h5>Email: rararara </h5>
-                                        <h5>Contact Number:  rararaar </h5>
-                                    </td>
-                                    <td class="td-buttons">
-                                    <button class="btn-invoice-create" id="btn-create-invoice">Create Invoice</button>
-                                    </td>
-                                </tr>
+
+                        <tr>
+                            <td class="td-date">
+                                <h1> 01 </h1>
+                            </td>
+                            <td class="td-details">
+                                <h5>Consultation Type: Acrylic</h5>
+                                <h5>Time of Appointment: November 6, 2003</h5>
+                                <h5>Site of Appointment: Makati City</h5>
+                            </td>
+                            <td class="td-booker">
+                                <h5>Name: Pwet </h5>
+                                <h5>Email: rararara </h5>
+                                <h5>Contact Number: rararaar </h5>
+                            </td>
+                            <td class="td-buttons">
+                                <button class="btn-invoice-create" id="btn-create-invoice">Create Invoice</button>
+                            </td>
+                        </tr>
                     </table>
                 </center>
             </div>
@@ -236,7 +246,9 @@ $conn->close();
                 <table class="sortby-container">
                     <tr>
                         <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
-                        <td><h4>Sort by: Most Recent</h4></td>
+                        <td>
+                            <h4>Sort by: Most Recent</h4>
+                        </td>
                     </tr>
                 </table>
                 <center>
@@ -244,7 +256,9 @@ $conn->close();
                         <?php foreach ($cancelledBookings as $row): ?>
                             <table class="booking-container">
                                 <tr>
-                                    <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+                                    <td class="td-date">
+                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                                    </td>
                                     <td class="td-details">
                                         <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
                                         <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
@@ -304,53 +318,55 @@ $conn->close();
     </div>
 
     <!-- Modal for Invoice Creation -->
-<div class="modal-invoice" id="modal-invoice">
-  <div class="modal-invoice-content">
-    <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
-    
-    <!-- Modal Title -->
-    <h1 class ="invoice-title">Mirror Your World <br> <p class ="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p> </h2>
-    
-    
-    <!-- Pre-filled Information -->
-    <div class="invoice-info">
+    <div class="modal-invoice" id="modal-invoice">
+        <div class="modal-invoice-content">
+            <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
 
-        <label for="user-name">Client:</label>
-        <input type="text" id="user-name" value="John Doe" disabled>
+            <!-- Modal Title -->
+            <h1 class="invoice-title">Mirror Your World <br>
+                <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
+                </h2>
 
-        <label for="user-email">Email:</label>
-        <input type="email" id="user-email" value="johndoe@example.com" disabled>
-           
-      <label for="user-contact">Contact:</label>
-      <input type="text" id="user-contact" value="123-456-7890" disabled>
-      
-      <label for="service-type">Service Type:</label>
-      <input type="text" id="service-type" value="Glass Installation" disabled>
-      
-      <label for="consultation-date">Consultation Date:</label>
-      <input type="date" id="consultation-date" value="2025-03-15" disabled>
+
+                <!-- Pre-filled Information -->
+                <div class="invoice-info">
+
+                    <label for="user-name">Client:</label>
+                    <input type="text" id="user-name" value="John Doe" disabled>
+
+                    <label for="user-email">Email:</label>
+                    <input type="email" id="user-email" value="johndoe@example.com" disabled>
+
+                    <label for="user-contact">Contact:</label>
+                    <input type="text" id="user-contact" value="123-456-7890" disabled>
+
+                    <label for="service-type">Service Type:</label>
+                    <input type="text" id="service-type" value="Glass Installation" disabled>
+
+                    <label for="consultation-date">Consultation Date:</label>
+                    <input type="date" id="consultation-date" value="2025-03-15" disabled>
+                </div>
+
+                <!-- Manual Inputs by Admin -->
+                <div class="invoice-manual-inputs">
+                    <label for="total-cost">Total Cost ($):</label>
+                    <input type="number" id="total-cost" placeholder="Enter total cost" required>
+
+                    <label for="invoice-notes">Notes/Description:</label>
+                    <textarea id="invoice-notes" placeholder="Add any notes"></textarea>
+
+                    <label for="tax-discount">Taxes/Discounts:</label>
+                    <input type="number" id="tax-discount" placeholder="Enter tax/discount rate">
+                </div>
+
+                <!-- Action Buttons -->
+
+                <div class="invoice-modal-actions">
+                    <button class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+                    <button class="btn-invoice-send" id="btn-send-invoice">Send</button>
+                </div>
+        </div>
     </div>
-
-    <!-- Manual Inputs by Admin -->
-    <div class="invoice-manual-inputs">
-      <label for="total-cost">Total Cost ($):</label>
-      <input type="number" id="total-cost" placeholder="Enter total cost" required>
-      
-      <label for="invoice-notes">Notes/Description:</label>
-      <textarea id="invoice-notes" placeholder="Add any notes"></textarea>
-      
-      <label for="tax-discount">Taxes/Discounts:</label>
-      <input type="number" id="tax-discount" placeholder="Enter tax/discount rate">
-    </div>
-
-    <!-- Action Buttons -->
-    
-    <div class="invoice-modal-actions">
-      <button class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-      <button class="btn-invoice-send" id="btn-send-invoice">Send</button>
-    </div>
-  </div>
-</div>
 
     <style>
         .popup {
@@ -391,7 +407,7 @@ $conn->close();
         }
 
         .radio-option input[type="radio"] {
-            accent-color: #FF5C5C; 
+            accent-color: #FF5C5C;
             transform: scale(1.2);
         }
 
@@ -520,44 +536,42 @@ $conn->close();
 
 
 
-// Get modal and buttons INVOICE!!!
-var modal = document.getElementById("modal-invoice");
-var btnCreateInvoice = document.getElementById("btn-create-invoice");
-var btnCloseModal = document.getElementById("btn-close-modal");
-var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
-var btnSendInvoice = document.getElementById("btn-send-invoice");
+    // Get modal and buttons INVOICE!!!
+    var modal = document.getElementById("modal-invoice");
+    var btnCreateInvoice = document.getElementById("btn-create-invoice");
+    var btnCloseModal = document.getElementById("btn-close-modal");
+    var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
+    var btnSendInvoice = document.getElementById("btn-send-invoice");
 
-// Open the modal when the 'Create Invoice' button is clicked
-btnCreateInvoice.onclick = function() {
-  modal.style.display = "block";
-}
+    // Open the modal when the 'Create Invoice' button is clicked
+    btnCreateInvoice.onclick = function() {
+        modal.style.display = "block";
+    }
 
-// Close the modal when the 'X' is clicked
-btnCloseModal.onclick = function() {
-  modal.style.display = "none";
-}
+    // Close the modal when the 'X' is clicked
+    btnCloseModal.onclick = function() {
+        modal.style.display = "none";
+    }
 
-// Close the modal when the 'Cancel' button is clicked
-btnCancelInvoice.onclick = function() {
-  modal.style.display = "none";
-}
+    // Close the modal when the 'Cancel' button is clicked
+    btnCancelInvoice.onclick = function() {
+        modal.style.display = "none";
+    }
 
-// Action when the 'Send' button is clicked
-btnSendInvoice.onclick = function() {
-  var totalCost = document.getElementById("total-cost").value;
-  var notes = document.getElementById("invoice-notes").value;
-  var taxDiscount = document.getElementById("tax-discount").value;
+    // Action when the 'Send' button is clicked
+    btnSendInvoice.onclick = function() {
+        var totalCost = document.getElementById("total-cost").value;
+        var notes = document.getElementById("invoice-notes").value;
+        var taxDiscount = document.getElementById("tax-discount").value;
 
-  // Do something with the data (e.g., generate the invoice, send email, etc.)
-  console.log("Invoice Generated with Total Cost:", totalCost);
-  console.log("Notes:", notes);
-  console.log("Tax/Discount:", taxDiscount);
+        // Do something with the data (e.g., generate the invoice, send email, etc.)
+        console.log("Invoice Generated with Total Cost:", totalCost);
+        console.log("Notes:", notes);
+        console.log("Tax/Discount:", taxDiscount);
 
-  // Close the modal after sending
-  modal.style.display = "none";
-}
-
-
+        // Close the modal after sending
+        modal.style.display = "none";
+    }
 </script>
 
 </html>

@@ -58,8 +58,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter OTP</title>
 
-    <link rel="stylesheet" href="Required.css">
-    <link rel="stylesheet" href="User_VerifyOTPCSS.css">
+    <link rel="stylesheet" href="Style/Required.css">
+    <link rel="stylesheet" href="Style/User_VerifyOTPCSS.css">
     
 </head>
 <body>
@@ -91,8 +91,12 @@
         </ul>
     </div>
 
+  
+
 <div class="BGhome-container">
     <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">
+
+    <center>
 
     <div class="otp-container">
         <h2>Enter OTP</h2>

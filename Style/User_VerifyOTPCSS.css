@@ -10,6 +10,7 @@ body {
   }
   
   .otp-container {
+    transform: translate(0%, 50%);
     background-color: #fff; /* White background for the form container */
     border-radius: 20px; /* Rounded corners */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
