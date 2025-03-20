@@ -11,18 +11,76 @@ body {
     padding: 0;
     margin-top: 80px; 
     font-family: louis;
+    line-height: 2vw;
+
+}
+
+input {
+    font-family: louis;
+    font-size: 0.7vw;
+    
+}
+
+textarea, ::placeholder {
+    text-align: center;
+    font-family: louis;
+    font-size: 0.8vw;
+}
+
+textarea {
+    max-width: 90%;
+}
+
+
+th {
+    font-size: 1vw;
+}
+
+select {
+    font-family: louis;
+    border-radius: 20px;
+    padding: 0.5vw;
+}
+
+table {
+    min-width: 85%;
+    max-width: 85%;
+}
+
+button {
+    font-family: louis;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5vw;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 60%;
+    transition: 0.3s ease;
+}
+
+.del-btn, .edit-btn {
+    font-size: 0.9vw;
+}
+
+.del-btn:hover {
+    transition: 0.3s ease-in-out;
+    color: white;
+    background-color: rgb(255, 0, 0);
+}
+
+.edit-btn:hover {
+    transition: 0.3s ease-in-out;
+    color: white;
+    background-color: rgb(18, 99, 20);
 }
 
 .btn-add {
-    font-size: 12px;
+    font-size: 0.8vw;
     font-family: louis;
     color: white;
     background-color: rgb(64, 110, 64);
-}
-
-.btn-add:hover {
-    opacity: 60%;
-    transition: 0.3s ease;
 }
 
 .calendar {
@@ -161,25 +219,6 @@ td {
 }
 
 /* Buttons */
-.content button {
-    background-color: rgb(93, 152, 93);
-    align-items: center;
-    margin-top:1vw;
-    font-family: louis;
-    width: 6vw;   
-    color: rgb(255, 255, 255);
-    border: none;
-    border-radius: 25px;
-    font-size: 0.8vw;
-    cursor: pointer;
-    transition: 0.3s ease, transform 0.3s ease;
-}
-
-.content button:hover {
-    /* background-color: #ff6464; */
-    transform: scale(1.05);
-    opacity: 60%;
-}
 
 /* Custom Scrollbar Design */
 ::-webkit-scrollbar {
@@ -213,17 +252,10 @@ body {
 
 /* Styling for the sortby-container and booking-container */
 .sortby-container {
-    padding-right: 10%;
+    transform: translate(-44%, 0%);
+    text-align: left;
+   align-items: left;
 }
-
-.sortby-icon {
-    top: -9;
-    position: relative;
-    margin-left: 10;
-    height: 20px;
-    width: 25px;
-}
-
 
 .booking-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -233,25 +265,40 @@ body {
 
 .td-date {
     text-align: center;
-    width: 20%;
+    width: auto;
+    font-size: 1vw;
+}
+
+img {
+    width: 6vw;
 }
 
 h1 {
-    font-size: 2vw;
+    font-size: 1.3vw;
+    }
+    
+
+h5 {
+    font-size: 1vw;
+    line-height: 2vw;
 }
+    
 
 .td-details {
-    line-height: 3px;
+    width: auto;
+    font-size: 1vw;
 }
 
 h5 {
-    line-height: 1.5vw;
+    line-height: 2vw;
+
     text-align: center;
     font-size: 1vw;
 }
 
 h6 {
-    line-height: 1px;
+    line-height: 2vw;
+
     text-align: center;
     font-size: 0.8vw;
     color: gray;
@@ -262,15 +309,15 @@ tr {
 }
 
 .td-booker, .td-satisfaction, .td-review, .td-details, .td-date {
-    padding-right: 10vw;
+    /* padding-right: 10vw; */
+    width: auto;
+    font-size: 1vw;
 }
 
 .td-booker {
-    line-height: 3px;
-}
-
-.td-booker {
-    line-height: 1px;
+    line-height: 3vw;
+    width: auto;
+    font-size: 1vw;
 }
 
 .td-satisfaction {
