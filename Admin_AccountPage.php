@@ -122,11 +122,12 @@
 
 
     <div class="navbar">
-        <a href="User_Homepage.php">About</a>
-        <a href="User_InquiryPage.php">FAQ</a>
-        <a href="User_Showcase.php">Showcase</a>
+        <a href="Admin_ShowcasePage.php">Showcase</a>
+        <a href="Admin_AppointmentsPage.php">Appointments</a>
+        <a href="Admin_FAQPage.php">FAQ</a>
+        <a href="Admin_ReviewsPage.php">Reviews</a>
     </div>
-
+    
     <div class="logo">
         <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px">
     </div>
