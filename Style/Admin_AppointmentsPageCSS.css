@@ -13,6 +13,16 @@ body {
     font-family: louis;
 }
 
+select {
+    font-family: louis;
+    border-radius: 20px;
+    padding: 0.5vw;
+}
+
+table {
+    min-width: 100%;
+}
+
 .calendar {
     position: fixed;
     top: 30px;
@@ -134,30 +144,71 @@ body {
 }
 
 .content input[type="text"]:focus,
-.content input[type="email"]:focus,
+.content input[type="email"]: focus,
 .content input[type="password"]:focus {
     border-color: #007bff;
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
 /* Buttons */
-.content button {
-    
-    width: 6vw;   
-    color: gray;
+
+button {
     border: none;
-    padding: 2px;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 30px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.content button:hover {
-    color: white;
-    background-color: rgb(66, 125, 66);
+button:hover {
+    opacity: 75%;
     transition: 0.3s ease;
 }
+
+.cancel-btn {
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding:none;
+    background-color: rgb(208, 90, 90);
+    font-size: 0.7;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    opacity: 75%;
+    transition: 0.3s ease;
+}
+
+.txt-cancel {
+    font-family: louis;
+    font-size: 1vw;
+}
+
+.confirm-cancel-btn {
+    font-family: louis;
+    font-size: 0.7vw;
+    background-color: rgb(208, 90, 90);
+    color: white;
+}
+
+.cancellation-title {
+    font-family: nexa;
+}
+
+#btn-create-invoice {
+    border-radius: 30px;
+    font-family: louis;
+    color: white;
+    background-color: rgb(80, 145, 80);
+    padding: 1vw;
+    font-size: 1vw;
+
+}
+
+input {
+    font-family: louis;
+}
+
+
 
 /* Custom Scrollbar Design */
 ::-webkit-scrollbar {
@@ -207,41 +258,36 @@ body {
 
 .td-date {
     text-align: center;
-    width: 20%;
+    width: 15%;
 }
 
 h1 {
-    font-size: 2vw;
+    font-size: 1.3vw;
 }
 
 .td-details {
-    line-height: 3px;
+    max-width: 10%;
 }
 
 h5 {
     font-size: 1vw;
+    line-height: 2vw;
 }
 
 .td-booker {
-    line-height: 3px;
+    width: auto;
 }
 
 .td-booker {
     line-height: 1px;
 }
 
+.td-buttons {
+    width: auto;
+}
+
 .booking-container td {
     padding: 10px 10px 0px 10px;
-}
-
-.cancel-btn {
-   
-    background-color: rgb(224, 78, 78);
-}
-
-.txt-cancel {
-    font-family: louis;
-    font-size: 1vw;
 }
 
 .completed-icon {
@@ -318,6 +364,7 @@ h5 {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     padding-top: 60px;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .modal-content {
@@ -335,8 +382,8 @@ h5 {
     margin-top: 20px;
 }
 
-.submit-btn, .close-btn {
-    padding: 10px 20px;
+.submit-btn {
+    /* padding: 10px 20px; */
     margin: 5px;
     font-size: 16px;
     cursor: pointer;
@@ -344,13 +391,6 @@ h5 {
 
 .submit-btn {
     background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-
-.close-btn {
-    background-color: #f44336;
     color: white;
     border: none;
     border-radius: 5px;
