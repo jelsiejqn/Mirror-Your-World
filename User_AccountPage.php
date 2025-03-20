@@ -180,7 +180,7 @@
                 <h2>Change Profile Picture</h2>
                 <form action="User_AccountPage.php" method="POST" enctype="multipart/form-data">
                     <label for="profile-picture">Upload New Picture</label>
-                    <input type="file" id="profile-picture" name="profile_picture"> <br>
+                    <input type="file" id="profile-picture" name="profile_picture"> <br> <br>
                     <button type="submit" name="update_profile_picture">Update Picture</button>
                 </form>
             </div>
@@ -203,7 +203,7 @@
                     <label for="contact_number">Contact Number</label>
                     <input type="text" id="contact_number" name="contact_number" value="<?php echo htmlspecialchars($user['contact_number']); ?>">
 
-                    <br>
+                    <br> <br>
                     <button type="submit" name="update_basic_info">Update Information</button>
                 </form>
             </div>
@@ -215,7 +215,7 @@
                     <label for="new_username">New Username</label>
                     <input type="text" id="new_username" name="new_username" value="<?php echo htmlspecialchars($user['username']); ?>">
 
-                    <br>
+                    <br> <br>
                     <button type="submit" name="update_username">Update Username</button>
                 </form>
             </div>
@@ -232,7 +232,7 @@
                     <label for="confirm_password">Confirm New Password</label>
                     <input type="password" id="confirm_password" name="confirm_password">
 
-                    <br>
+                    <br> <br>
                     <button type="submit" name="update_password">Update Password</button>
                 </form>
             </div>
