@@ -46,7 +46,7 @@ body {
 
     .sidebar h3 {
         margin-bottom: 20px;
-        font-size: 22px;
+        font-size: 2vw;
         font-weight: 600;
         color: #333;
     }
@@ -54,7 +54,7 @@ body {
     .sidebar a {
         display: block;
         padding: 12px;
-        font-size: 16px;
+        font-size: 1.2vw;
         color: #333;
         text-decoration: none;
         border-radius: 25px; /* Rounded sidebar links */
@@ -83,8 +83,8 @@ body {
 }
 
 .about-me-info img {
-    width: 150px; 
-    height: 150px;
+    width: 5vw; 
+    height: 5vw;
     object-fit: cover;
     border-radius: 50%; 
 }
@@ -97,6 +97,7 @@ body {
 .about-me-info h3 {
     margin: 5px 0; 
     font-family: louis; 
+    font-size: 1vw;
 }
 
 
@@ -112,7 +113,7 @@ body {
 }
 
     .content h2 {
-        font-size: 28px;
+        font-size: 1.5vw;
         margin-bottom: 20px;
         color: #333;
         font-weight: 700;
@@ -125,7 +126,7 @@ body {
     /* Form Fields (Narrowed down) */
     .content label {
         display: block;
-        font-size: 16px;
+        font-size: 1.3vw;
         margin-bottom: 8px;
         color: #555;
     }
@@ -135,13 +136,14 @@ body {
     .content input[type="file"],
     .content input[type="password"] {
         width: 80%; /* Make fields narrower */
-        max-width: 500px; /* Maximum width of the fields */
+        max-width: 80%; /* Maximum width of the fields */
         padding: 12px;
-        font-size: 16px;
+        font-size: 1vw;
         border: 1px solid #ddd;
         border-radius: 25px; /* Significantly more rounded fields */
         background-color: #fafafa;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        font-family: louis;
     }
 
         .content input[type="text"]:focus,
@@ -195,35 +197,48 @@ body {
 /* Prevent horizontal scrolling */
 
 
-/* Responsive layout */
-@media screen and (max-width: 1024px) {
+
+/* Mobile Responsiveness: Sidebar moves to the top */
+@media screen and (max-width: 768px) {
+
     .dashboard-container {
-        flex-direction: column;
-        height: 100vh;
+        height: auto;
+        overflow-y: visible;
+        align-items: center;
+        flex-direction: column; /* Stack the sidebar and content vertically */
     }
 
     .sidebar {
-        width: 100%;
-        padding: 15px;
+        height: 20%;
+        width: 100%; /* Make sidebar take full width on small screens */
+        padding: 10px;
         border-right: none;
-        border-bottom: 1px solid #ddd;
-        position: relative;
+        position: relative; /* Sidebar will be at the top of the screen */
+        top: unset;
+        margin: 0;
+        flex-shrink: 0;
+        box-shadow: none;
     }
 
     .content {
         padding: 20px;
         width: 100%;
         max-width: 100%;
-        height: auto;
+        height: calc(100vh - 20%); /* Make content take up remaining space */
+        margin-left: 0;
+        overflow-y: auto; /* Allow scrolling if content overflows */
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        padding: 10px 20px;
+        font-size: 2vw;
+        display: inline-block;
     }
 }
 
-@media screen and (max-width: 768px) {
-    .sidebar {
-        padding: 10px;
-        font-size: 14px;
-    }
-
+/* Adjust font sizes and layout for even smaller screens */
+@media screen and (max-width: 480px) {
     .content h2 {
         font-size: 22px;
     }
@@ -232,5 +247,9 @@ body {
     .content input,
     .content button {
         font-size: 14px;
+    }
+
+    .booking-container {
+        max-width: 100%;
     }
 }
