@@ -1,7 +1,17 @@
 <?php
+require "dbconnect.php";
+
 session_start();
-// Check if the user is logged in
+
 $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
+
+// Fetch showcase data
+$sql_showcase = "SELECT * FROM showcasetbl ORDER BY date DESC";
+$result_showcase = $conn->query($sql_showcase);
+
+// Fetch clients data
+$sql_clients = "SELECT * FROM clientstbl ORDER BY id DESC";
+$result_clients = $conn->query($sql_clients);
 
 ?>
 
@@ -111,63 +121,25 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 <center> 
 
 <div class="frames-container">
-    
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
-    
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder1.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
+    <?php
 
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
+    if ($result_showcase->num_rows > 0) {
+        while ($row = $result_showcase->fetch_assoc()) {
+            echo '<div class="frame">';
+            echo '    <img src="' . htmlspecialchars($row["image_path"]) . '" alt="Showcase Image" class="frame-icon">';
+            echo '    <p class="frame-description">' . htmlspecialchars($row["company_name"]) . '</p>';
+            echo '    <p class="frame-date">' . date("F j, Y", strtotime($row["date"])) . '</p>';
+            echo '    <p class="frame-info">' . htmlspecialchars($row["description"]) . '</p>';
+            echo '</div>';
+        }
+    } else {
+        echo '<p>No showcase items available.</p>';
+    }
 
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
-    
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
-
-    <div class="frame" id="frame1">
-        <img src="Assets/placeholder2.jpg" alt="Icon 1" class="frame-icon">
-   
-        <p class="frame-description"> Company Name </p>
-        <p class="frame-date"> mm/yy/dd </p>
-        <p class="frame-info"> short description here. </p>
-      
-    </div>
-
-
+    $conn->close();
+    ?>
 </div>
+
 
 
 <div class="material-modal-overlay" id="material-modal">
@@ -204,46 +176,29 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
 <div class = "clients-container">
 <div class = "wrapper2">
-  
-<div class="card">
-    <img src="Assets/client1.jpg" />
-    <div class = "card-descriptions">
-    <h2 class="card-title">Client Name</h2>
-    <h3 class="card-subtitle">Property Owner</h3>
-    <br>
-    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
-    </div>
-</div>
 
-<div class="card">
-    <img src="Assets/client2.jpg" />
-    <div class = "card-descriptions">
-    <h2 class="card-title">Client Name</h2>
-    <h3 class="card-subtitle">Property Owner</h3>
-    <br>
-    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
-    </div>
-</div>
 
-<div class="card">
-    <img src="Assets/client3.jpg" />
-    <div class = "card-descriptions">
-    <h2 class="card-title">Client Name</h2>
-    <h3 class="card-subtitle">Property Owner</h3>
-    <br>
-    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
+<div class="clients-container">
+    <div class="wrapper2">
+        <?php
+        if ($result_clients->num_rows > 0) {
+            while ($row = $result_clients->fetch_assoc()) {
+                echo '<div class="card">';
+                echo '<img src="' . htmlspecialchars($row['image_path']) . '" />';
+                echo '<div class="card-descriptions">';
+                echo '<h2 class="card-title">' . htmlspecialchars($row['client_name']) . '</h2>';
+                echo '<h3 class="card-subtitle">' . htmlspecialchars($row['client_role']) . '</h3>';
+                echo '<br>';
+                echo '<h4 class="card-info">' . nl2br(htmlspecialchars($row['description'])) . '</h4>';
+                echo '</div>';
+                echo '</div>';
+            }
+        } else {
+            echo '<p>No clients found.</p>'; // Or any other message if no clients
+        }
+        ?>
     </div>
-</div>
 
-<div class="card">
-    <img src="Assets/client4.jpg" />
-    <div class = "card-descriptions">
-    <h2 class="card-title">Client Name</h2>
-    <h3 class="card-subtitle">Property Owner</h3>
-    <br>
-    <h4 class="card-info"> Short description about the work or job done for the client. </h4>
-    </div>
-</div>
 
 
 </div>

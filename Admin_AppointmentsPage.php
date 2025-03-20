@@ -1,5 +1,11 @@
 <?php
+session_start(); // Ensure session starts before any output
 include 'dbconnect.php';
+
+// Debugging: Check if the session is active
+if (!isset($_SESSION['admin_id'])) {
+    die('Session is missing. Please log in again.'); 
+}
 
 // Check if the update button was clicked
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,8 +40,12 @@ $query = "
     WHERE a.status = 'Cancelled'";
 $cancelledBookings = $conn->query($query);
 
+// Debugging 
+// echo isset($_SESSION['admin_id']) ? 'Session is active' : 'Session is missing';
+
 $conn->close();
 ?>
+
 
 <html lang="en">
 
@@ -95,9 +105,11 @@ $conn->close();
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
                 <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-                <a href="Admin_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
-            </li>
+            <form method="POST" action="Admin_LoginPage.php">
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="Admin_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+            </form>
         </ul>
     </div>
 

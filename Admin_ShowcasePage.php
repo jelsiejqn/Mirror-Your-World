@@ -11,9 +11,93 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    
+
+
+        <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </head>
+
+<?php
+require "dbconnect.php"; 
+
+// Check if the form is submitted
+if (isset($_POST['update-desc'])) {
+    // Sanitize inputs
+    $company_name = mysqli_real_escape_string($conn, $_POST['company-name']);
+    $date = $_POST['date'];
+    $desc = mysqli_real_escape_string($conn, $_POST['desc']);
+    
+    // Handle file upload
+    $image_path = '';
+    if (isset($_FILES['fileUpload']) && $_FILES['fileUpload']['error'] == 0) {
+        $target_dir = "uploads/"; // Folder where images will be saved
+        $target_file = $target_dir . basename($_FILES["fileUpload"]["name"]);
+        
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $target_file)) {
+            $image_path = $target_file;
+        } else {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Upload Failed',
+                    text: 'There was an error uploading your file.'
+                });
+            </script>";
+            exit();
+        }
+    }
+
+    // Insert data into the showcase table
+    if (!empty($image_path)) {
+        $sql = "INSERT INTO showcasetbl (company_name, date, description, image_path) 
+                VALUES ('$company_name', '$date', '$desc', '$image_path')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Your data has been inserted successfully.'
+                }).then(() => {
+                    window.location.href = 'Admin_ShowcasePage.php'; // Redirect to Showcase page
+                });
+            </script>";
+        } else {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Database Error',
+                    text: 'Error inserting data: " . addslashes($conn->error) . "'
+                });
+            </script>";
+        }
+    } else {
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Image',
+                text: 'Please upload an image.'
+            });
+        </script>";
+    }
+}
+
+// Fetch showcase data
+$sql_showcase = "SELECT * FROM showcasetbl ORDER BY date DESC";
+$result_showcase = $conn->query($sql_showcase);
+
+// Fetch clients data
+$sql_clients = "SELECT * FROM clientstbl ORDER BY id DESC";
+$result_clients = $conn->query($sql_clients);
+
+
+    $conn->close();
+    ?>
+
 <body>
    <!-- Required -->
 
@@ -65,9 +149,11 @@
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
                 <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="Admin_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
-            </li>
+            <form method="POST" action="Admin_LoginPage.php">
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="Admin_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+            </form>
         </ul>
     </div>
 
@@ -98,54 +184,92 @@
             </tr>
             </table>
 
-                <!-- Review Container -->
+ <!-- Showcase Container -->
 
-                <center>
+ <center>
 
-            <table class = "booking-container"> 
-            <tr>
-                <td>
-                    <h1> 01 </h1>
-</td>
-                <td class = "td-date"> 
-                <form action="upload.php" method="POST" enctype="multipart/form-data">
-                <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
-                <button type="submit" name="submit">Upload</button>
-</form>
-                <br>    
-               </td>
+    <table class="booking-container">
+        <tr>
+            <td class="td-date">
+            <form action="Admin_ShowcasePage.php" method="POST" enctype="multipart/form-data" id="showcaseForm" onsubmit="return validateForm()">
+            <input type="hidden" name="table" value="showcase">
 
-                <td class = "td-details"> 
-                     <form>
-                        <textarea name="company-name" class="company-name"> Company Name </textarea>
-                        <br> <button type="submit" name="update-company">Update</button>
-                    </form>
-                </td>
+                    <input type="file" name="fileUpload" id="fileUpload" accept="image/*" required>
 
-                <td class = "td-booker"> 
-                    <form>
-                        <textarea name="date" class="date"> MM/DD/YYYY </textarea>
-                        <br><button type="submit" name="update-date">Update</button>
-                    </form>
-                </td>
+            </td>
 
-                <td class = "td-review"> 
+            <td class="td-details">
 
-                <form>
-                        <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                        </textarea>
-                        <br> <button type="submit" name="update-desc">Update</button>
-                    </form>
-                    
-                    
-                </td>
-            </tr>
-            </table>  
+                <textarea name="company-name" placeholder="Company Name" required></textarea>
+            </td>
 
+            <td class="td-booker">
+
+            <td class="td-booker">
+                <input type="date" name="date" placeholder="MM/DD/YYYY" required />
+            </td>
+
+            </td>
+
+            <td class="td-review">
+
+                <textarea name="desc" class="desc" placeholder="Description" required></textarea>
+                <br>
+            <td>
+                <button type="submit" name="update-desc" class = "btn-add">Add Work </button>
+            </td>
+        </tr>
+        </form>
+    </table>
+
+</center>
              <!-- End Showcase Container -->
-            
 
-        </div>
+             <center>
+    <table class="booking-container">
+        <tr>
+            <th>Image</th>
+            <th>Company Name</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Actions</th> 
+        </tr>
+
+        <?php
+        require "dbconnect.php";
+
+        // Fetch showcase data
+        $sql = "SELECT * FROM showcasetbl ORDER BY date DESC";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td class='td-date'><img src='" . $row['image_path'] . "' width='100' height='100' style='object-fit: cover;'></td>";
+                echo "<td class='td-details'><strong>" . htmlspecialchars($row['company_name']) . "</strong></td>";
+                echo "<td class='td-booker'>" . date('F j, Y', strtotime($row['date'])) . "</td>";
+                echo "<td class='td-review'>" . nl2br(htmlspecialchars($row['description'])) . "</td>";
+                echo "<td class='td-actions'>"; // New column for buttons
+                echo "<button class='btn btn-primary btn-edit' data-id='" . $row['id'] . "' 
+                data-company='" . htmlspecialchars($row['company_name']) . "' 
+                data-date='" . $row['date'] . "' 
+                data-description='" . htmlspecialchars($row['description']) . "' 
+                data-image='" . $row['image_path'] . "'>Edit</button> | ";
+            
+                echo "<button class='btn btn-danger btn-delete' data-id='" . $row['id'] . "'>Delete</button>";
+                echo "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>No records found.</td></tr>"; // colspan adjusted
+        }
+
+        $conn->close();
+        ?>
+    </table>
+</center>
+
+</div>
 
         <!-- Past Bookings -->
         <div class="section" id="past-bookings" style="display: none;">
@@ -160,102 +284,64 @@
             </table>
 
             
-                <!-- Review Container -->
-
-                <center>
-
-            <table class = "booking-container"> 
-            <tr>
+            <center>
+    <table class="booking-container">
+        <tr>
+            <td class="td-date">
+                <form action="Admin_AddClients.php" method="POST" enctype="multipart/form-data" id="clientForm" onsubmit="return validateClientForm()">
+                    <input type="hidden" name="table" value="client">
+                    <input type="file" name="fileUpload" id="fileUpload" accept="image/*" required>
+            </td>
+            <td class="td-details">
+                <textarea name="client-name" placeholder="Client Name" required></textarea>
+            </td>
+            <td class="td-booker">
+                <textarea name="client-role" placeholder="Client Role" required></textarea>
+            </td>
+            <td class="td-review">
+                <textarea name="desc" class="desc" placeholder="Description" required></textarea>
+                <br>
                 <td>
-                    <h1> 01 </h1>
-</td>
-                <td class = "td-date"> 
-                <form action="upload.php" method="POST" enctype="multipart/form-data">
-                <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
-                <button type="submit" name="submit">Upload</button>
-</form>
-                <br>    
-               </td>
-
-                <td class = "td-details"> 
-                     <form>
-                        <textarea name="company-name" class="company-name"> Client Name /n and Company </textarea>
-                        <br> <button type="submit" name="update-company">Update</button>
-                    </form>
+                    <button type="submit" name="update-desc" class="btn-add">Add Client</button>
                 </td>
-
-                <td class = "td-booker"> 
-                    <form>
-                        <textarea name="date" class="date"> MM/DD/YYYY </textarea>
-                        <br><button type="submit" name="update-date">Update</button>
-                    </form>
-                </td>
-
-                <td class = "td-review"> 
-
-                <form>
-                        <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                        </textarea>
-                        <br> <button type="submit" name="update-desc">Update</button>
-                    </form>
-                    
-                    
-                </td>
-            </tr>
-            </table>  
-
-             <!-- End Showcase Container -->
-
-             <!-- Review Container -->
-
-             <center>
-
-<table class = "booking-container"> 
-<tr>
-    <td>
-        <h1> 02 </h1>
-</td>
-    <td class = "td-date"> 
-    <form action="upload.php" method="POST" enctype="multipart/form-data">
-    <input type="file" class="fileUpload" name="fileUpload" id="fileUpload" accept="image/*">
-    <button type="submit" name="submit">Upload</button>
-</form>
-    <br>    
-   </td>
-
-    <td class = "td-details"> 
-         <form>
-            <textarea name="company-name" class="company-name"> Client Name /n and Company </textarea>
-            <br> <button type="submit" name="update-company">Update</button>
+            </td>
+        </tr>
         </form>
-    </td>
+    </table>
 
-    <td class = "td-booker"> 
-        <form>
-            <textarea name="date" class="date"> MM/DD/YYYY </textarea>
-            <br><button type="submit" name="update-date">Update</button>
-        </form>
-    </td>
-
-    <td class = "td-review"> 
-
-    <form>
-            <textarea name="desc" class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-            </textarea>
-            <br> <button type="submit" name="update-desc">Update</button>
-        </form>
-        
-        
-    </td>
-</tr>
-</table>  
-
- <!-- End Showcase Container -->
-
-
-
-        
-        </div>
+    <table class="booking-container">
+        <tr>
+            <th>Image</th>
+            <th>Client Name</th>
+            <th>Client Role</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        <?php
+        if ($result_clients->num_rows > 0) {
+            while ($row = $result_clients->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td class='td-date'><img src='" . $row['image_path'] . "' width='100' height='100' style='object-fit: cover;'></td>";
+                echo "<td class='td-details'><strong>" . htmlspecialchars($row['client_name']) . "</strong></td>";
+                echo "<td class='td-booker'>" . htmlspecialchars($row['client_role']) . "</td>";
+                echo "<td class='td-review'>" . nl2br(htmlspecialchars($row['description'])) . "</td>";
+                echo "<td class='td-actions'>";
+                echo "<button class='btn btn-primary btn-edit-client' data-id='" . $row['id'] . "' 
+                        data-name='" . htmlspecialchars($row['client_name']) . "' 
+                        data-role='" . htmlspecialchars($row['client_role']) . "' 
+                        data-description='" . htmlspecialchars($row['description']) . "' 
+                        data-image='" . $row['image_path'] . "'>Edit</button> | ";
+                echo "<button class='btn btn-danger btn-delete-client' data-id='" . $row['id'] . "'>Delete</button>";
+                echo "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>No client records found.</td></tr>";
+        }
+        ?>
+    </table>
+</center>
+     </div>
 
     </div>
 </div>
@@ -348,7 +434,208 @@ function openModal() {
                 }
             }
         });
-   
+        
+        document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-delete").forEach(button => {
+        button.addEventListener("click", function () {
+            let showcaseId = this.getAttribute("data-id");
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action cannot be undone!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("delete_showcase.php?id=" + showcaseId, { method: "GET" })
+                    .then(response => response.text())
+                    .then(data => {
+                        Swal.fire("Deleted!", "The showcase has been deleted.", "success")
+                        .then(() => location.reload());
+                    })
+                    .catch(error => {
+                        Swal.fire("Error", "Something went wrong!", "error");
+                    });
+                }
+            });
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-edit").forEach(button => {
+        button.addEventListener("click", function () {
+            let showcaseId = this.getAttribute("data-id");
+            let companyName = this.getAttribute("data-company");
+            let date = this.getAttribute("data-date");
+            let description = this.getAttribute("data-description");
+            let imagePath = this.getAttribute("data-image");
+
+            Swal.fire({
+                title: "Edit Showcase",
+                width: 400, // Fixed width to prevent overflow
+                padding: "1.2em",
+                background: "#f8f9fa",
+                confirmButtonColor: "#007bff",
+                cancelButtonColor: "#dc3545",
+                showCloseButton: true, // Add "X" button
+                allowOutsideClick: false, // Prevent accidental closing
+                backdrop: true, // Ensures it stays in front
+                html: `
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box;">
+                        <img src="${imagePath}" width="100" style="border-radius: 8px; margin-bottom: 10px;">
+                        <label for="company" style="font-size: 14px; align-self: flex-start;">Company Name:</label>
+                        <input type="text" id="company" class="swal2-input" style="width: 100%; font-size: 14px; box-sizing: border-box;" value="${companyName}">
+                        
+                        <label for="date" style="font-size: 14px; align-self: flex-start;">Date:</label>
+                        <input type="date" id="date" class="swal2-input" style="width: 100%; font-size: 14px; box-sizing: border-box;" value="${date}">
+
+                        <label for="description" style="font-size: 14px; align-self: flex-start;">Description:</label>
+                        <textarea id="description" class="swal2-textarea" style="width: 100%; font-size: 14px; height: 100px; box-sizing: border-box;">${description}</textarea>
+
+                        <label for="image" style="font-size: 14px; align-self: flex-start;">Image:</label>
+                        <input type="file" id="image" class="swal2-file" style="width: 100%; font-size: 12px; box-sizing: border-box;">
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: "Update",
+                cancelButtonText: "Cancel",
+                preConfirm: () => {
+                    let formData = new FormData();
+                    formData.append("id", showcaseId);
+                    formData.append("company_name", document.getElementById("company").value);
+                    formData.append("date", document.getElementById("date").value);
+                    formData.append("description", document.getElementById("description").value);
+                    let imageFile = document.getElementById("image").files[0];
+                    if (imageFile) {
+                        formData.append("image", imageFile);
+                    }
+
+                    return fetch("edit_showcase.php", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data.trim() === "Success") {
+                            Swal.fire("Updated!", "The showcase has been updated.", "success")
+                            .then(() => location.reload());
+                        } else {
+                            Swal.fire("Error", "Something went wrong!", "error");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire("Error", "Something went wrong!", "error");
+                    });
+                }
+            });
+        });
+    });
+});
+
+//Delete Client
+document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-delete-client").forEach(button => {
+            button.addEventListener("click", function () {
+                let clientId = this.getAttribute("data-id");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch("delete_client.php?id=" + clientId, { method: "GET" })
+                            .then(response => response.text())
+                            .then(data => {
+                                Swal.fire("Deleted!", "The client has been deleted.", "success")
+                                    .then(() => location.reload());
+                            })
+                            .catch(error => {
+                                Swal.fire("Error", "Something went wrong!", "error");
+                            });
+                    }
+                });
+            });
+        });
+    });
+
+    //Edit Client
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-edit-client").forEach(button => {
+            button.addEventListener("click", function () {
+                let clientId = this.getAttribute("data-id");
+                let clientName = this.getAttribute("data-name");
+                let clientRole = this.getAttribute("data-role");
+                let description = this.getAttribute("data-description");
+                let imagePath = this.getAttribute("data-image");
+
+                Swal.fire({
+                    title: "Edit Client",
+                    width: 400,
+                    padding: "1.2em",
+                    background: "#f8f9fa",
+                    confirmButtonColor: "#007bff",
+                    cancelButtonColor: "#dc3545",
+                    showCloseButton: true,
+                    allowOutsideClick: false,
+                    backdrop: true,
+                    html: `
+                        <div style="display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box;">
+                            <img src="${imagePath}" width="100" style="border-radius: 8px; margin-bottom: 10px;">
+                            <label for="name" style="font-size: 14px; align-self: flex-start;">Client Name:</label>
+                            <input type="text" id="name" class="swal2-input" style="width: 100%; font-size: 14px; box-sizing: border-box;" value="${clientName}">
+                            <label for="role" style="font-size: 14px; align-self: flex-start;">Client Role:</label>
+                            <input type="text" id="role" class="swal2-input" style="width: 100%; font-size: 14px; box-sizing: border-box;" value="${clientRole}">
+                            <label for="description" style="font-size: 14px; align-self: flex-start;">Description:</label>
+                            <textarea id="description" class="swal2-textarea" style="width: 100%; font-size: 14px; height: 100px; box-sizing: border-box;">${description}</textarea>
+                            <label for="image" style="font-size: 14px; align-self: flex-start;">Image:</label>
+                            <input type="file" id="image" class="swal2-file" style="width: 100%; font-size: 12px; box-sizing: border-box;">
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: "Update",
+                    cancelButtonText: "Cancel",
+                    preConfirm: () => {
+                        let formData = new FormData();
+                        formData.append("id", clientId);
+                        formData.append("name", document.getElementById("name").value);
+                        formData.append("role", document.getElementById("role").value);
+                        formData.append("description", document.getElementById("description").value);
+                        let imageFile = document.getElementById("image").files[0];
+                        if (imageFile) {
+                            formData.append("image", imageFile);
+                        }
+
+                        return fetch("edit_client.php", {
+                            method: "POST",
+                            body: formData
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                if (data.trim() === "Success") {
+                                    Swal.fire("Updated!", "The client has been updated.", "success")
+                                        .then(() => location.reload());
+                                } else {
+                                    Swal.fire("Error", "Something went wrong!", "error");
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire("Error", "Something went wrong!", "error");
+                            });
+                    }
+                });
+            });
+        });
+    });
+
 </script>
     
 

@@ -68,9 +68,11 @@
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
                 <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
-            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s; ">
-                <a href="Admin_LoginPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
-            </li>
+            <form method="POST" action="Admin_LoginPage.php">
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="Admin_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+            </form>
         </ul>
     </div>
 

@@ -1,3 +1,51 @@
+<?php
+require 'dbconnect.php';
+
+$error_message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $first_name = trim($_POST['first_name']);
+    $last_name = trim($_POST['last_name']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+
+    // Validate passwords
+    if ($password !== $confirm_password) {
+        $error_message = "Passwords do not match!";
+    } else {
+        // Hash the password
+        $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+        // Check if username or email already exists
+        $checkQuery = "SELECT * FROM adminstbl WHERE username = ? OR email = ?";
+        $stmt = $conn->prepare($checkQuery);
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $error_message = "Username or Email already taken!";
+        } else {
+            // Insert new admin into the database
+            $query = "INSERT INTO adminstbl (first_name, last_name, username, email, password_hash, created_at) 
+                      VALUES (?, ?, ?, ?, ?, NOW())";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sssss", $first_name, $last_name, $username, $email, $password_hash);
+
+            if ($stmt->execute()) {
+                header("Location: Admin_LoginPage.php?success=1"); // Redirect to login page
+                exit();
+            } else {
+                $error_message = "Registration failed. Please try again.";
+            }
+        }
+        $stmt->close();
+    }
+    $conn->close();
+}
+?>
 
 
 <!DOCTYPE html>
@@ -5,7 +53,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | Mirror Your World</title>
+    <title>Admin Signup | Mirror Your World</title>
 
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Admin_LoginPageCSS.css" />
@@ -41,42 +89,59 @@
             <!-- Main Login Form -->
             <div class="loginDiv">
 
-                <form class="loginForm" method="POST" action="User_LoginPage.php">
+                    <form class="loginForm" method="POST" action="Admin_SignupPage.php">
+            <div class="txt_Title">
+                <br> <br>
+                <h2 class="txt_MYW"> Mirror Your World. </h2>
+                <h4 class="txt_Desc"> Welcome! </h4>
+            </div>
 
-                    <div class="txt_Title">
-                        <br> <br>
-                        <h2 class="txt_MYW"> Mirror Your World. </h2>
-                        <h4 class="txt_Desc"> Welcome! </h4>
-                    </div>
+            <div class="input-field">
+                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                <input id="first_name" name="first_name" type="text" placeholder="First Name" required>
+            </div>
 
-                    <div class="input-field">
-                        <label> <img src="Assets/icon_Profile.png" class="field-icon"> </label>
-                        <input id="username" name="username" type="text" placeholder="Username" required>
-                    </div>
+            <div class="input-field">
+                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                <input id="last_name" name="last_name" type="text" placeholder="Last Name" required>
+            </div>
 
-                    <div class="input-field">
-                        <label> <img src="Assets/icon_Profile.png" class="field-icon"> </label>
-                        <input id="username" name="username" type="text" placeholder="Email" required>
-                    </div>
+            <div class="input-field">
+                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                <input id="username" name="username" type="text" placeholder="Username" required>
+            </div>
 
-                    <div class="input-field">
-                        <label> <img src="Assets/icon_lock.png" class="field-icon"> </label>
-                        <input id="password" name="password" type="password" placeholder="Password" required>
-                    </div>
+            <div class="input-field">
+                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                <input id="email" name="email" type="email" placeholder="Email" required>
+            </div>
 
-                    <div class="input-field">
-                        <label> <img src="Assets/icon_lock.png" class="field-icon"> </label>
-                        <input id="password" name="password" type="password" placeholder="Confirm Password" required>
-                    </div>
+            <div class="input-field">
+                <label><img src="Assets/icon_lock.png" class="field-icon"></label>
+                <input id="password" name="password" type="password" placeholder="Password" required>
+            </div>
 
-                    <button class="btn_login" type="submit" name="action" id="login">
-                        Sign-Up
-                    </button>
-                    <p class="existingacc"> Already an admin? <a href="Admin_LoginPage.php" class="a1"> Login</a> </p>
+            <div class="input-field">
+                <label><img src="Assets/icon_lock.png" class="field-icon"></label>
+                <input id="confirm_password" name="confirm_password" type="password" placeholder="Confirm Password" required>
+            </div>
 
+            <button class="btn_login" type="submit" name="action">
+                Sign-Up
+            </button>
 
-                    <br /><br />
-                </form>
+            <p class="existingacc"> Already an admin? <a href="Admin_LoginPage.php" class="a1"> Login</a> </p>
+
+            <br /><br />
+
+            <!-- Display error message -->
+            <?php if (!empty($error_message)) { ?>
+                <div class="error-message" style="color: red;">
+                    <?php echo $error_message; ?>
+                </div>
+            <?php } ?>
+        </form>
+
 
                 <!-- Display error or success messages -->
                 <?php if (!empty($error_message)) { ?>
