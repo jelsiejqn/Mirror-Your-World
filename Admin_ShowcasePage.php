@@ -160,7 +160,7 @@ $conn->close();
     </div>
 
     <!-- Required -->
-    </center>
+
 
     <div class="dashboard-container">
         <!-- Sidebar (Options) -->
@@ -175,8 +175,9 @@ $conn->close();
 
             <!-- Active Bookings -->
             <div class="section" id="active-bookings">
-                <h2>Works</h2>
+                <h2>Company Works</h2>
                 <!-- Yung 12 hours pagitan na pwede silamagcancel both client and user -->
+
                 <table class="sortby-container">
                     <tr>
                         <td>
@@ -191,6 +192,8 @@ $conn->close();
 
                 <!-- Showcase Container -->
                 <br>
+
+                <!-- Showcase Container -->
 
                 <center>
 
@@ -209,13 +212,13 @@ $conn->close();
                                 <textarea name="company-name" placeholder="Company Name" required></textarea>
                             </td>
 
-
+                            <td class="td-booker">
 
                             <td class="td-booker">
                                 <input type="date" name="date" placeholder="MM/DD/YYYY" required />
                             </td>
 
-
+                            </td>
 
                             <td class="td-review">
 
@@ -228,13 +231,14 @@ $conn->close();
                         </form>
                     </table>
 
+                    <br>
+
                 </center>
                 <!-- End Showcase Container -->
 
                 <center>
                     <table class="booking-container">
                         <tr>
-                            <br>
                             <th>Image</th>
                             <th>Company Name</th>
                             <th>Date</th>
@@ -263,18 +267,15 @@ $conn->close();
                                 echo "<td class='td-booker'>" . date('F j, Y', strtotime($row['date'])) . "</td>";
                                 echo "<td class='td-review'>" . nl2br(htmlspecialchars($row['description'])) . "</td>";
                                 echo "<td class='td-actions'>"; // New column for buttons
-                                echo "<button class='edit-btn' data-id='" . $row['id'] . "' 
+                                echo "<button class='btn btn-primary btn-edit edit-btn' data-id='" . $row['id'] . "' 
                 data-company='" . htmlspecialchars($row['company_name']) . "' 
                 data-date='" . $row['date'] . "' 
                 data-description='" . htmlspecialchars($row['description']) . "' 
                 data-image='" . $row['image_path'] . "'>Edit</button> | ";
 
-                                echo "<button class='del-btn' data-id='" . $row['id'] . "'>Delete</button>";
-
+                                echo "<button class='btn btn-danger btn-delete del-btn' data-id='" . $row['id'] . "'>Delete</button>";
                                 echo "</td>";
                                 echo "</tr>";
-
-                                // Insert an <hr> tag after each row to visually separate them
                                 echo "<tr><td colspan='5'><hr></td></tr>";
                             }
                         } else {
@@ -302,14 +303,12 @@ $conn->close();
                                 <option value="oldest">Oldest</option>
                             </select>
                         </td>
-
-                    </tr>
                 </table>
 
+                <br>
 
                 <center>
                     <table class="booking-container">
-                        <br>
                         <tr>
                             <td class="td-date">
                                 <form action="Admin_AddClients.php" method="POST" enctype="multipart/form-data" id="clientForm" onsubmit="return validateClientForm()">
@@ -332,9 +331,9 @@ $conn->close();
                         </tr>
                         </form>
                     </table>
+                    <br>
 
                     <table class="booking-container">
-                        <br>
                         <tr>
                             <th>Image</th>
                             <th>Client Name</th>
@@ -357,17 +356,14 @@ $conn->close();
                                 echo "<td class='td-booker'>" . htmlspecialchars($row['client_role']) . "</td>";
                                 echo "<td class='td-review'>" . nl2br(htmlspecialchars($row['description'])) . "</td>";
                                 echo "<td class='td-actions'>";
-                                echo "<button class='edit-btn' data-id='" . $row['id'] . "' 
+                                echo "<button class='btn btn-primary btn-edit-client edit-btn' data-id='" . $row['id'] . "' 
                         data-name='" . htmlspecialchars($row['client_name']) . "' 
                         data-role='" . htmlspecialchars($row['client_role']) . "' 
                         data-description='" . htmlspecialchars($row['description']) . "' 
                         data-image='" . $row['image_path'] . "'>Edit</button> | ";
-                                echo "<button class='del-btn' data-id='" . $row['id'] . "'>Delete</button>";
-                                echo "<br> <br>";
+                                echo "<button class='btn btn-danger btn-delete-client del-btn' data-id='" . $row['id'] . "'>Delete</button>";
                                 echo "</td>";
                                 echo "</tr>";
-
-                                // Insert an <hr> tag after each row to visually separate them
                                 echo "<tr><td colspan='5'><hr></td></tr>";
                             }
                         } else {

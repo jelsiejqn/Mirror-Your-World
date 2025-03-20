@@ -43,8 +43,8 @@ select {
 }
 
 table {
-    min-width: 85%;
-    max-width: 85%;
+    min-width: 100%;
+    max-width: 100%;
 }
 
 button {
