@@ -150,6 +150,8 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
                 <!-- Scrollable Container -->
 
+                <br> <br>
+
                 <div class="scrollable-container">
                     <div class="scroll-frame">
                         <h2 class="frame-title2">Our Story</h2>
