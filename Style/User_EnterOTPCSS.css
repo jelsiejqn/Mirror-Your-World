@@ -1,83 +1,92 @@
 /* General Styling */
 body {
-    font-family: 'louis', sans-serif; /* Apply 'louis' font */
-    background-color: #f0f0f0; /* Light background for the body */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-  }
-  
+  font-family: 'louis', sans-serif; /* Apply 'louis' font */
+  background-color: #f0f0f0; /* Light background for the body */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* OTP Container */
+.otp-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff; /* White background for the form container */
+  border-radius: 20px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  padding: 30px;
+  width: 100%;
+  max-width: 400px; /* Limit the width of the container */
+  text-align: center;
+}
+
+/* Heading */
+.otp-container h2 {
+  font-family: nexa;
+  font-size: 2rem; /* Larger font size for heading */
+  color: #333; /* Dark text color */
+  margin-bottom: 10px;
+}
+
+.otp-container h4 {
+  font-size: 1rem; /* Medium font size for paragraph */
+  color: #666; /* Lighter text color */
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.otpForm input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.otpForm input[type="text"] {
+  background-color: #f9f9f9; /* Light background for the input */
+}
+
+/* Submit Button */
+.otpForm button {
+  width: 60%;
+  padding: 12px;
+  background-color: #2a2a2a;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1vw;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.otpForm button:hover {
+  color: #2a2a2a;
+  background-color: #e0e0e0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
   .otp-container {
-    top: 50%;
-    background-color: #fff; /* White background for the form container */
-    border-radius: 20px; /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
-    padding: 30px;
-    width: 100%;
-    max-width: 400px; /* Limit the width of the container */
-    text-align: center;
-  }
-  
-  .otp-container h2 {
-    font-size: 2rem; /* Larger font size for heading */
-    color: #333; /* Dark text color */
-    margin-bottom: 10px;
-  }
-  
-  .otp-container p {
-    top: 50%;
-    font-size: 1rem; /* Medium font size for paragraph */
-    color: #666; /* Lighter text color */
-    margin-bottom: 20px;
-  }
-  
-  .otpForm input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 1rem;
-  }
-  
-  .otpForm input[type="text"] {
-    background-color: #f9f9f9; /* Light background for the input */
-  }
-  
-  .otpForm button {
-    background-color: #4CAF50; /* Green background for the button */
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
-  }
-  
-  .otpForm button:hover {
-    background-color: #45a049; /* Darker green when hovered */
-  }
-  
-  @media (max-width: 600px) {
-    .otp-container {
       width: 90%; /* Allow the form container to take up more space on small screens */
       padding: 20px; /* Less padding on smaller screens */
-    }
-  
-    .otp-container h2 {
-      font-size: 1.5rem; /* Adjust heading font size */
-    }
-  
-    .otpForm input {
-      padding: 10px; /* Smaller padding for input fields */
-    }
-  
-    .otpForm button {
-      padding: 10px 15px; /* Adjust button padding for smaller screens */
-    }
   }
-  
+
+  .otp-container h2 {
+      font-size: 1.5rem; /* Adjust heading font size */
+  }
+
+  .otpForm input {
+      padding: 10px; /* Smaller padding for input fields */
+  }
+
+  .otpForm button {
+      padding: 10px 15px; /* Adjust button padding for smaller screens */
+  }
+}
