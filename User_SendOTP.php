@@ -1,6 +1,6 @@
-<?php 
-include "dbconnect.php"; 
-require 'User_EmailAPI.php'; 
+<?php
+include "dbconnect.php";
+require 'User_EmailAPI.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statement->execute(["otp" => $otp, "email" => $email]);
 
         try {
-            sendOTPEmail($email, $otp); 
+            sendOTPEmail($email, $otp);
 
             echo "<script>alert('OTP sent successfully! Check your email.');</script>";
             header("Location: User_VerifyOTP.php?email=$email");
@@ -29,8 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         echo "<script>alert('Email not found! Please enter a registered email.');</script>";
-        header("Location: User_RequestOtpPage.php"); 
+        header("Location: User_RequestOtpPage.php");
         exit();
     }
 }
-?>  

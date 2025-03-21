@@ -282,6 +282,7 @@ input::placeholder {
         padding: 15px;
         max-width: 90%;
         top: 50%;
+        max-height: 70%;
     }
 
     .txt_MYW {
