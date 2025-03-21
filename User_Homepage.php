@@ -234,17 +234,17 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
         const modalDescription = document.getElementById('modal-description');
 
         if (frameId === 1) {
-            modalImage.src = 'Assets/image1.jpg';
-            modalTitle.innerHTML = 'Detailed Frame 1 Title';
-            modalDescription.innerHTML = 'Detailed description of the content for frame 1 will go here.';
+            modalImage.src = 'Assets/pic-expertise.jpg';
+            modalTitle.innerHTML = 'We do Glass Installations!';
+            modalDescription.innerHTML = 'Transform your space with our premium glass solutions. Whether youre looking for sleek glass panels, mirrors, or custom designs, we deliver clarity, elegance, and precision. Perfect for any style, our glass pieces are crafted to enhance your environment with a touch of modern sophistication.';
         } else if (frameId === 2) {
-            modalImage.src = 'Assets/image2.jpg';
-            modalTitle.innerHTML = 'Detailed Frame 2 Title';
-            modalDescription.innerHTML = 'Detailed description of the content for frame 2 will go here.';
+            modalImage.src = 'Assets/pic-passion.jpg';
+            modalTitle.innerHTML = 'We do Aluminum Installations!';
+            modalDescription.innerHTML = 'Add a touch of industrial strength and sleek design with our high-quality aluminum products. From frames to custom pieces, aluminum offers durability, lightweight flexibility, and a clean, contemporary look. Whether for structural or aesthetic purposes, our aluminum creations are built to last and impress.';
         } else if (frameId === 3) {
-            modalImage.src = 'Assets/image3.jpg';
-            modalTitle.innerHTML = 'Detailed Frame 3 Title';
-            modalDescription.innerHTML = 'Detailed description of the content for frame 3 will go here.';
+            modalImage.src = 'Assets/pic-story.jpg';
+            modalTitle.innerHTML = 'We do Glass and Aluminum Installations';
+            modalDescription.innerHTML = 'Experience the perfect fusion of elegance and strength with our glass and aluminum combinations. The smooth, reflective beauty of glass paired with the sturdy, modern feel of aluminum creates stunning designs that elevate any project. Custom-made to your specifications, these pieces are as versatile as they are beautiful.';
         }
 
         modal.style.display = 'block';
