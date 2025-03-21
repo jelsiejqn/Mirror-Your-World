@@ -1,6 +1,9 @@
 <?php
-session_start(); // Ensure session starts before any output
+session_start();
 include 'dbconnect.php';
+require 'User_EmailAPI.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Debugging: Check if the session is active
 if (!isset($_SESSION['admin_id'])) {
@@ -8,7 +11,7 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 // Check if the update button was clicked
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) { //check to make sure it is not the invoice form submission
     // Automatically update appointment statuses
     $conn->query("UPDATE appointmentstbl SET status = 'Confirmed' WHERE status = 'Pending' AND appointment_date <= NOW() - INTERVAL 1 DAY");
     $conn->query("UPDATE appointmentstbl SET status = 'Completed' WHERE appointment_date < NOW() AND status != 'Completed'");
@@ -37,13 +40,115 @@ $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Completed'";
+$completed_appointments = $conn->query($query);
+
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
     WHERE a.status = 'Cancelled'";
 $cancelledBookings = $conn->query($query);
 
-// Debugging 
-// echo isset($_SESSION['admin_id']) ? 'Session is active' : 'Session is missing';
+// Invoice creation logic (create_invoice.php)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_invoice_form') {
+    // Validate and sanitize input
+    $user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
+    $total_cost = mysqli_real_escape_string($conn, $_POST['total_cost']);
+    $notes = mysqli_real_escape_string($conn, $_POST['notes']);
+    $tax_discount = mysqli_real_escape_string($conn, $_POST['tax_discount']);
+
+    $sql = "INSERT INTO invoicestbl (user_id, total_cost, notes, tax_discount) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("idsd", $user_id, $total_cost, $notes, $tax_discount);
+
+    if ($stmt->execute()) {
+        $_SESSION['popup_message'] = "Invoice created successfully!";
+        $_SESSION['popup_type'] = "success";
+
+        // Fetch user and appointment data for email
+        $user_query = "SELECT email, first_name FROM userstbl WHERE user_id = ?";
+        $user_stmt = $conn->prepare($user_query);
+        $user_stmt->bind_param("i", $user_id);
+        $user_stmt->execute();
+        $user_result = $user_stmt->get_result();
+        if ($user_row = $user_result->fetch_assoc()) {
+            $user_email = $user_row['email'];
+            $user_first_name = $user_row['first_name'];
+
+            //Fetch appointment data
+            $appointment_query = "SELECT appointment_date, consultation_type, appointment_time FROM appointmentstbl WHERE user_id = ? AND status = 'Completed' ORDER BY appointment_date DESC LIMIT 1";
+            $appointment_stmt = $conn->prepare($appointment_query);
+            $appointment_stmt->bind_param("i", $user_id);
+            $appointment_stmt->execute();
+            $appointment_result = $appointment_stmt->get_result();
+            if($appointment_row = $appointment_result->fetch_assoc()){
+                $appointment_date = $appointment_row['appointment_date'];
+                $consultation_type = $appointment_row['consultation_type'];
+                $appointment_time = $appointment_row['appointment_time'];
+
+                // Send confirmation email
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host     = $smtp_host;
+                    $mail->SMTPAuth = true;
+                    $mail->Username = $smtp_username;
+                    $mail->Password = $smtp_password;
+                    $mail->SMTPSecure = $smtp_secure;
+                    $mail->Port     = $smtp_port;
+
+                    $mail->setFrom($smtp_sender, 'Mirror Your World');
+                    $mail->addAddress($user_email, $user_first_name);
+
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Invoice Confirmation';
+                    $mail->Body    = "Dear " . htmlspecialchars($user_first_name) . ",<br><br>Your invoice has been created, for your appointment on " . htmlspecialchars(date('M d Y', strtotime($appointment_date))) . " at " . htmlspecialchars(date('h:i A', strtotime($appointment_time))) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Total Cost: $".htmlspecialchars($total_cost)."<br>Notes: ".htmlspecialchars($notes)."<br>Taxes/Discounts: ".htmlspecialchars($tax_discount)."<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
+
+                    $mail->send();
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Invoice created successfully! A confirmation email has been sent to you.',
+                        });
+                    </script>";
+                } catch (Exception $e) {
+                    echo "<script>
+                        alert('Invoice created successfully! However, there was an error sending the confirmation email: {$mail->ErrorInfo}');
+                    </script>";
+                }
+            } else {
+                echo "<script>alert('Error: Appointment data not found for user.');</script>";
+            }
+        } else {
+            echo "<script>alert('Error: User data not found.');</script>";
+        }
+
+
+    } else {
+        $_SESSION['popup_message'] = "Error creating invoice. Please try again.";
+        $_SESSION['popup_type'] = "error";
+    }
+
+    $stmt->close();
+}
 
 $conn->close();
+
+if (isset($_SESSION['popup_message'])) {
+    $message = htmlspecialchars($_SESSION['popup_message']);
+    $type = $_SESSION['popup_type'];
+
+    echo "<script>
+        window.onload = function() {
+            alert('" . $message . "');
+        };
+    </script>";
+
+    unset($_SESSION['popup_message']);
+    unset($_SESSION['popup_type']);
+}
 ?>
 
 
@@ -60,6 +165,7 @@ $conn->close();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -240,34 +346,49 @@ $conn->close();
                         </td>
                     </tr>
                 </table>
+
                 <center>
-                    <table class="booking-container">
-
-                        <tr>
-                            <td class="td-date">
-                                <h1> Nov 6 2003 </h1>
-                            </td>
-                            <td class="td-details">
-                                <h5>Consultation Type: Acrylic <br>
-                                    Time: 2pm <br>
-                                    Site of Appointment: <br> Makati City</h5>
-                            </td>
-                            <td class="td-booker">
-                                <h5>Name: Pwet <br>
-                                    Email: rararara <br>
-                                    Contact Number: rararaar </h5>
-                            </td>
-                            <td class="td-buttons">
-                                <button class="btn-invoice-create" id="btn-create-invoice">Create Invoice</button>
-                            </td>
-                        </tr>
-                    </table>
-                </center>
+    <?php if ($completed_appointments->num_rows > 0): ?>
+        <?php while ($row = $completed_appointments->fetch_assoc()): ?>
+            <?php
+                $appointment_data = [
+                    'user_id' => $row['user_id'],
+                    'user_name' => $row['first_name'] . ' ' . $row['last_name'],
+                    'user_email' => $row['email'],
+                    'user_contact' => $row['contact_number'],
+                    'service_type' => $row['consultation_type'],
+                    'consultation_date' => $row['appointment_date'],
+                ];
+                $appointment_json = json_encode($appointment_data);
+            ?>
+            <table class="booking-container">
+                <tr>
+                    <td class="td-date">
+                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                    </td>
+                    <td class="td-details">
+                        <h5> Type: <?php echo $row['consultation_type']; ?> <br>
+                            Time: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                            Site of Appointment: <br> <?php echo $row['address']; ?></h5>
+                    </td>
+                    <td class="td-booker">
+                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> <br>
+                            Email: <?php echo $row['email']; ?> <br>
+                            Contact: <?php echo $row['contact_number']; ?> </h5>
+                    </td>
+                    <td class="td-buttons">
+                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <h5>No past bookings.</h5>
+    <?php endif; ?>
+</center>
             </div>
-
-
-
-
+  
 
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
@@ -349,57 +470,43 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Modal for Invoice Creation -->
     <div class="modal-invoice" id="modal-invoice">
-        <div class="modal-invoice-content">
-            <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
-
-            <!-- Modal Title -->
-            <br>
-            <h1 class="invoice-title">Mirror Your World <br>
-                <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
-                </h2>
-
-
-                <!-- Pre-filled Information -->
-                <div class="invoice-info">
-
-                    <label for="user-name">Client:</label>
-                    <input type="text" id="user-name" value="John Doe" disabled>
-
-                    <label for="user-email">Email:</label>
-                    <input type="email" id="user-email" value="johndoe@example.com" disabled>
-
-                    <label for="user-contact">Contact:</label>
-                    <input type="text" id="user-contact" value="123-456-7890" disabled>
-
-                    <label for="service-type">Service Type:</label>
-                    <input type="text" id="service-type" value="Glass Installation" disabled>
-
-                    <label for="consultation-date">Consultation Date:</label>
-                    <input type="date" id="consultation-date" value="2025-03-15" disabled>
-                </div>
-
-                <!-- Manual Inputs by Admin -->
-                <div class="invoice-manual-inputs">
-                    <label for="total-cost">Total Cost ($):</label>
-                    <input type="number" id="total-cost" placeholder="Enter total cost" required>
-
-                    <label for="invoice-notes">Notes/Description:</label>
-                    <textarea id="invoice-notes" placeholder="Add any notes"></textarea>
-
-                    <label for="tax-discount">Taxes/Discounts:</label>
-                    <input type="number" id="tax-discount" placeholder="Enter tax/discount rate">
-                </div>
-
-                <!-- Action Buttons -->
-
-                <div class="invoice-modal-actions">
-                    <button class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-                    <button class="btn-invoice-send" id="btn-send-invoice">Send</button>
-                </div> <br>
-        </div>
+    <div class="modal-invoice-content">
+        <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
+        <br>
+        <h1 class="invoice-title">Mirror Your World <br>
+            <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
+        </h1>
+        <form method="POST" action="Admin_AppointmentsPage.php">
+            <div class="invoice-info">
+                <label for="user-name">Client:</label>
+                <input type="text" id="user-name" disabled>
+                <label for="user-email">Email:</label>
+                <input type="email" id="user-email" disabled>
+                <label for="user-contact">Contact:</label>
+                <input type="text" id="user-contact" disabled>
+                <label for="service-type">Service Type:</label>
+                <input type="text" id="service-type" disabled>
+                <label for="consultation-date">Consultation Date:</label>
+                <input type="date" id="consultation-date" disabled>
+            </div>
+            <div class="invoice-manual-inputs">
+                <label for="total-cost">Total Cost ($):</label>
+                <input type="number" id="total-cost" name="total_cost" placeholder="Enter total cost" required>
+                <label for="invoice-notes">Notes/Description:</label>
+                <textarea id="invoice-notes" name="notes" placeholder="Add any notes"></textarea>
+                <label for="tax-discount">Taxes/Discounts:</label>
+                <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
+            </div>
+            <div class="invoice-modal-actions">
+            <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+                <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
+            </div><br>
+            <input type="hidden" id="invoice-user-id" name="user_id">
+            <input type="hidden" name="action" value="create_invoice_form">
+        </form>
     </div>
+</div>
 
     <style>
         .popup {
@@ -574,27 +681,21 @@ $conn->close();
 
 
 
-    // Get modal and buttons INVOICE!!!
-    var modal = document.getElementById("modal-invoice");
-    var btnCreateInvoice = document.getElementById("btn-create-invoice");
-    var btnCloseModal = document.getElementById("btn-close-modal");
-    var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
-    var btnSendInvoice = document.getElementById("btn-send-invoice");
+   // Get modal and buttons INVOICE!!!
+   var modal = document.getElementById("modal-invoice");
+        var btnCloseModal = document.getElementById("btn-close-modal");
+        var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
+        var btnSendInvoice = document.getElementById("btn-send-invoice");
 
-    // Open the modal when the 'Create Invoice' button is clicked
-    btnCreateInvoice.onclick = function() {
-        modal.style.display = "block";
-    }
+        // Close the modal when the 'X' is clicked
+        btnCloseModal.onclick = function() {
+            modal.style.display = "none";
+        }
 
-    // Close the modal when the 'X' is clicked
-    btnCloseModal.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // Close the modal when the 'Cancel' button is clicked
-    btnCancelInvoice.onclick = function() {
-        modal.style.display = "none";
-    }
+        // Close the modal when the 'Back' button is clicked
+        btnCancelInvoice.onclick = function() {
+            modal.style.display = "none";
+        }
 
     // Action when the 'Send' button is clicked
     btnSendInvoice.onclick = function() {
@@ -617,6 +718,19 @@ $conn->close();
         var sortByValue = document.getElementById('sortByDropdown').value;
         window.location.href = window.location.pathname + "?sort=" + sortByValue;
     }
+
+    function populateInvoiceModal(appointmentData) {
+        document.getElementById('user-name').value = appointmentData.user_name;
+        document.getElementById('user-email').value = appointmentData.user_email;
+        document.getElementById('user-contact').value = appointmentData.user_contact;
+        document.getElementById('service-type').value = appointmentData.service_type;
+        document.getElementById('consultation-date').value = appointmentData.consultation_date;
+        document.getElementById('invoice-user-id').value = appointmentData.user_id;
+
+        document.getElementById('modal-invoice').style.display = "block";
+    }
+
+    
 </script>
 
 </html>

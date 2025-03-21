@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 include 'dbconnect.php';
 
 // Redirect to login if the user is not logged in
@@ -11,7 +13,10 @@ if (!isset($_SESSION['user_id'])) {
 // Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch pending appointments for the logged-in user
+// Get the current date for comparison purposes
+$current_date = date('Y-m-d H:i:s'); // Current date and time
+
+// Fetch pending (cancellable) appointments for the logged-in user
 $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
@@ -20,7 +25,7 @@ $query = "
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$activeBookings = $stmt->get_result();
+$pendingBookings = $stmt->get_result();
 $stmt->close();
 
 // Fetch confirmed appointments for the logged-in user
@@ -32,7 +37,7 @@ $query = "
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$confirmed_appointments = $stmt->get_result();
+$confirmedBookings = $stmt->get_result();
 $stmt->close();
 
 // Fetch cancelled appointments for the logged-in user
@@ -47,8 +52,22 @@ $stmt->execute();
 $cancelledBookings = $stmt->get_result();
 $stmt->close();
 
+// Fetch past (completed) appointments for the logged-in user
+$query = "
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    FROM appointmentstbl a
+    JOIN userstbl u ON a.user_id = u.user_id
+    WHERE a.status = 'Completed' AND a.user_id = ? AND a.appointment_date < ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("is", $user_id, $current_date);
+$stmt->execute();
+$pastBookings = $stmt->get_result();
+$stmt->close();
+
 $conn->close();
+
 ?>
+
 
 
 <html lang="en">
@@ -64,8 +83,6 @@ $conn->close();
 </head>
 <body>
     
-   <!-- Required -->
-
    <div class="navbar">
         <a href="User_Homepage.php">About</a>
         <a href="User_InquiryPage.php">FAQ</a>
@@ -73,7 +90,7 @@ $conn->close();
     </div>
 
     <div class="logo">
-          <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px"> 
+        <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px"> 
     </div>
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
@@ -95,11 +112,7 @@ $conn->close();
         </ul>
     </div>
 
-    <!-- Required -->
-
-
     <div class="dashboard-container">
-    <!-- Sidebar (Options) -->
     <div class="sidebar">
         <h3>My Appointments</h3>
         <a href="#" onclick="showContent('pending')">Pending Bookings</a>
@@ -108,21 +121,49 @@ $conn->close();
         <a href="#" onclick="showContent('cancelled')">Cancelled</a>
     </div>
 
-    <!-- Main Content (Forms to edit) -->
     <div class="content">
 
-    <!-- Pending Bookings -->
-<!-- <div class="section" id="pending">
-    <h2>Active Bookings</h2>
-    
-    <table class="sortby-container">
-        <tr>
-            <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
-            <td><h4>Sort by: Most Recent</h4></td>
-        </tr>
-    </table>
 
-</div> -->
+        <div class="section" id="pending">
+            <h2>Pending Bookings</h2>
+            
+            <table class="sortby-container">
+                <tr>
+                    <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
+                    <td><h4>Sort by: Most Recent</h4></td>
+                </tr>
+            </table>
+
+            <center>
+                <?php if ($pendingBookings->num_rows > 0): ?>
+                    <?php while ($row = $pendingBookings->fetch_assoc()): ?>
+                        <table class="booking-container">
+                            <tr>
+                                <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
+                                <td class="td-details">
+                                    <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
+                                    <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
+                                    <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                                </td>
+                                <td class="td-booker">
+                                    <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                                    <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
+                                    <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                                </td>
+                                <td class="td-buttons">
+                                    <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
+                                        <h5 class="txt-cancel">Cancel</h5>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <h5>No pending bookings found.</h5>
+                <?php endif; ?>
+            </center>
+        </div> 
 
 
  <!-- Confirmed Bookings -->
@@ -137,8 +178,8 @@ $conn->close();
     </table>
 
     <center>
-        <?php if ($activeBookings->num_rows > 0): ?>
-            <?php while ($row = $activeBookings->fetch_assoc()): ?>
+        <?php if ($confirmedBookings->num_rows > 0): ?>
+            <?php while ($row = $confirmedBookings->fetch_assoc()): ?>
                 <table class="booking-container">
                     <tr>
                         <td class="td-date"><h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1></td>
@@ -152,17 +193,12 @@ $conn->close();
                             <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
                             <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
                         </td>
-                        <td class="td-buttons">
-                            <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                <h5 class="txt-cancel">Cancel</h5>
-                            </button>
-                        </td>
                     </tr>
                 </table>
                 <br>
             <?php endwhile; ?>
         <?php else: ?>
-            <h5>No active bookings found.</h5>
+            <h5>No confirmed bookings found.</h5>
         <?php endif; ?>
     </center>
 </div>
@@ -170,7 +206,7 @@ $conn->close();
 
  <!-- Past Bookings -->
 <div class="section" id="past-bookings" style="display: none;">
-    <h2>Confirmed Appointments</h2>
+    <h2>Past Bookings</h2>
     <table class="sortby-container">
         <tr>
             <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
@@ -180,8 +216,8 @@ $conn->close();
 
     <center>
     <table class="booking-container">
-        <?php if ($confirmed_appointments && $confirmed_appointments->num_rows > 0): ?>
-            <?php while ($row = $confirmed_appointments->fetch_assoc()): ?>
+        <?php if ($pastBookings->num_rows > 0): ?>
+            <?php while ($row = $pastBookings->fetch_assoc()): ?>
             <tr>
                 <td class="td-date">
                     <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
@@ -202,7 +238,7 @@ $conn->close();
             </tr>
             <?php endwhile; ?>
         <?php else: ?>
-                <h5>No confirmed appointments.</h5>
+                <h5>No past bookings found.</h5>
         <?php endif; ?>
     </table>
     </center>
