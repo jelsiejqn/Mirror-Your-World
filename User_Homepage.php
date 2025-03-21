@@ -76,6 +76,11 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
         </ul>
     </div>
 
+    <a href="#" title="Go back to top" class="uparrow2">
+        <img src="Assets/icon_uparrow.png" class="uparrow3">
+        <span class="tooltip">Go back to top</span>
+    </a>
+
     <div class="BGhome-container">
         <div class="text-container">
             <h1>Mirror Your <br>World.</h1>
@@ -102,7 +107,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
             </div>
 
             <div class="txtServices-container">
-                <h2 class="txtServices"> Services </h2>
+                <h2 class="txtServices"> What We Do </h2>
             </div>
 
             <div class="services-container">

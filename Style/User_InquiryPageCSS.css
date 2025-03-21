@@ -131,6 +131,7 @@
 
 /* Modal Styling */
 .modal {
+    font-family: louis;
     display: none;
     position: fixed;
     z-index: 1000;
@@ -145,6 +146,7 @@
 }
 
 .modal-content {
+    font-family: louis;
     background-color: white;
     margin: 5% auto;
     padding: 20px;
@@ -187,12 +189,12 @@
 }
 
 .modal-right h3 {
-    font-family: Arial, sans-serif;
+    font-family: nexa;
     font-size: 1.5rem;
 }
 
 .modal-right p {
-    font-family: Arial, sans-serif;
+    font-family: louis;
     font-size: 1rem;
 }
 
@@ -211,7 +213,7 @@
 .text-container h1 {
     line-height: 0.9;
     font-family: nexa;
-    font-size: 4rem;
+    font-size: 7vw;
     color: white;
     margin-bottom: 0;
     font-weight: 800;
@@ -257,6 +259,24 @@
 }
 
 .btn-email:hover {
+    opacity: 80%;
+    transition: 0.3s;
+}
+
+.btn-email2 {
+    font-family: louis;
+    background-color: transparent;
+    color: white;
+    padding: none;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1.5vw;
+    text-decoration: underline;
+}
+
+.btn-email2:hover {
     opacity: 80%;
     transition: 0.3s;
 }
@@ -688,17 +708,23 @@ p {
 
 .material-modal-close {
     position: absolute;
+    right: 240;
     margin: 10;
-    background: red;
-    color: white;
+    background: transparent;
+    color: #2a2a2a;
     border: none;
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    font-size: 1.2em;
+    font-size: 3vw;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
+}
+
+.material-modal-close:hover {
+    opacity: 75%;
+    transition: 0.3s ease-in-out;
 }
 
 .policies-container {
@@ -794,15 +820,15 @@ p {
 
 .custom-swal-popup {
     border-radius: 20px !important;
-    font-family: 'louis', sans-serif !important;
+    font-family: louis;
 }
 
 .custom-swal-title,
 .custom-swal-text {
-    font-family: 'louis', sans-serif !important;
+    font-family: louis;
 }
 
 .custom-swal-confirm,
 .custom-swal-cancel {
-    font-family: 'louis', sans-serif !important;
+    font-family: louis;
 }

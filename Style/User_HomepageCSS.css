@@ -96,7 +96,7 @@
     border:#ddd;
     padding: 20px;
     text-align: center;
-    width: calc(25% - 40px); /* Adjust for responsiveness */
+    width: 20%;
     background-color: transparent;
     border-radius: 8px;
     transition: box-shadow 0.3s ease;
@@ -163,6 +163,26 @@
 }
 
 
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    top: -30px; /* Adjust position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show the tooltip on hover */
+.back-to-top:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
 
 
 
@@ -252,10 +272,10 @@
     font-weight: 800;
 }
 
-.text-container p {
+.text-container .qs, h2 {
     line-height: 1.5;
     font-family: louis;
-    font-size: 1.6vw;
+    font-size: 1.2rem;
     color: white;
     margin-top: 5px;
 }
