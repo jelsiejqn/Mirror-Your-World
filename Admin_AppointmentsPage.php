@@ -265,7 +265,7 @@ if (isset($_SESSION['popup_message'])) {
                                     </td>
                                     <td class="td-buttons">
                                         <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                            <h5 class="txt-cancel">Cancel</h5>
+                                            Cancel
                                         </button>
                                     </td>
                                 </tr>
