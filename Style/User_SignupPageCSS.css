@@ -1,3 +1,6 @@
+body {
+    overflow: visible;
+}
 .loginForm {
     margin-top: 8%;
     background-color: #f9f9f9;
@@ -86,6 +89,22 @@ input {
     width: 20px;
     opacity: 80%;
 }
+
+@media (max-width: 1024px) {
+    .loginForm {
+        transform: scale(0.9);
+        max-width: 80%;
+    }
+}
+
+/* Tablets and large phones (up to 850px) */
+@media (max-width: 850px) {
+    .loginForm {
+        transform: scale(0.85);
+        max-width: 90%;
+    }
+}
+
 /* Responsive scaling when the browser is small */
 @media (max-width: 768px) {
     .loginForm {
