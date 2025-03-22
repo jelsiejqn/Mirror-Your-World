@@ -2,7 +2,6 @@
 session_start();
 include 'dbconnect.php';
 require 'User_EmailAPI.php';
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -10,6 +9,9 @@ use PHPMailer\PHPMailer\Exception;
 if (!isset($_SESSION['admin_id'])) {
     die('Session is missing. Please log in again.');
 }
+
+// Add this near the beginning of your PHP
+$activeSection = isset($_GET['section']) ? $_GET['section'] : 'active-bookings';
 
 // Check if the update button was clicked
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) { //check to make sure it is not the invoice form submission
@@ -22,33 +24,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) { //check
     exit;
 }
 
-// Fetch booked appointments with user details
+// Get the sort parameter
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'recent';
+
+// Modify the ORDER BY clause in your queries based on the sort parameter
+$orderBy = ($sort === 'oldest') ? 'ORDER BY a.appointment_date ASC' : 'ORDER BY a.appointment_date DESC';
+
+// Update all your queries to include the ORDER BY clause
 $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
-    WHERE a.status = 'Pending'";
+    WHERE a.status = 'Pending'
+    $orderBy";
 $pending_appointments = $conn->query($query);
 
 $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
-    WHERE a.status = 'Confirmed'";
+    WHERE a.status = 'Confirmed'
+    $orderBy";
 $confirmed_appointments = $conn->query($query);
 
 $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
-    WHERE a.status = 'Completed'";
+    WHERE a.status = 'Completed'
+    $orderBy";
 $completed_appointments = $conn->query($query);
 
 $query = "
     SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
-    WHERE a.status = 'Cancelled'";
+    WHERE a.status = 'Cancelled'
+    $orderBy";
 $cancelledBookings = $conn->query($query);
 
 // Invoice creation logic (create_invoice.php)
@@ -83,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $appointment_stmt->bind_param("i", $user_id);
             $appointment_stmt->execute();
             $appointment_result = $appointment_stmt->get_result();
-            if ($appointment_row = $appointment_result->fetch_assoc()) {
+            if($appointment_row = $appointment_result->fetch_assoc()){
                 $appointment_date = $appointment_row['appointment_date'];
                 $consultation_type = $appointment_row['consultation_type'];
                 $appointment_time = $appointment_row['appointment_time'];
@@ -104,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                     $mail->isHTML(true);
                     $mail->Subject = 'Invoice Confirmation';
-                    $mail->Body    = "Dear " . htmlspecialchars($user_first_name) . ",<br><br>Your invoice has been created, for your appointment on " . htmlspecialchars(date('M d Y', strtotime($appointment_date))) . " at " . htmlspecialchars(date('h:i A', strtotime($appointment_time))) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Total Cost: $" . htmlspecialchars($total_cost) . "<br>Notes: " . htmlspecialchars($notes) . "<br>Taxes/Discounts: " . htmlspecialchars($tax_discount) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
+                    $mail->Body    = "Dear " . htmlspecialchars($user_first_name) . ",<br><br>Your invoice has been created, for your appointment on " . htmlspecialchars(date('M d Y', strtotime($appointment_date))) . " at " . htmlspecialchars(date('h:i A', strtotime($appointment_time))) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Total Cost: $".htmlspecialchars($total_cost)."<br>Notes: ".htmlspecialchars($notes)."<br>Taxes/Discounts: ".htmlspecialchars($tax_discount)."<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
 
                     $mail->send();
                     echo "<script>
@@ -125,6 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         } else {
             echo "<script>alert('Error: User data not found.');</script>";
         }
+
+
     } else {
         $_SESSION['popup_message'] = "Error creating invoice. Please try again.";
         $_SESSION['popup_type'] = "error";
@@ -237,11 +251,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
+                        <select id="sortByDropdown-active" class="sortByDropdown" onchange="sortBookings('active-bookings')">
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                         </td>
                     </tr>
                 </table>
@@ -266,7 +280,7 @@ if (isset($_SESSION['popup_message'])) {
                                     </td>
                                     <td class="td-buttons">
                                         <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                            Cancel
+                                            <h5 class="txt-cancel">Cancel</h5>
                                         </button>
                                     </td>
                                 </tr>
@@ -285,11 +299,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
+                        <select id="sortByDropdown-past" class="sortByDropdown" onchange="sortBookings('past-bookings')">
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                         </td>
                     </tr>
                 </table>
@@ -339,58 +353,58 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
+                        <select id="sortByDropdown-completed" class="sortByDropdown" onchange="sortBookings('completed')">
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                         </td>
                     </tr>
                 </table>
                 <br>
 
                 <center>
-                    <?php if ($completed_appointments->num_rows > 0): ?>
-                        <?php while ($row = $completed_appointments->fetch_assoc()): ?>
-                            <?php
-                            $appointment_data = [
-                                'user_id' => $row['user_id'],
-                                'user_name' => $row['first_name'] . ' ' . $row['last_name'],
-                                'user_email' => $row['email'],
-                                'user_contact' => $row['contact_number'],
-                                'service_type' => $row['consultation_type'],
-                                'consultation_date' => $row['appointment_date'],
-                            ];
-                            $appointment_json = json_encode($appointment_data);
-                            ?>
-                            <table class="booking-container">
-                                <tr>
-                                    <td class="td-date">
-                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
-                                    </td>
-                                    <td class="td-details">
-                                        <h5> Type: <?php echo $row['consultation_type']; ?> <br>
-                                            Time: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
-                                            Site of Appointment: <br> <?php echo $row['address']; ?></h5>
-                                    </td>
-                                    <td class="td-booker">
-                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> <br>
-                                            Email: <?php echo $row['email']; ?> <br>
-                                            Contact: <?php echo $row['contact_number']; ?> </h5>
-                                    </td>
-                                    <td class="td-buttons">
-                                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <h5>No past bookings.</h5>
-                    <?php endif; ?>
-                </center>
+    <?php if ($completed_appointments->num_rows > 0): ?>
+        <?php while ($row = $completed_appointments->fetch_assoc()): ?>
+            <?php
+                $appointment_data = [
+                    'user_id' => $row['user_id'],
+                    'user_name' => $row['first_name'] . ' ' . $row['last_name'],
+                    'user_email' => $row['email'],
+                    'user_contact' => $row['contact_number'],
+                    'service_type' => $row['consultation_type'],
+                    'consultation_date' => $row['appointment_date'],
+                ];
+                $appointment_json = json_encode($appointment_data);
+            ?>
+            <table class="booking-container">
+                <tr>
+                    <td class="td-date">
+                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                    </td>
+                    <td class="td-details">
+                        <h5> Type: <?php echo $row['consultation_type']; ?> <br>
+                            Time: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                            Site of Appointment: <br> <?php echo $row['address']; ?></h5>
+                    </td>
+                    <td class="td-booker">
+                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> <br>
+                            Email: <?php echo $row['email']; ?> <br>
+                            Contact: <?php echo $row['contact_number']; ?> </h5>
+                    </td>
+                    <td class="td-buttons">
+                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <h5>No past bookings.</h5>
+    <?php endif; ?>
+</center>
             </div>
-
+  
 
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
@@ -398,11 +412,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
+                        <select id="sortByDropdown-cancelled" class="sortByDropdown" onchange="sortBookings('cancelled')">
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                         </td>
                     </tr>
                 </table>
@@ -474,42 +488,42 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <div class="modal-invoice" id="modal-invoice">
-        <div class="modal-invoice-content">
-            <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
-            <br>
-            <h1 class="invoice-title">Mirror Your World <br>
-                <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
-            </h1>
-            <form method="POST" action="Admin_AppointmentsPage.php">
-                <div class="invoice-info">
-                    <label for="user-name">Client:</label>
-                    <input type="text" id="user-name" disabled>
-                    <label for="user-email">Email:</label>
-                    <input type="email" id="user-email" disabled>
-                    <label for="user-contact">Contact:</label>
-                    <input type="text" id="user-contact" disabled>
-                    <label for="service-type">Service Type:</label>
-                    <input type="text" id="service-type" disabled>
-                    <label for="consultation-date">Consultation Date:</label>
-                    <input type="date" id="consultation-date" disabled>
-                </div>
-                <div class="invoice-manual-inputs">
-                    <label for="total-cost">Total Cost ($):</label>
-                    <input type="number" id="total-cost" name="total_cost" placeholder="Enter total cost" required>
-                    <label for="invoice-notes">Notes/Description:</label>
-                    <textarea id="invoice-notes" name="notes" placeholder="Add any notes"></textarea>
-                    <label for="tax-discount">Taxes/Discounts:</label>
-                    <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
-                </div>
-                <div class="invoice-modal-actions">
-                    <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-                    <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
-                </div><br>
-                <input type="hidden" id="invoice-user-id" name="user_id">
-                <input type="hidden" name="action" value="create_invoice_form">
-            </form>
-        </div>
+    <div class="modal-invoice-content">
+        <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
+        <br>
+        <h1 class="invoice-title">Mirror Your World <br>
+            <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
+        </h1>
+        <form method="POST" action="Admin_AppointmentsPage.php">
+            <div class="invoice-info">
+                <label for="user-name">Client:</label>
+                <input type="text" id="user-name" disabled>
+                <label for="user-email">Email:</label>
+                <input type="email" id="user-email" disabled>
+                <label for="user-contact">Contact:</label>
+                <input type="text" id="user-contact" disabled>
+                <label for="service-type">Service Type:</label>
+                <input type="text" id="service-type" disabled>
+                <label for="consultation-date">Consultation Date:</label>
+                <input type="date" id="consultation-date" disabled>
+            </div>
+            <div class="invoice-manual-inputs">
+                <label for="total-cost">Total Cost ($):</label>
+                <input type="number" id="total-cost" name="total_cost" placeholder="Enter total cost" required>
+                <label for="invoice-notes">Notes/Description:</label>
+                <textarea id="invoice-notes" name="notes" placeholder="Add any notes"></textarea>
+                <label for="tax-discount">Taxes/Discounts:</label>
+                <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
+            </div>
+            <div class="invoice-modal-actions">
+            <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+                <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
+            </div><br>
+            <input type="hidden" id="invoice-user-id" name="user_id">
+            <input type="hidden" name="action" value="create_invoice_form">
+        </form>
     </div>
+</div>
 
     <style>
         .popup {
@@ -684,21 +698,21 @@ if (isset($_SESSION['popup_message'])) {
 
 
 
-    // Get modal and buttons INVOICE!!!
-    var modal = document.getElementById("modal-invoice");
-    var btnCloseModal = document.getElementById("btn-close-modal");
-    var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
-    var btnSendInvoice = document.getElementById("btn-send-invoice");
+   // Get modal and buttons INVOICE!!!
+   var modal = document.getElementById("modal-invoice");
+        var btnCloseModal = document.getElementById("btn-close-modal");
+        var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
+        var btnSendInvoice = document.getElementById("btn-send-invoice");
 
-    // Close the modal when the 'X' is clicked
-    btnCloseModal.onclick = function() {
-        modal.style.display = "none";
-    }
+        // Close the modal when the 'X' is clicked
+        btnCloseModal.onclick = function() {
+            modal.style.display = "none";
+        }
 
-    // Close the modal when the 'Back' button is clicked
-    btnCancelInvoice.onclick = function() {
-        modal.style.display = "none";
-    }
+        // Close the modal when the 'Back' button is clicked
+        btnCancelInvoice.onclick = function() {
+            modal.style.display = "none";
+        }
 
     // Action when the 'Send' button is clicked
     btnSendInvoice.onclick = function() {
@@ -716,11 +730,37 @@ if (isset($_SESSION['popup_message'])) {
     }
 
     //Sort Booking
-
     function sortBookings() {
-        var sortByValue = document.getElementById('sortByDropdown').value;
-        window.location.href = window.location.pathname + "?sort=" + sortByValue;
+    var sortByValue = document.getElementById('sortByDropdown').value;
+    
+    // Get the currently active section
+    var activeSection = '';
+    var sections = document.querySelectorAll('.section');
+    sections.forEach(function(section) {
+        if (section.style.display === 'block') {
+            activeSection = section.id;
+        }
+    });
+    
+    // Add the active section as a parameter
+    window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + activeSection;
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show the active section based on URL parameter
+        var activeSection = "<?php echo $activeSection; ?>";
+        if (activeSection) {
+            showContent(activeSection);
+        }
+    });
+
+    function sortBookings(section) {
+    // Find the dropdown in the current section
+    var sortByValue = document.getElementById('sortByDropdown-' + section.split('-')[0]).value;
+    
+    // Redirect with both sort and section parameters
+    window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + section;
+}
 
     function populateInvoiceModal(appointmentData) {
         document.getElementById('user-name').value = appointmentData.user_name;
@@ -732,6 +772,8 @@ if (isset($_SESSION['popup_message'])) {
 
         document.getElementById('modal-invoice').style.display = "block";
     }
+
+    
 </script>
 
 </html>
