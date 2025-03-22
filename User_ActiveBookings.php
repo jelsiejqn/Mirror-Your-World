@@ -131,12 +131,16 @@ $conn->close();
 
                 <table class="sortby-container">
                     <tr>
-                        <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
                         <td>
-                            <h4>Sort by: Most Recent</h4>
+                            <select id="sortByDropdown" onchange="sortBookings()">
+                                <option value="recent">Sort by</option>
+                                <option value="recent">Most Recent</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
+                <br>
 
                 <center>
                     <?php if ($pendingBookings->num_rows > 0): ?>
@@ -147,18 +151,18 @@ $conn->close();
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
-                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                                        <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
-                                        <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?> <br>
+                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
                                     </td>
                                     <td class="td-booker">
-                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
-                                        <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
-                                        <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?><br>
+                                            Email: <?= htmlspecialchars($row['email']) ?><br>
+                                            Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
                                     </td>
                                     <td class="td-buttons">
                                         <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                            <h5 class="txt-cancel">Cancel</h5>
+                                            Cancel
                                         </button>
                                     </td>
                                 </tr>
@@ -178,12 +182,16 @@ $conn->close();
 
                 <table class="sortby-container">
                     <tr>
-                        <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
                         <td>
-                            <h4>Sort by: Most Recent</h4>
+                            <select id="sortByDropdown" onchange="sortBookings()">
+                                <option value="recent">Sort by</option>
+                                <option value="recent">Most Recent</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
+                <br>
 
                 <center>
                     <?php if ($confirmedBookings->num_rows > 0): ?>
@@ -194,14 +202,18 @@ $conn->close();
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
-                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                                        <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
-                                        <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?><br>
+                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?><br>
+                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
                                     </td>
                                     <td class="td-booker">
-                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
-                                        <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
-                                        <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?><br>
+                                            Email: <?= htmlspecialchars($row['email']) ?><br>
+                                            Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                                    </td>
+
+                                    <td class="td-buttons">
+                                        <img src="Assets/icon_check.png" class="completed-icon">
                                     </td>
                                 </tr>
                             </table>
@@ -219,49 +231,53 @@ $conn->close();
                 <h2>Completed Bookings</h2>
                 <table class="sortby-container">
                     <tr>
-                        <td><img src="Assets/icon_sortBy.png" class="sortby-icon"></td>
                         <td>
-                            <h4>Sort by: Most Recent</h4>
+                            <select id="sortByDropdown" onchange="sortBookings()">
+                                <option value="recent">Sort by</option>
+                                <option value="recent">Most Recent</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
+                <br>
 
                 <center>
-    <table class="booking-container">
-        <?php if ($pastBookings->num_rows > 0): ?>
-            <?php while ($row = $pastBookings->fetch_assoc()): ?>
-                <tr>
-                    <td class="td-date">
-                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
-                    </td>
-                    <td class="td-details">
-                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?></h5>
-                        <h5>Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?></h5>
-                        <h5>Site of Appointment: <?php echo htmlspecialchars($row['address']); ?></h5>
-                    </td>
-                    <td class="td-booker">
-                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
-                        <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
-                        <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
-                        
-                    </td>
-                    <td class="td-buttons">
-                    <button class="review-button"
-                            data-appointment-id="<?= $row['appointment_id'] ?>"
-                            data-user-id="<?= $row['user_id'] ?>"
-                            data-first-name="<?= htmlspecialchars($row['first_name']) ?>"
-                            data-last-name="<?= htmlspecialchars($row['last_name']) ?>">
-                        Review
-                    </button>
-                </td>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <h5>No past bookings found.</h5>
-        <?php endif; ?>
-    </table>
-</center>
+                    <table class="booking-container">
+                        <?php if ($pastBookings->num_rows > 0): ?>
+                            <?php while ($row = $pastBookings->fetch_assoc()): ?>
+                                <tr>
+                                    <td class="td-date">
+                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?>
+                                            Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?><br>
+                                            Site of Appointment: <br> <?php echo htmlspecialchars($row['address']); ?></h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?><br>
+                                            Email: <?= htmlspecialchars($row['email']) ?><br>
+                                            Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+
+                                    </td>
+                                    <td class="td-buttons">
+                                        <button class="review-button"
+                                            data-appointment-id="<?= $row['appointment_id'] ?>"
+                                            data-user-id="<?= $row['user_id'] ?>"
+                                            data-first-name="<?= htmlspecialchars($row['first_name']) ?>"
+                                            data-last-name="<?= htmlspecialchars($row['last_name']) ?>">
+                                            Review
+                                        </button>
+                                    </td>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <h5>No past bookings found.</h5>
+                        <?php endif; ?>
+                    </table>
+                </center>
             </div>
 
             <div id="reviewModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;">
@@ -273,18 +289,18 @@ $conn->close();
                         <input type="hidden" id="userId" name="user_id" value="">
                         <input type="hidden" id="reviewerFirstName" name="reviewer_first_name" value="">
                         <input type="hidden" id="reviewerLastName" name="reviewer_last_name" value="">
-                        
+
                         <div style="margin-bottom: 15px;">
                             <label for="rating" style="display: block;">Rating (1-5):</label><br>
                             <input type="number" id="rating" name="rating" min="1" max="5" required style="width: 100%;">
                         </div>
-                        
+
                         <div style="margin-bottom: 20px;">
                             <label for="comment" style="display: block;">Comment:</label><br>
                             <textarea id="comment" name="comment" rows="5" required style="width: 100%;"></textarea>
                         </div>
-                        
-                        <input type="submit" value="Submit Review" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%;">
+
+                        <input type="submit" value="Submit Review" style="background-color:rgb(165, 166, 165); color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%;">
                     </form>
                 </div>
             </div>
@@ -296,12 +312,16 @@ $conn->close();
 
                 <table class="sortby-container">
                     <tr>
-                        <td> <img src="Assets/icon_sortBy.png" class="sortby-icon"> </td>
                         <td>
-                            <h4> Sort by: Most Recent </h4>
+                            <select id="sortByDropdown" onchange="sortBookings()">
+                                <option value="recent">Sort by</option>
+                                <option value="recent">Most Recent</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
+                <br>
 
                 <center>
                     <?php if (!empty($cancelledBookings)): ?>
@@ -312,9 +332,9 @@ $conn->close();
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
-                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?></h5>
-                                        <h5>Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?></h5>
-                                        <h5>Site of Appointment: <?= htmlspecialchars($row['address']) ?></h5>
+                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?><br>
+                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?><br>
+                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
                                     </td>
                                     <td class="td-booker">
                                         <h5>Reason for Cancellation</h5>
@@ -336,10 +356,10 @@ $conn->close();
             <div id="cancelPopup" class="popup">
                 <div class="popup-content">
                     <span class="close-btn" onclick="closeCancelPopup()">&times;</span>
-                    <h2>Cancel Appointment</h2>
+                    <h2 class="cancel-modal-title">Mirror Your World</h2>
                     <form id="cancelForm" method="POST" action="cancel_appointment.php">
                         <input type="hidden" name="appointment_id" id="appointmentId">
-                        <label for="reason">Reason for Cancellation</label><br>
+                        <label for="reason">Select Reason for Cancellation</label><br>
 
                         <div class="radio-group">
                             <label class="radio-option">
@@ -363,8 +383,8 @@ $conn->close();
                             </label>
                         </div>
 
-                        <button type="submit" class="">
-                            <h5 class="txt-cancel">Confirm Cancellation</h5>
+                        <button type="submit" class="txt-cancel">
+                            Confirm Cancellation
                         </button>
                     </form>
                 </div>
@@ -422,9 +442,9 @@ $conn->close();
 
                 .close-btn {
                     position: absolute;
-                    top: 10px;
+                    top: -10;
                     right: 15px;
-                    font-size: 22px;
+                    font-size: 2.5vw;
                     cursor: pointer;
                     color: #777;
                     transition: color 0.3s;
@@ -493,38 +513,37 @@ $conn->close();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById('reviewModal');
-    var buttons = document.querySelectorAll('.review-button');
-    var span = document.getElementsByClassName('close')[0];
+        var modal = document.getElementById('reviewModal');
+        var buttons = document.querySelectorAll('.review-button');
+        var span = document.getElementsByClassName('close')[0];
 
-    console.log("Modal display on load:", modal.style.display); // Check initial display
+        console.log("Modal display on load:", modal.style.display); // Check initial display
 
-    buttons.forEach(function(button) {
-        button.onclick = function() {
-            console.log("Review button clicked"); // Check if button is clicked
-            document.getElementById('appointmentId').value = this.dataset.appointmentId;
-            document.getElementById('reviewerFirstName').value = this.dataset.firstName;
-            document.getElementById('reviewerLastName').value = this.dataset.lastName;
-            modal.style.display = 'block';
-            console.log("Modal display after button click:", modal.style.display); // Check display after click
+        buttons.forEach(function(button) {
+            button.onclick = function() {
+                console.log("Review button clicked"); // Check if button is clicked
+                document.getElementById('appointmentId').value = this.dataset.appointmentId;
+                document.getElementById('reviewerFirstName').value = this.dataset.firstName;
+                document.getElementById('reviewerLastName').value = this.dataset.lastName;
+                modal.style.display = 'block';
+                console.log("Modal display after button click:", modal.style.display); // Check display after click
+            };
+        });
+
+        span.onclick = function() {
+            console.log("Close button clicked"); // Check if close is clicked
+            modal.style.display = 'none';
+            console.log("Modal display after close:", modal.style.display); // Check display after close
+        };
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                console.log("Clicked outside modal"); // Check if clicked outside
+                modal.style.display = 'none';
+                console.log("Modal display after outside click:", modal.style.display); // Check display after outside click
+            }
         };
     });
-
-    span.onclick = function() {
-        console.log("Close button clicked"); // Check if close is clicked
-        modal.style.display = 'none';
-        console.log("Modal display after close:", modal.style.display); // Check display after close
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            console.log("Clicked outside modal"); // Check if clicked outside
-            modal.style.display = 'none';
-            console.log("Modal display after outside click:", modal.style.display); // Check display after outside click
-        }
-    };
-});
-
 </script>
 
 

@@ -68,6 +68,22 @@ body {
     transform: scale(1.05);
 }
 
+.txt-cancel {
+    font-family: louis;
+    padding: 10px;
+    font-size: 1vw;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    background-color: #828282;
+    cursor: pointer;
+}
+
+.txt-cancel:hover {
+    transition: 0.3s ease-in-out;
+    background-color: rgb(209, 70, 70);
+}
+
 /* Content */
 .content {
     flex-grow: 1;
@@ -91,6 +107,13 @@ body {
 .content .section {
     margin-bottom: 30px;
 }
+
+.cancel-modal-title {
+    font-family: nexa;
+    font-size: 2vw;
+}
+
+
 
 /* Form Fields (Narrowed down) */
 .content label {
@@ -122,7 +145,7 @@ body {
 }
 
 /* Buttons */
-.content button {
+/* .content button {
     
     width: 6vw;   
     color: white;
@@ -136,7 +159,7 @@ body {
 .content button:hover {
     background-color: #ff6464;
     transform: scale(1.05);
-}
+} */
 
 /* Custom Scrollbar Design */
 ::-webkit-scrollbar {
@@ -177,6 +200,12 @@ body {
     width: 25px;
 }
 
+select {
+    font-family: louis;
+    border-radius: 20px;
+    padding: 0.5vw;
+}
+
 
 .booking-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -185,40 +214,68 @@ body {
 }
 
 .td-date {
+
     text-align: center;
-    width: 20%;
+    width: 15%;
 }
 
 h1 {
-    font-size: 2vw;
-}
-
+    font-size: 1.5vw;
+    }
+    
 .td-details {
-    line-height: 3px;
-}
-
+    width: auto;
+    }
+    
 h5 {
     font-size: 1vw;
-}
-
+    line-height: 2vw;
+    }
+    
 .td-booker {
-    line-height: 3px;
-}
+    width: 30%;
+    }
 
-.td-booker {
-    line-height: 1px;
-}
+    .cancel-btn {
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding:none;
+        background-color: rgb(208, 90, 90);
+        font-size: 0.7;
+        cursor: pointer;
+    }
+    
+    .cancel-btn:hover {
+        opacity: 75%;
+        transition: 0.3s ease;
+    }
+
+
+    .review-button {
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding:none;
+        background-color: rgb(119, 119, 119);
+        font-size: 0.7;
+        cursor: pointer;
+    }
+    
+    .review-button:hover {
+        opacity: 75%;
+        transition: 0.3s ease;
+    }
+    
+    
 
 .booking-container td {
     padding: 10px 10px 0px 10px;
 }
 
 .cancel-btn {
-   
+   padding: 10px;
     background-color: rgb(224, 78, 78);
-}
-
-.txt-cancel {
     font-family: louis;
     font-size: 1vw;
 }

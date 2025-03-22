@@ -140,6 +140,25 @@
     background-color: #333;
 }
 
+.btn-email2 {
+    font-family: louis;
+    background-color: transparent;
+    color: white;
+    padding: none;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1.5vw;
+    text-decoration: underline;
+}
+
+.btn-email2:hover {
+    opacity: 80%;
+    transition: 0.3s;
+}
+
+
 /* Responsive Adjustments */
 @media (max-width: 1200px) {
     .frame {

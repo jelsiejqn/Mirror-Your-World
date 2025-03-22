@@ -202,7 +202,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
     <div class="Footer-container">
         <div class="text-container">
             <h1>Book a <br> consultation <br> now.</h1>
-            <p>Got something specific to request? <a href="#"> Email us. </a> </p>
+            <p>Got something specific to request? <button onclick="sendEmail()" class="btn-email2">Email Us</button> </p>
             <button class="btnConsult" onclick="showConsultAlert()">Consult</button>
         </div>
         <img src="Assets/bg_Footer.png" alt="Full-Screen Image" class="BGhome">
@@ -240,15 +240,15 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
 
         if (frameId === 1) {
             modalImage.src = 'Assets/pic-expertise.jpg';
-            modalTitle.innerHTML = 'We do Glass Installations!';
+            modalTitle.innerHTML = 'We do Residential Installations!';
             modalDescription.innerHTML = 'Transform your space with our premium glass solutions. Whether youre looking for sleek glass panels, mirrors, or custom designs, we deliver clarity, elegance, and precision. Perfect for any style, our glass pieces are crafted to enhance your environment with a touch of modern sophistication.';
         } else if (frameId === 2) {
             modalImage.src = 'Assets/pic-passion.jpg';
-            modalTitle.innerHTML = 'We do Aluminum Installations!';
+            modalTitle.innerHTML = 'We do Commercial Solutions!';
             modalDescription.innerHTML = 'Add a touch of industrial strength and sleek design with our high-quality aluminum products. From frames to custom pieces, aluminum offers durability, lightweight flexibility, and a clean, contemporary look. Whether for structural or aesthetic purposes, our aluminum creations are built to last and impress.';
         } else if (frameId === 3) {
             modalImage.src = 'Assets/pic-story.jpg';
-            modalTitle.innerHTML = 'We do Glass and Aluminum Installations';
+            modalTitle.innerHTML = 'We do Custom Projects';
             modalDescription.innerHTML = 'Experience the perfect fusion of elegance and strength with our glass and aluminum combinations. The smooth, reflective beauty of glass paired with the sturdy, modern feel of aluminum creates stunning designs that elevate any project. Custom-made to your specifications, these pieces are as versatile as they are beautiful.';
         }
 
@@ -317,6 +317,10 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
                 }
             });
         <?php endif; ?>
+    }
+
+    function sendEmail() {
+        window.open("https://mail.google.com/mail/?view=cm&fs=1&to=hellodeesy@gmail.com", "_blank");
     }
 </script>
 
