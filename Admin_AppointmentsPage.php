@@ -719,18 +719,6 @@ if (isset($_SESSION['popup_message'])) {
         window.location.href = window.location.pathname + "?sort=" + sortByValue;
     }
 
-    function populateInvoiceModal(appointmentData) {
-        document.getElementById('user-name').value = appointmentData.user_name;
-        document.getElementById('user-email').value = appointmentData.user_email;
-        document.getElementById('user-contact').value = appointmentData.user_contact;
-        document.getElementById('service-type').value = appointmentData.service_type;
-        document.getElementById('consultation-date').value = appointmentData.consultation_date;
-        document.getElementById('invoice-user-id').value = appointmentData.user_id;
-
-        document.getElementById('modal-invoice').style.display = "block";
-    }
-
-    
 </script>
 
 </html>

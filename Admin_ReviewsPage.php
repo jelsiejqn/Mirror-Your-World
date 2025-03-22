@@ -1,3 +1,34 @@
+<?php
+require "dbconnect.php";
+
+$sql = "SELECT 
+            r.review_id,
+            u.username,
+            r.rating,
+            r.comment,
+            r.review_date
+        FROM 
+            reviewstbl r
+        JOIN 
+            userstbl u ON r.user_id = u.user_id
+        ORDER BY 
+            r.rating DESC;";
+
+$result = $conn->query($sql);
+
+if (!$result) {
+  die("Error executing query: " . $conn->error);
+}
+
+// Check if there are any reviews
+if ($result->num_rows > 0) {
+  // Data will be fetched and used in the HTML below
+} else {
+  echo "No reviews found.";
+}
+
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -101,164 +132,64 @@
 
             <center>
 
-                <!-- Review Container -->
-
-            <table class = "booking-container"> 
+            <?php
+if ($result->num_rows > 0) {
+    $review_count = 1;
+    while ($row = $result->fetch_assoc()) {
+        ?>
+        <table class="booking-container">
             <tr>
-                <td class = "td-date"> <h1> 01 </h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Full Name of Client <br> email@example.com   </h5>
+                <td class="td-date">
+                    <h1><?php echo $review_count; ?></h1>
                 </td>
-
-                <td class = "td-booker"> 
-                    <h5> MM/DD/YY <br> </h5>
+                <td class="td-details">
+                    <h5>
+                        <?php 
+                            echo isset($row["username"]) ? $row["username"] : "Unknown User"; 
+                        ?>
+                        <br>
+                    </h5>
                 </td>
-
-                <td class = "td-satisfaction"> 
+                <td class="td-booker">
+                    <h5>
+                    <?php echo date('F j, Y', strtotime($row["review_date"])); ?>
+                        <br>
+                    </h5>
+                </td>
+                <td class="td-satisfaction">
                     <center>
-                    <img src = "Assets/satisfaction-5.png" class = "img-satisfaction">
+                        <?php echo $row["rating"]; ?> 
                     </center>
                 </td>
-
-                <td class = "td-review"> 
-                    <h5> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                     </h5>
-                    
+                <td class="td-review">
+                    <h5>
+                        <?php echo $row["comment"]; ?>
+                    </h5>
                 </td>
             </tr>
-
             <tr>
-
-            <td class = "td-date"> 
-                
-            </td>
-
-            <td class = "td-details"> 
-                <h6> Company Name </h6>
-            </td>
-
-            <td class = "td-booker"> 
-                <h6>  Date </h6>
-            </td>
-
-            <td class = "td-satisfaction"> 
-                <h6> Satisfaction </h6>
-            </td>
-
-            <td class = "td-review"> 
-                <h6> Review </h6>
-            </td>  
-
+                <td class="td-date"></td>
+                <td class="td-details"></td>
+                <td class="td-booker">
+                    <h6>Date</h6>
+                </td>
+                <td class="td-satisfaction">
+                    <h6>Rating (1-5)</h6>
+                </td>
+                <td class="td-review">
+                    <h6>Review</h6>
+                </td>
             </tr>
-            </table>  
+        </table>
+        <?php
+        $review_count++;
+    }
+} else {
+    echo "No reviews found.";
+}
+?>
 
              <!-- End Review Container -->
-
-              <!-- Review Container -->
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> 02 </h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Full Name of Client <br> email@example.com   </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> MM/DD/YY <br> </h5>
-                </td>
-
-                <td class = "td-satisfaction"> 
-                    <center>
-                    <img src = "Assets/satisfaction-5.png" class = "img-satisfaction">
-                    </center>
-                </td>
-
-                <td class = "td-review"> 
-                    <h5> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                     </h5>
-                    
-                </td>
-            </tr>
-
-            <tr>
-
-            <td class = "td-date">  </td>
-
-            <td class = "td-details"> 
-                <h6> Company Name </h6>
-            </td>
-
-            <td class = "td-booker"> 
-                <h6>  Date </h6>
-            </td>
-
-            <td class = "td-satisfaction"> 
-                <h6> Satisfaction </h6>
-            </td>
-
-            <td class = "td-review"> 
-                <h6> Review </h6>
-            </td>  
-
-            </tr>
-            </table>  
-
-             <!-- End Review Container -->
-
-              <!-- Review Container -->
-
-            <table class = "booking-container"> 
-            <tr>
-                <td class = "td-date"> <h1> 03 </h1> </td>
-
-                <td class = "td-details"> 
-                    <h5> Full Name of Client <br> email@example.com   </h5>
-                </td>
-
-                <td class = "td-booker"> 
-                    <h5> MM/DD/YY <br> </h5>
-                </td>
-
-                <td class = "td-satisfaction"> 
-                    <center>
-                    <img src = "Assets/satisfaction-5.png" class = "img-satisfaction">
-                    </center>
-                </td>
-
-                <td class = "td-review"> 
-                    <h5> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt aliqua. 
-                     </h5>
-                    
-                </td>
-            </tr>
-
-            <tr>
-
-            <td class = "td-date">  </td>
-
-            <td class = "td-details"> 
-                <h6> Company Name </h6>
-            </td>
-
-            <td class = "td-booker"> 
-                <h6>  Date </h6>
-            </td>
-
-            <td class = "td-satisfaction"> 
-                <h6> Satisfaction </h6>
-            </td>
-
-            <td class = "td-review"> 
-                <h6> Review </h6>
-            </td>  
-
-            </tr>
-            </table>  
-
-             <!-- End Review Container -->
-
             
             
 

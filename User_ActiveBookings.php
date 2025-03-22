@@ -54,7 +54,7 @@ $stmt->close();
 
 // Fetch past (completed) appointments for the logged-in user
 $query = "
-    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number
+    SELECT a.*, u.first_name, u.last_name, u.email, u.contact_number, u.user_id
     FROM appointmentstbl a
     JOIN userstbl u ON a.user_id = u.user_id
     WHERE a.status = 'Completed' AND a.user_id = ? AND a.appointment_date < ?";
@@ -227,35 +227,67 @@ $conn->close();
                 </table>
 
                 <center>
-                    <table class="booking-container">
-                        <?php if ($pastBookings->num_rows > 0): ?>
-                            <?php while ($row = $pastBookings->fetch_assoc()): ?>
-                                <tr>
-                                    <td class="td-date">
-                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
-                                    </td>
-                                    <td class="td-details">
-                                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?></h5>
-                                        <h5>Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?></h5>
-                                        <h5>Site of Appointment: <?php echo htmlspecialchars($row['address']); ?></h5>
-                                    </td>
-                                    <td class="td-booker">
-                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
-                                        <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
-                                        <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
-                                    </td>
-                                    <td class="td-buttons">
-                                        <img src="Assets/icon_check.png" class="completed-icon">
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <h5>No past bookings found.</h5>
-                        <?php endif; ?>
-                    </table>
-                </center>
+    <table class="booking-container">
+        <?php if ($pastBookings->num_rows > 0): ?>
+            <?php while ($row = $pastBookings->fetch_assoc()): ?>
+                <tr>
+                    <td class="td-date">
+                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                    </td>
+                    <td class="td-details">
+                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?></h5>
+                        <h5>Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?></h5>
+                        <h5>Site of Appointment: <?php echo htmlspecialchars($row['address']); ?></h5>
+                    </td>
+                    <td class="td-booker">
+                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></h5>
+                        <h5>Email: <?= htmlspecialchars($row['email']) ?></h5>
+                        <h5>Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                        
+                    </td>
+                    <td class="td-buttons">
+                    <button class="review-button"
+                            data-appointment-id="<?= $row['appointment_id'] ?>"
+                            data-user-id="<?= $row['user_id'] ?>"
+                            data-first-name="<?= htmlspecialchars($row['first_name']) ?>"
+                            data-last-name="<?= htmlspecialchars($row['last_name']) ?>">
+                        Review
+                    </button>
+                </td>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <h5>No past bookings found.</h5>
+        <?php endif; ?>
+    </table>
+</center>
             </div>
 
+            <div id="reviewModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;">
+                <div style="background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
+                    <span class="close" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                    <h2>Add Review</h2>
+                    <form id="reviewForm" method="post" action="submit_review.php">
+                        <input type="hidden" id="appointmentId" name="appointment_id" value="">
+                        <input type="hidden" id="userId" name="user_id" value="">
+                        <input type="hidden" id="reviewerFirstName" name="reviewer_first_name" value="">
+                        <input type="hidden" id="reviewerLastName" name="reviewer_last_name" value="">
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label for="rating" style="display: block;">Rating (1-5):</label><br>
+                            <input type="number" id="rating" name="rating" min="1" max="5" required style="width: 100%;">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label for="comment" style="display: block;">Comment:</label><br>
+                            <textarea id="comment" name="comment" rows="5" required style="width: 100%;"></textarea>
+                        </div>
+                        
+                        <input type="submit" value="Submit Review" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%;">
+                    </form>
+                </div>
+            </div>
 
 
             <!-- Cancelled -->
@@ -459,6 +491,40 @@ $conn->close();
             popup.style.display = 'none';
         }, 200);
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('reviewModal');
+    var buttons = document.querySelectorAll('.review-button');
+    var span = document.getElementsByClassName('close')[0];
+
+    console.log("Modal display on load:", modal.style.display); // Check initial display
+
+    buttons.forEach(function(button) {
+        button.onclick = function() {
+            console.log("Review button clicked"); // Check if button is clicked
+            document.getElementById('appointmentId').value = this.dataset.appointmentId;
+            document.getElementById('reviewerFirstName').value = this.dataset.firstName;
+            document.getElementById('reviewerLastName').value = this.dataset.lastName;
+            modal.style.display = 'block';
+            console.log("Modal display after button click:", modal.style.display); // Check display after click
+        };
+    });
+
+    span.onclick = function() {
+        console.log("Close button clicked"); // Check if close is clicked
+        modal.style.display = 'none';
+        console.log("Modal display after close:", modal.style.display); // Check display after close
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            console.log("Clicked outside modal"); // Check if clicked outside
+            modal.style.display = 'none';
+            console.log("Modal display after outside click:", modal.style.display); // Check display after outside click
+        }
+    };
+});
+
 </script>
 
 

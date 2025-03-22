@@ -13,6 +13,13 @@ $result_showcase = $conn->query($sql_showcase);
 $sql_clients = "SELECT * FROM clientstbl ORDER BY id DESC";
 $result_clients = $conn->query($sql_clients);
 
+$sql_reviews = "SELECT r.*, u.first_name, u.last_name, u.profile_picture
+                FROM reviewstbl r
+                JOIN userstbl u ON r.user_id = u.user_id
+                ORDER BY r.review_date DESC";
+
+$result_reviews = $conn->query($sql_reviews);
+
 ?>
 
 <html lang="en">
@@ -208,73 +215,36 @@ $result_clients = $conn->query($sql_clients);
 
 
 
-<h2 class="reviews-title" id ="section-reviews"> Client Reviews </h2>
+<h2 class="reviews-title" id="section-reviews">Client Reviews</h2>
 
-<div class = "reviews-container">
+<div class="reviews-container">
 
-<figure class="snip1157">
-  <blockquote>Calvin: You know sometimes when I'm talking, my words can't keep up with my thoughts... I wonder why we think faster than we speak. Hobbes: Probably so we can think twice.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample3.jpg" alt="sq-sample3" />
-  <div class="author">
-  <h5>Max Conversion<span> Property Owner </span></h5>
-  </div>
-</figure>
+    <?php
+    if ($result_reviews->num_rows > 0) {
+        while ($row_review = $result_reviews->fetch_assoc()) {
+            $reviewer_first_name = $row_review["first_name"];
+            $reviewer_last_name = $row_review["last_name"];
+            $comment = $row_review["comment"];
+            $profile_picture = $row_review["profile_picture"];
+            $profile_picture = $profile_picture ? $profile_picture : "Assets/default_profile.png"; // Use default if no profile picture
 
-
-<figure class="snip1157 hover">
-  <blockquote>Thank you. before I begin, I'd like everyone to notice that my report is in a professional, clear plastic binder...When a report looks this good, you know it'll get an A. That's a tip kids. Write it down.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample27.jpg" alt="sq-sample27" />
-  <div class="author">
-    <h5>Max Conversion<span> Property Owner </span></h5>
-  </div>
-</figure>
-
-
-<figure class="snip1157">
-  <blockquote>My behaviour is addictive functioning in a disease process of toxic co-dependency. I need holistic healing and wellness before I'll accept any responsibility for my actions.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="Assets/client1.jpg" alt="sq-sample17" />
-  <div class="author">
-    <h5>Eleanor Faint<span> Property Owner </span></h5>
-  </div>
-</figure>
-
-<figure class="snip1157">
-  <blockquote>My behaviour is addictive functioning in a disease process of toxic co-dependency. I need holistic healing and wellness before I'll accept any responsibility for my actions.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
-  <div class="author">
-    <h5>Eleanor Faint<span> Property Owner </span></h5>
-  </div>
-</figure>
-
-<figure class="snip1157">
-  <blockquote>My behaviour is addictive functioning in a disease process of toxic co-dependency. I need holistic healing and wellness before I'll accept any responsibility for my actions.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
-  <div class="author">
-    <h5>Eleanor Faint<span> Property Owner </span></h5>
-  </div>
-</figure>
-
-<figure class="snip1157">
-  <blockquote>My behaviour is addictive functioning in a disease process of toxic co-dependency. I need holistic healing and wellness before I'll accept any responsibility for my actions.
-    <div class="arrow"></div>
-  </blockquote>
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sq-sample17.jpg" alt="sq-sample17" />
-  <div class="author">
-    <h5>Eleanor Faint<span> Property Owner </span></h5>
-  </div>
-</figure>
-
-</div>
+            ?>
+            <figure class="snip1157">
+                <blockquote>
+                    <?php echo $comment; ?>
+                    <div class="arrow"></div>
+                </blockquote>
+                <img src="<?php echo $profile_picture; ?>" alt="<?php echo $reviewer_first_name . " " . $reviewer_last_name; ?>" />
+                <div class="author">
+                    <h5><?php echo $reviewer_first_name . " " . $reviewer_last_name; ?><span> Property Owner </span></h5>
+                </div>
+            </figure>
+            <?php
+        }
+    } else {
+        echo "<p>No reviews available.</p>";
+    }
+    ?>
 
 
 

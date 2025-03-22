@@ -330,6 +330,7 @@ document.getElementById('appointment-date').addEventListener('change', function(
             console.error('Error fetching available slots:', error);
         });
 });
+
 document.querySelector('.btn-submit').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent form submission
 
