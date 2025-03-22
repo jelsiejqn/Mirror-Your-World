@@ -1,11 +1,11 @@
 .loginForm {
-    margin-top: 10%;
+    margin-top: 8%;
     background-color: #f9f9f9;
+    width: 100%;
     max-width: 38%;
     border-radius: 40px;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-bottom: 50px
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* Text styling */
@@ -85,4 +85,34 @@ input {
     top: 0;
     width: 20px;
     opacity: 80%;
+}
+/* Responsive scaling when the browser is small */
+@media (max-width: 768px) {
+    .loginForm {
+        margin-top: 10%;
+        transform: scale(0.85); /* Shrinks the form to 85% of its original size */
+        max-width: 90%; /* Allows it to take up more screen width */
+    }
+}
+
+@media (max-width: 480px) {
+    .loginForm {
+        margin-top: 2%;
+        transform: scale(0.75); /* Further shrinks for smaller devices */
+        max-width: 95%;
+    }
+}
+
+/* Prevent input overflow */
+input {
+    width: 100%; /* Make input responsive within the form */
+    max-width: 14rem; /* Maintain shape */
+    box-sizing: border-box;
+}
+
+/* Ensure buttons remain proportional */
+.btn_login {
+    width: 100%;
+    max-width: 14rem;
+    box-sizing: border-box;
 }
