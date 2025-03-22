@@ -256,11 +256,12 @@ h5 {
         color: white;
         border: none;
         border-radius: 20px;
-        padding:none;
+        padding: 10px 20px; /* Adjust padding for size */
         background-color: rgb(119, 119, 119);
-        font-size: 0.7;
+        font-size: 1em; /* Use 'em' for relative sizing, 1em is usually the default font size */
         cursor: pointer;
     }
+    
     
     .review-button:hover {
         opacity: 75%;
