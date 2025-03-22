@@ -61,7 +61,7 @@
 
 
 .txtServices {
-    padding-top: 10%;
+    padding-top: 20%;
     font-family: nexa;
     color: #1e271f;
     font-size: 3rem;
@@ -86,7 +86,7 @@
     border:#ddd;
     padding: 20px;
     text-align: center;
-    width: 20%;
+    min-width: 10%;
     background-color: transparent;
     border-radius: 8px;
     transition: box-shadow 0.3s ease;
@@ -222,7 +222,7 @@
 .text-container p {
     line-height: 1.5;
     font-family: louis;
-    font-size: 1.2rem;
+    font-size: 1.2w;
     color: white;
     margin-top: 5px;
 }
@@ -236,14 +236,14 @@
     top: 50%; /* Vertically center it */
     transform: translateY(-50%);
     font-family: louis;
-    font-size: 1.2rem;
+    font-size: 1.2vw;
     color: white;
     margin: 0;
 }
 
 /* Position btn-email on the far right */
 .btn-email {
-   
+   font-size: 1vw;
     position: absolute;
     right: 10%; /* Align it 5% from the right side */
     top: 65%; /* You can adjust this value based on how high/low you want the button */
@@ -272,7 +272,7 @@
     text-decoration: none;
     cursor: pointer;
     border: none;
-    font-size: 1.5vw;
+    font-size: 1.1vw;
     text-decoration: underline;
 }
 
@@ -304,7 +304,7 @@
     padding: 5px 40px 5px 40px;
     font-family: louis;
     border-style: none;
-    font-size: 1rem;
+    font-size: 1vw;
     cursor: pointer;
 }
 
@@ -585,8 +585,12 @@ p {
     opacity: 1;
 }
 
+.moreQs {
+    font-size: 1vw;
+}
+
 .materials-title {
-    margin-top: 10vh;
+    margin-top: 20vh;
     font-family: louis;
 }
 .material-frame {
@@ -708,7 +712,7 @@ p {
 
 .material-modal-close {
     position: absolute;
-    right: 240;
+    right: 420;
     margin: 10;
     background: transparent;
     color: #2a2a2a;

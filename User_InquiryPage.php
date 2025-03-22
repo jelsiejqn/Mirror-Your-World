@@ -67,7 +67,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
             <h1>Are we the <br>perfect fit <br> for you?</h1>
             <p>Frequently asked questions and <br /> inquiry page.</p>
 
-            <h2 class="qs"> Still have questions? <br> Don't hesitate to email us!</h2>
+            <h2> Still have questions? <br> Don't hesitate to email us!</h2>
             <button onclick="sendEmail()" class="btn-email">Email Us</button>
         </div>
 
@@ -200,29 +200,43 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
                     <div class="material-scroll-container">
                         <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
                             <img src="Assets/placeholder2.jpg">
-                            <div class="material-frame-title">Sample Title</div>
-                            <div class="material-frame-subtitle">Sample Subtitle</div>
-                            <div class="material-frame-description">Unavailable</div>
+                            <div class="material-frame-title">Tempered Glass</div>
+                            <div class="material-frame-subtitle">Strong and heat-resistant safety glass.</div>
+                            <div class="material-frame-description">Available</div>
                         </div>
 
                         <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
                             <img src="Assets/placeholder1.jpg">
-                            <div class="material-frame-title">Sample Title</div>
-                            <div class="material-frame-subtitle">Sample Subtitle</div>
+                            <div class="material-frame-title">Frosted Glass</div>
+                            <div class="material-frame-subtitle">Opaque glass for privacy and aesthetics.</div>
                             <div class="material-frame-description">Available</div>
                         </div>
 
                         <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
                             <img src="Assets/placeholder3.jpg">
-                            <div class="material-frame-title">Sample Title</div>
-                            <div class="material-frame-subtitle">Sample Subtitle</div>
+                            <div class="material-frame-title"> Laminated Glass</div>
+                            <div class="material-frame-subtitle">Safety glass with soundproofing features. </div>
                             <div class="material-frame-description">Available</div>
                         </div>
 
                         <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
-                            <img src="Assets/placeholder.jpg">
-                            <div class="material-frame-title">Sample Title</div>
-                            <div class="material-frame-subtitle">Sample Subtitle</div>
+                            <img src="Assets/placeholder4.jpg">
+                            <div class="material-frame-title"> Clear Acrylic Sheet</div>
+                            <div class="material-frame-subtitle">Transparent and lightweight glass alternative.</div>
+                            <div class="material-frame-description">Available</div>
+                        </div>
+
+                        <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                            <img src="Assets/placeholder5.jpg">
+                            <div class="material-frame-title"> Frosted Acrylic Sheet</div>
+                            <div class="material-frame-subtitle">Semi-transparent acrylic for privacy and elegance.</div>
+                            <div class="material-frame-description">Available</div>
+                        </div>
+
+                        <div class="material-frame" onclick="openMaterialModal('Sample Title', 'Sample Subtitle', 'Sample Description', 'Available', 'Detail 1', 'Detail 2', 'Detail 3', 'Detail 4')">
+                            <img src="Assets/placeholder6.jpg">
+                            <div class="material-frame-title"> Colored Acrylic Sheet</div>
+                            <div class="material-frame-subtitle">Vibrant, durable acrylic for decorative use.</div>
                             <div class="material-frame-description">Available</div>
                         </div>
                     </div>
@@ -248,28 +262,28 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
                         <h2 class="txtPolicies" id="section-policies"> Policies </h2>
                         <div class="policy-section">
                             <h2 class="policy-section-header">1. Booking Policy</h2>
-                            <div class="policy-item"><span>Advance Booking:</span> Appointments should be booked at least [X days/weeks] in advance to ensure availability.</div>
+                            <div class="policy-item"><span>Advance Booking:</span> Appointments should be booked at least <strong> 1 day </strong> in advance to ensure availability.</div>
                             <div class="policy-item"><span>Required Information:</span> Customers must provide accurate details during booking, including location, service type, and contact information.</div>
                         </div>
                         <div class="policy-section">
                             <h2 class="policy-section-header">2. Cancellation and Rescheduling Policy</h2>
-                            <div class="policy-item"><span>Cancellation Deadline:</span> Cancellations must be made at least [X hours/days] before the appointment. Failure to do so may result in a cancellation fee.</div>
-                            <div class="policy-item"><span>Rescheduling Policy:</span> Rescheduling is allowed with at least [X hours/days] notice, subject to availability.</div>
+                            <div class="policy-item"><span>Cancellation Deadline:</span> Cancellations must be made within 12 hours after booking the appointment. Failure to do so may result in a cancellation fee.</div>
+                            <div class="policy-item"><span>Rescheduling Policy:</span> Rescheduling is allowed with at least 1 day notice, subject to availability.</div>
                         </div>
                         <div class="policy-section">
                             <h2 class="policy-section-header">3. Payment Policy</h2>
-                            <div class="policy-item"><span>Deposit:</span> A [percentage or fixed amount] deposit is required to secure your appointment, payable via [list payment methods].</div>
+                            <div class="policy-item"><span>Deposit:</span> A percentage of the estimated price deposit is required to secure your appointment, payable via bank, cash, or online wallets.</div>
                             <div class="policy-item"><span>Full Payment:</span> The remaining balance is due upon project completion or as per the agreement.</div>
-                            <div class="policy-item"><span>Accepted Payment Methods:</span> We accept cash, bank transfers, and online payment methods like [specific platforms].</div>
+                            <div class="policy-item"><span>Accepted Payment Methods:</span> We accept cash, bank transfers, and online payment methods like Gcash, PayMaya, GoTyme, and SeaBank.</div>
                         </div>
                         <div class="policy-section">
                             <h2 class="policy-section-header">4. Warranty Policy</h2>
-                            <div class="policy-item"><span>Workmanship Warranty:</span> We provide a [X-year] warranty on all installations for defects in materials and workmanship.</div>
+                            <div class="policy-item"><span>Workmanship Warranty:</span> We provide a 6-month on all installations for defects in materials and workmanship.</div>
                             <div class="policy-item"><span>Exclusions:</span> The warranty does not cover damages caused by misuse, accidents, or natural wear and tear.</div>
                         </div>
                         <div class="policy-section">
                             <h2 class="policy-section-header">5. Service Area Policy</h2>
-                            <div class="policy-item"><span>Covered Areas:</span> We primarily serve [list of locations]. If you’re outside this area, additional charges may apply for travel.</div>
+                            <div class="policy-item"><span>Covered Areas:</span> We primarily serve Pasig area only. If you’re outside this area, additional charges may apply for travel.</div>
                             <div class="policy-item"><span>Additional Fees:</span> Projects outside the service area may incur extra travel or transportation fees.</div>
                         </div>
                         <div class="policy-section">
