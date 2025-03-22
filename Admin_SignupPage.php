@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Admin_LoginPageCSS.css" />
 </head>
+
 <body>
 
     <!-- Required -->
@@ -70,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
             <img src="Assets/icon_Profile.png" class="iconProfile" alt="Profile Icon" width="40px" height="40px" style="width: 25px; height: 25px; object-fit: cover; cursor: pointer; transition: filter 0.3s ease;" onmouseover="this.style.filter='invert(1)';" onmouseout="this.style.filter='invert(0)';" />
         </button>
-        
+
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
@@ -81,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </li>
         </ul>
     </div>
-    
+
     <div class="BGhome-container">
         <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">
 
@@ -89,58 +91,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Main Login Form -->
             <div class="loginDiv">
 
-                    <form class="loginForm" method="POST" action="Admin_SignupPage.php">
-            <div class="txt_Title">
-                <br> <br>
-                <h2 class="txt_MYW"> Mirror Your World. </h2>
-                <h4 class="txt_Desc"> Welcome! </h4>
-            </div>
+                <form class="loginForm" method="POST" action="Admin_SignupPage.php">
+                    <div class="txt_Title">
+                        <br> <br>
+                        <h2 class="txt_MYW"> Mirror Your World. </h2>
+                        <h4 class="txt_Desc"> Welcome! </h4>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
-                <input id="first_name" name="first_name" type="text" placeholder="First Name" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                        <input id="first_name" name="first_name" type="text" placeholder="First Name" required>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
-                <input id="last_name" name="last_name" type="text" placeholder="Last Name" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                        <input id="last_name" name="last_name" type="text" placeholder="Last Name" required>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
-                <input id="username" name="username" type="text" placeholder="Username" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                        <input id="username" name="username" type="text" placeholder="Username" required>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
-                <input id="email" name="email" type="email" placeholder="Email" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_Profile.png" class="field-icon"></label>
+                        <input id="email" name="email" type="email" placeholder="Email" required>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_lock.png" class="field-icon"></label>
-                <input id="password" name="password" type="password" placeholder="Password" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_lock.png" class="field-icon"></label>
+                        <input id="password" name="password" type="password" placeholder="Password" required>
+                    </div>
 
-            <div class="input-field">
-                <label><img src="Assets/icon_lock.png" class="field-icon"></label>
-                <input id="confirm_password" name="confirm_password" type="password" placeholder="Confirm Password" required>
-            </div>
+                    <div class="input-field">
+                        <label><img src="Assets/icon_lock.png" class="field-icon"></label>
+                        <input id="confirm_password" name="confirm_password" type="password" placeholder="Confirm Password" required>
+                    </div>
 
-            <button class="btn_login" type="submit" name="action">
-                Sign-Up
-            </button>
+                    <button class="btn_login" type="submit" name="action">
+                        Sign-Up
+                    </button>
 
-            <p class="existingacc"> Already an admin? <a href="Admin_LoginPage.php" class="a1"> Login</a> </p>
+                    <p class="existingacc"> Already an admin? <a href="Admin_LoginPage.php" class="a1"> Login</a> </p>
 
-            <br /><br />
+                    <br /><br />
 
-            <!-- Display error message -->
-            <?php if (!empty($error_message)) { ?>
-                <div class="error-message" style="color: red;">
-                    <?php echo $error_message; ?>
-                </div>
-            <?php } ?>
-        </form>
+                    <!-- Display error message -->
+                    <?php if (!empty($error_message)) { ?>
+                        <div class="error-message" style="color: red;">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php } ?>
+                </form>
 
 
                 <!-- Display error or success messages -->

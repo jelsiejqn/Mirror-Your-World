@@ -1,13 +1,16 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
-    
+
 </body>
+
 </html>
 
 <?php
@@ -37,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update-desc'])) {
     $image_path = '';
     if (isset($_FILES['fileUpload']) && $_FILES['fileUpload']['error'] == 0) {
         $target_dir = "uploads/"; // Folder where images will be saved
-        
+
         // Create the directory if it doesn't exist
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true);

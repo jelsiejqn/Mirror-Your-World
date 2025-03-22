@@ -1,6 +1,6 @@
 <?php
 session_start(); // Ensure session starts at the very top
-require 'dbconnect.php'; 
+require 'dbconnect.php';
 
 // Enable error reporting for debugging (remove in production)
 error_reporting(E_ALL);
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $admin = $result->fetch_assoc();
 
             // Ensure the correct column name for password hash
-            if (password_verify($password, $admin["password_hash"])) { 
+            if (password_verify($password, $admin["password_hash"])) {
                 session_regenerate_id(true); // Prevent session fixation
 
                 $_SESSION["admin_id"] = $admin["admin_id"];
@@ -45,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Admin_LoginPageCSS.css" />
 </head>
+
 <body>
 
     <!-- Required -->
@@ -65,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
             <img src="Assets/icon_Profile.png" class="iconProfile" alt="Profile Icon" width="40px" height="40px" style="width: 25px; height: 25px; object-fit: cover; cursor: pointer; transition: filter 0.3s ease;" onmouseover="this.style.filter='invert(1)';" onmouseout="this.style.filter='invert(0)';" />
         </button>
-        
+
         <br />
         <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
             <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
@@ -76,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </li>
         </ul>
     </div>
-    
+
     <div class="BGhome-container">
         <img src="Assets/bg_HomePage.png" alt="Full-Screen Image" class="BGhome">
 
@@ -125,25 +127,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- Required -->
-     <!-- Include SweetAlert2 Library -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Include SweetAlert2 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    // Check if the logout flag is set in the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('logout')) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Logged Out',
-            text: 'You have successfully logged out.',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            // Remove the logout flag from URL
-            window.location.href = 'Admin_LoginPage.php';
-        });
-    }
-</script>
+    <script>
+        // Check if the logout flag is set in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('logout')) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Logged Out',
+                text: 'You have successfully logged out.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Remove the logout flag from URL
+                window.location.href = 'Admin_LoginPage.php';
+            });
+        }
+    </script>
 
 
 </body>

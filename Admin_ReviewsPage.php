@@ -55,7 +55,7 @@ if ($result->num_rows > 0) {
     <div class="navbar">
         <a href="Admin_ShowcasePage.php">Showcase</a>
         <a href="Admin_AppointmentsPage.php">Appointments</a>
-        <a href="Admin_FAQPage.php">FAQ</a>
+        <!-- <a href="Admin_FAQPage.php">FAQ</a> -->
         <a href="Admin_ReviewsPage.php">Reviews</a>
 
     </div>

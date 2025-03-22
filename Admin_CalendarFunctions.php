@@ -20,7 +20,6 @@ if (isset($_POST['action'])) {
             echo json_encode(['success' => false, 'message' => 'Error blocking date']);
         }
         $stmt->close();
-
     } elseif ($action === 'unblock') {
         // Unblock the date (e.g., remove from blocked_dates table)
         $sql = "DELETE FROM blocked_dates WHERE blocked_date = ?";
@@ -58,4 +57,3 @@ if (isset($_POST['action'])) {
 }
 
 $conn->close();
-?>
