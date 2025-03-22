@@ -245,6 +245,7 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
+                <br>
                 <center>
                     <?php if ($pending_appointments->num_rows > 0): ?>
                         <?php while ($row = $pending_appointments->fetch_assoc()): ?>
@@ -292,6 +293,7 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
+                <br>
                 <center>
 
                     <?php if ($confirmed_appointments && $confirmed_appointments->num_rows > 0): ?>
@@ -345,6 +347,7 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
+                <br>
 
                 <center>
                     <?php if ($completed_appointments->num_rows > 0): ?>
@@ -403,6 +406,7 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
+                <br>
                 <center>
                     <?php if (!empty($cancelledBookings)): ?>
                         <?php foreach ($cancelledBookings as $row): ?>
