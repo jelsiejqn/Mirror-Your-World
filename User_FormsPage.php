@@ -276,7 +276,7 @@
             <div class="request-field">
                 <div class="input-wrapper">
                     <label for="request">Special Requests</label>
-                    <input type="text" id="request" name="request" placeholder="e.g., Can you accommodate [ ] size?" required>
+                    <input type="text" id="request" name="request" placeholder="e.g., Can you accommodate [ ] size?">
                 </div>
             </div>
 
@@ -342,15 +342,38 @@
                 title: 'Confirm Booking',
                 text: 'Are you sure you want to request this appointment?',
                 icon: 'warning',
+                iconColor: '#2a2a2a', // Exclamation point color
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, confirm it!'
+                confirmButtonColor: '#38853c',
+                cancelButtonColor: '#c94747',
+                confirmButtonText: 'Yes, confirm it!',
+                customClass: {
+                    title: 'swal-custom-font',
+                    content: 'swal-custom-font',
+                    confirmButton: 'swal-custom-font swal-custom-button',
+                    cancelButton: 'swal-custom-font swal-custom-button'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.querySelector('form').submit(); // Submit the form
                 }
             });
+
+            // Add custom font styling and button border radius
+            const style = document.createElement('style');
+            style.innerHTML = `
+   
+    .swal-custom-font {
+      font-family: louis ;
+    }
+    .swal-custom-button {
+      border-radius: 20px !important;
+    }
+     .swal-custom-text {
+      font-family: louis ;
+    }
+  `;
+            document.head.appendChild(style);
         });
     </script>
 
