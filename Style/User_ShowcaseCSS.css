@@ -79,11 +79,13 @@ body {
 
 /* Frame container */
 .frames-container {
-    width: 80%;
+    max-width: 70%;
+    max-height: 50%;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
     gap: 20px; /* Space between the frames */
     margin: 20px 0;
+
 }
 
 .frame {
@@ -106,29 +108,32 @@ body {
 
 .frame-title {
     font-family: louis;
-    font-size: 1.2rem;
+    font-size: 1.5vw;
     margin-top: 10px;
 }
 
 .frame-description {
+   font-weight: 700;
     text-align: left;
     font-family: louis;
-    font-size: 1rem;
+    font-size: 1.5vw;
     margin-top: 10px;
 }
 
 .frame-date {
     text-align: left;
     font-family: louis;
-    font-size: 1rem;
+    font-size: 0.9vw;
     margin-top: -1vw;
+    color: rgb(91, 91, 91)
 }
 
 .frame-info {
     text-align: left;
+    font-size: 1vw;
     font-family: louis;
-    font-size: 1rem;
     margin-top: -1vw;
+    color: rgb(91, 91, 91)
 }
 
 
@@ -215,7 +220,7 @@ body {
 .text-container h1 {
     line-height: 0.9;
     font-family: nexa;
-    font-size: 4rem;
+    font-size: 4vw;
     color: white;
     margin-bottom: 0;
     font-weight: 800;
@@ -224,7 +229,7 @@ body {
 .text-container p {
     line-height: 1.5;
     font-family: louis;
-    font-size: 1.2rem;
+    font-size: 1.2w;
     color: white;
     margin-top: 5px;
 }
@@ -238,9 +243,49 @@ body {
     top: 50%; /* Vertically center it */
     transform: translateY(-50%);
     font-family: louis;
-    font-size: 1.2rem;
+    font-size: 1.2vw;
     color: white;
     margin: 0;
+}
+
+/* Position btn-email on the far right */
+.btn-email {
+   font-size: 1vw;
+    position: absolute;
+    right: 10%; /* Align it 5% from the right side */
+    top: 65%; /* You can adjust this value based on how high/low you want the button */
+    transform: translateY(-50%);
+    font-family: louis;
+    background-color: #1e271f;
+    color: white;
+    padding: 7px 35px;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-email:hover {
+    opacity: 80%;
+    transition: 0.3s;
+}
+
+.btn-email2 {
+    font-family: louis;
+    background-color: transparent;
+    color: white;
+    padding: none;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1.1vw;
+    text-decoration: underline;
+}
+
+.btn-email2:hover {
+    opacity: 80%;
+    transition: 0.3s;
 }
 
 /* Position btn-email on the far right */
@@ -614,6 +659,11 @@ p {
 
 /* Responsive design */
 @media (max-width: 768px) {
+
+    .frames-container {
+        grid-template-columns: 1fr; /* Stacks frames in one column */
+      }
+    
     .policy-header {
         font-size: 1.8em;
     }
