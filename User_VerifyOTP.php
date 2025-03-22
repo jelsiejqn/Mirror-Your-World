@@ -111,6 +111,9 @@
                     <input type="text" name="otp" id="otp" required>
 
                     <button type="submit">Verify OTP</button>
+                    <a href="User_LoginPage.php">
+                        <h4> Return to Login. </h4>
+                    </a>
                 </form>
             </div>
 

@@ -8,6 +8,14 @@ body {
     min-height: 100vh;
     margin: 0;
   }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    transition: 0.3s ease-in-out;
+  }
   
   .otp-container {
     transform: translate(0%, 50%);
@@ -23,7 +31,7 @@ body {
   .otp-container h2 {
     font-size: 2rem; /* Larger font size for heading */
     color: #333; /* Dark text color */
-    margin-bottom: 5px;
+    margin-bottom: 5gitpx;
     font-family: nexa;
   }
   .otp-container h4 {
