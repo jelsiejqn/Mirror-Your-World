@@ -7,7 +7,8 @@ use PHPMailer\PHPMailer\Exception;
 
 // Debugging: Check if the session is active
 if (!isset($_SESSION['admin_id'])) {
-    die('Session is missing. Please log in again.');
+    header('Location: Admin_LoginPage.php');
+    exit; 
 }
 
 // Add this near the beginning of your PHP
