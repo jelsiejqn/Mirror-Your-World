@@ -245,8 +245,6 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
-                <br>
-
                 <center>
                     <?php if ($pending_appointments->num_rows > 0): ?>
                         <?php while ($row = $pending_appointments->fetch_assoc()): ?>
@@ -294,7 +292,6 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
-                <br>
                 <center>
 
                     <?php if ($confirmed_appointments && $confirmed_appointments->num_rows > 0): ?>
@@ -348,7 +345,6 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
-                <br>
 
                 <center>
                     <?php if ($completed_appointments->num_rows > 0): ?>
@@ -407,8 +403,6 @@ if (isset($_SESSION['popup_message'])) {
                         </td>
                     </tr>
                 </table>
-                <br>
-
                 <center>
                     <?php if (!empty($cancelledBookings)): ?>
                         <?php foreach ($cancelledBookings as $row): ?>
@@ -722,6 +716,17 @@ if (isset($_SESSION['popup_message'])) {
     function sortBookings() {
         var sortByValue = document.getElementById('sortByDropdown').value;
         window.location.href = window.location.pathname + "?sort=" + sortByValue;
+    }
+
+    function populateInvoiceModal(appointmentData) {
+        document.getElementById('user-name').value = appointmentData.user_name;
+        document.getElementById('user-email').value = appointmentData.user_email;
+        document.getElementById('user-contact').value = appointmentData.user_contact;
+        document.getElementById('service-type').value = appointmentData.service_type;
+        document.getElementById('consultation-date').value = appointmentData.consultation_date;
+        document.getElementById('invoice-user-id').value = appointmentData.user_id;
+
+        document.getElementById('modal-invoice').style.display = "block";
     }
 </script>
 

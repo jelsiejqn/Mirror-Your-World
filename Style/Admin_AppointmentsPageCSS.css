@@ -163,6 +163,24 @@ button:hover {
     transition: 0.3s ease;
 }
 
+.btn-invoice-create {
+    font-size: 1vw;
+    font-family: louis;
+    color: white;
+    background-color: #4CAF50;
+    padding: 10px;
+}
+
+.review-button {
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px; /* Adjust padding for size */
+    background-color: rgb(119, 119, 119);
+    font-size: 1em; /* Use 'em' for relative sizing, 1em is usually the default font size */
+    cursor: pointer;
+}
+
 .cancel-btn {
     color: white;
     border: none;
