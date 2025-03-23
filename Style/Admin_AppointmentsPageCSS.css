@@ -182,6 +182,8 @@ button:hover {
 }
 
 .cancel-btn {
+    padding:10px;
+    font-family:louis;
     color: white;
     border: none;
     border-radius: 20px;

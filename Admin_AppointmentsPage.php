@@ -2,6 +2,7 @@
 session_start();
 include 'dbconnect.php';
 require 'User_EmailAPI.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $appointment_stmt->bind_param("i", $user_id);
             $appointment_stmt->execute();
             $appointment_result = $appointment_stmt->get_result();
-            if($appointment_row = $appointment_result->fetch_assoc()){
+            if ($appointment_row = $appointment_result->fetch_assoc()) {
                 $appointment_date = $appointment_row['appointment_date'];
                 $consultation_type = $appointment_row['consultation_type'];
                 $appointment_time = $appointment_row['appointment_time'];
@@ -116,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                     $mail->isHTML(true);
                     $mail->Subject = 'Invoice Confirmation';
-                    $mail->Body    = "Dear " . htmlspecialchars($user_first_name) . ",<br><br>Your invoice has been created, for your appointment on " . htmlspecialchars(date('M d Y', strtotime($appointment_date))) . " at " . htmlspecialchars(date('h:i A', strtotime($appointment_time))) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Total Cost: $".htmlspecialchars($total_cost)."<br>Notes: ".htmlspecialchars($notes)."<br>Taxes/Discounts: ".htmlspecialchars($tax_discount)."<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
+                    $mail->Body    = "Dear " . htmlspecialchars($user_first_name) . ",<br><br>Your invoice has been created, for your appointment on " . htmlspecialchars(date('M d Y', strtotime($appointment_date))) . " at " . htmlspecialchars(date('h:i A', strtotime($appointment_time))) . ".<br><br>Consultation Type: " . htmlspecialchars($consultation_type) . "<br>Total Cost: $" . htmlspecialchars($total_cost) . "<br>Notes: " . htmlspecialchars($notes) . "<br>Taxes/Discounts: " . htmlspecialchars($tax_discount) . "<br><br>Thank you for choosing us!<br><br>Best regards,<br>Mirror Your World";
 
                     $mail->send();
                     echo "<script>
@@ -137,8 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         } else {
             echo "<script>alert('Error: User data not found.');</script>";
         }
-
-
     } else {
         $_SESSION['popup_message'] = "Error creating invoice. Please try again.";
         $_SESSION['popup_type'] = "error";
@@ -198,22 +197,22 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <div id="calntime-modal" class="calntime-modal" style="display: none;">
-    <div class="calntime-modal-content">
-        <span class="calntime-close">&times;</span>
-        <h2 class="calntime-title">Calendar Availability
-            <br>
-            <p class="calntime-description"> Please block off unavailable dates. </p>
-        </h2>
-        <center>
-            <div id="calntime-datepicker"></div>
-            <div class="calntime-buttons">
-                <button id="calntime-block" type="button">Block Date</button>
-                <button id="calntime-unblock" type="button">Unblock Date</button>
-                <button id="calntime-update" type="button">Update</button>
-            </div>
-        </center>
+        <div class="calntime-modal-content">
+            <span class="calntime-close">&times;</span>
+            <h2 class="calntime-title">Calendar Availability
+                <br>
+                <p class="calntime-description"> Please block off unavailable dates. </p>
+            </h2>
+            <center>
+                <div id="calntime-datepicker"></div>
+                <div class="calntime-buttons">
+                    <button id="calntime-block" type="button">Block Date</button>
+                    <button id="calntime-unblock" type="button">Unblock Date</button>
+                    <button id="calntime-update" type="button">Update</button>
+                </div>
+            </center>
+        </div>
     </div>
-</div>
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
         <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
@@ -251,11 +250,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                        <select id="sortByDropdown-active" class="sortByDropdown" onchange="sortBookings('active-bookings')">
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
-                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
-                        </select>
+                            <select id="sortByDropdown-active" class="sortByDropdown" onchange="sortBookings('active-bookings')">
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                                <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
@@ -280,7 +279,7 @@ if (isset($_SESSION['popup_message'])) {
                                     </td>
                                     <td class="td-buttons">
                                         <button class="cancel-btn" onclick="openCancelPopup('<?= htmlspecialchars($row['appointment_id']) ?>')">
-                                            <h5 class="txt-cancel">Cancel</h5>
+                                            Cancel
                                         </button>
                                     </td>
                                 </tr>
@@ -299,11 +298,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                        <select id="sortByDropdown-past" class="sortByDropdown" onchange="sortBookings('past-bookings')">
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
-                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
-                        </select>
+                            <select id="sortByDropdown-past" class="sortByDropdown" onchange="sortBookings('past-bookings')">
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                                <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
@@ -353,58 +352,58 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                        <select id="sortByDropdown-completed" class="sortByDropdown" onchange="sortBookings('completed')">
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
-                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
-                        </select>
+                            <select id="sortByDropdown-completed" class="sortByDropdown" onchange="sortBookings('completed')">
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                                <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
                 <br>
 
                 <center>
-    <?php if ($completed_appointments->num_rows > 0): ?>
-        <?php while ($row = $completed_appointments->fetch_assoc()): ?>
-            <?php
-                $appointment_data = [
-                    'user_id' => $row['user_id'],
-                    'user_name' => $row['first_name'] . ' ' . $row['last_name'],
-                    'user_email' => $row['email'],
-                    'user_contact' => $row['contact_number'],
-                    'service_type' => $row['consultation_type'],
-                    'consultation_date' => $row['appointment_date'],
-                ];
-                $appointment_json = json_encode($appointment_data);
-            ?>
-            <table class="booking-container">
-                <tr>
-                    <td class="td-date">
-                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
-                    </td>
-                    <td class="td-details">
-                        <h5> Type: <?php echo $row['consultation_type']; ?> <br>
-                            Time: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
-                            Site of Appointment: <br> <?php echo $row['address']; ?></h5>
-                    </td>
-                    <td class="td-booker">
-                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> <br>
-                            Email: <?php echo $row['email']; ?> <br>
-                            Contact: <?php echo $row['contact_number']; ?> </h5>
-                    </td>
-                    <td class="td-buttons">
-                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
-                    </td>
-                </tr>
-            </table>
-            <br>
-        <?php endwhile; ?>
-    <?php else: ?>
-        <h5>No past bookings.</h5>
-    <?php endif; ?>
-</center>
+                    <?php if ($completed_appointments->num_rows > 0): ?>
+                        <?php while ($row = $completed_appointments->fetch_assoc()): ?>
+                            <?php
+                            $appointment_data = [
+                                'user_id' => $row['user_id'],
+                                'user_name' => $row['first_name'] . ' ' . $row['last_name'],
+                                'user_email' => $row['email'],
+                                'user_contact' => $row['contact_number'],
+                                'service_type' => $row['consultation_type'],
+                                'consultation_date' => $row['appointment_date'],
+                            ];
+                            $appointment_json = json_encode($appointment_data);
+                            ?>
+                            <table class="booking-container">
+                                <tr>
+                                    <td class="td-date">
+                                        <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5> Type: <?php echo $row['consultation_type']; ?> <br>
+                                            Time: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                                            Site of Appointment: <br> <?php echo $row['address']; ?></h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> <br>
+                                            Email: <?php echo $row['email']; ?> <br>
+                                            Contact: <?php echo $row['contact_number']; ?> </h5>
+                                    </td>
+                                    <td class="td-buttons">
+                                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <h5>No past bookings.</h5>
+                    <?php endif; ?>
+                </center>
             </div>
-  
+
 
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
@@ -412,11 +411,11 @@ if (isset($_SESSION['popup_message'])) {
                 <table class="sortby-container">
                     <tr>
                         <td>
-                        <select id="sortByDropdown-cancelled" class="sortByDropdown" onchange="sortBookings('cancelled')">
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
-                            <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
-                            <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
-                        </select>
+                            <select id="sortByDropdown-cancelled" class="sortByDropdown" onchange="sortBookings('cancelled')">
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Sort by</option>
+                                <option value="recent" <?php echo ($sort === 'recent') ? 'selected' : ''; ?>>Most Recent</option>
+                                <option value="oldest" <?php echo ($sort === 'oldest') ? 'selected' : ''; ?>>Oldest</option>
+                            </select>
                         </td>
                     </tr>
                 </table>
@@ -488,42 +487,42 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <div class="modal-invoice" id="modal-invoice">
-    <div class="modal-invoice-content">
-        <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
-        <br>
-        <h1 class="invoice-title">Mirror Your World <br>
-            <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
-        </h1>
-        <form method="POST" action="Admin_AppointmentsPage.php">
-            <div class="invoice-info">
-                <label for="user-name">Client:</label>
-                <input type="text" id="user-name" disabled>
-                <label for="user-email">Email:</label>
-                <input type="email" id="user-email" disabled>
-                <label for="user-contact">Contact:</label>
-                <input type="text" id="user-contact" disabled>
-                <label for="service-type">Service Type:</label>
-                <input type="text" id="service-type" disabled>
-                <label for="consultation-date">Consultation Date:</label>
-                <input type="date" id="consultation-date" disabled>
-            </div>
-            <div class="invoice-manual-inputs">
-                <label for="total-cost">Total Cost ($):</label>
-                <input type="number" id="total-cost" name="total_cost" placeholder="Enter total cost" required>
-                <label for="invoice-notes">Notes/Description:</label>
-                <textarea id="invoice-notes" name="notes" placeholder="Add any notes"></textarea>
-                <label for="tax-discount">Taxes/Discounts:</label>
-                <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
-            </div>
-            <div class="invoice-modal-actions">
-            <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-                <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
-            </div><br>
-            <input type="hidden" id="invoice-user-id" name="user_id">
-            <input type="hidden" name="action" value="create_invoice_form">
-        </form>
+        <div class="modal-invoice-content">
+            <span class="modal-invoice-close" id="btn-close-modal">&times;</span>
+            <br>
+            <h1 class="invoice-title">Mirror Your World <br>
+                <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
+            </h1>
+            <form method="POST" action="Admin_AppointmentsPage.php">
+                <div class="invoice-info">
+                    <label for="user-name">Client:</label>
+                    <input type="text" id="user-name" disabled>
+                    <label for="user-email">Email:</label>
+                    <input type="email" id="user-email" disabled>
+                    <label for="user-contact">Contact:</label>
+                    <input type="text" id="user-contact" disabled>
+                    <label for="service-type">Service Type:</label>
+                    <input type="text" id="service-type" disabled>
+                    <label for="consultation-date">Consultation Date:</label>
+                    <input type="date" id="consultation-date" disabled>
+                </div>
+                <div class="invoice-manual-inputs">
+                    <label for="total-cost">Total Cost ($):</label>
+                    <input type="number" id="total-cost" name="total_cost" placeholder="Enter total cost" required>
+                    <label for="invoice-notes">Notes/Description:</label>
+                    <textarea id="invoice-notes" name="notes" placeholder="Add any notes"></textarea>
+                    <label for="tax-discount">Taxes/Discounts:</label>
+                    <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
+                </div>
+                <div class="invoice-modal-actions">
+                    <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+                    <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
+                </div><br>
+                <input type="hidden" id="invoice-user-id" name="user_id">
+                <input type="hidden" name="action" value="create_invoice_form">
+            </form>
+        </div>
     </div>
-</div>
 
     <style>
         .popup {
@@ -698,21 +697,21 @@ if (isset($_SESSION['popup_message'])) {
 
 
 
-   // Get modal and buttons INVOICE!!!
-   var modal = document.getElementById("modal-invoice");
-        var btnCloseModal = document.getElementById("btn-close-modal");
-        var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
-        var btnSendInvoice = document.getElementById("btn-send-invoice");
+    // Get modal and buttons INVOICE!!!
+    var modal = document.getElementById("modal-invoice");
+    var btnCloseModal = document.getElementById("btn-close-modal");
+    var btnCancelInvoice = document.getElementById("btn-cancel-invoice");
+    var btnSendInvoice = document.getElementById("btn-send-invoice");
 
-        // Close the modal when the 'X' is clicked
-        btnCloseModal.onclick = function() {
-            modal.style.display = "none";
-        }
+    // Close the modal when the 'X' is clicked
+    btnCloseModal.onclick = function() {
+        modal.style.display = "none";
+    }
 
-        // Close the modal when the 'Back' button is clicked
-        btnCancelInvoice.onclick = function() {
-            modal.style.display = "none";
-        }
+    // Close the modal when the 'Back' button is clicked
+    btnCancelInvoice.onclick = function() {
+        modal.style.display = "none";
+    }
 
     // Action when the 'Send' button is clicked
     btnSendInvoice.onclick = function() {
@@ -731,19 +730,19 @@ if (isset($_SESSION['popup_message'])) {
 
     //Sort Booking
     function sortBookings() {
-    var sortByValue = document.getElementById('sortByDropdown').value;
-    
-    // Get the currently active section
-    var activeSection = '';
-    var sections = document.querySelectorAll('.section');
-    sections.forEach(function(section) {
-        if (section.style.display === 'block') {
-            activeSection = section.id;
-        }
-    });
-    
-    // Add the active section as a parameter
-    window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + activeSection;
+        var sortByValue = document.getElementById('sortByDropdown').value;
+
+        // Get the currently active section
+        var activeSection = '';
+        var sections = document.querySelectorAll('.section');
+        sections.forEach(function(section) {
+            if (section.style.display === 'block') {
+                activeSection = section.id;
+            }
+        });
+
+        // Add the active section as a parameter
+        window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + activeSection;
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -755,12 +754,12 @@ if (isset($_SESSION['popup_message'])) {
     });
 
     function sortBookings(section) {
-    // Find the dropdown in the current section
-    var sortByValue = document.getElementById('sortByDropdown-' + section.split('-')[0]).value;
-    
-    // Redirect with both sort and section parameters
-    window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + section;
-}
+        // Find the dropdown in the current section
+        var sortByValue = document.getElementById('sortByDropdown-' + section.split('-')[0]).value;
+
+        // Redirect with both sort and section parameters
+        window.location.href = window.location.pathname + "?sort=" + sortByValue + "&section=" + section;
+    }
 
     function populateInvoiceModal(appointmentData) {
         document.getElementById('user-name').value = appointmentData.user_name;
@@ -774,185 +773,185 @@ if (isset($_SESSION['popup_message'])) {
     }
 
     // Calendar functionality
-document.addEventListener("DOMContentLoaded", function() {
-    const modal = document.getElementById("calntime-modal");
-    const img = document.querySelector(".calntime-cal_img");
-    const closeBtn = document.querySelector(".calntime-close");
-    const blockBtn = document.getElementById("calntime-block");
-    const unblockBtn = document.getElementById("calntime-unblock");
-    const updateBtn = document.getElementById("calntime-update");
-    
-    // Store blocked dates
-    let blockedDates = [];
-    
-    // Initialize calendar
-    const calendar = flatpickr("#calntime-datepicker", {
-        inline: true,
-        enableTime: false,
-        dateFormat: "Y-m-d",
-        onReady: function() {
-            // Load blocked dates from the database
-            loadBlockedDates();
-        }
-    });
-    
-    // Function to load blocked dates from the database
-    function loadBlockedDates() {
-        fetch('get_blocked_dates.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    blockedDates = data.dates;
-                    updateCalendarDisplay();
-                } else {
-                    console.error("Failed to load blocked dates:", data.message);
-                }
-            })
-            .catch(error => console.error("Error loading blocked dates:", error));
-    }
-    
-    // Function to update the calendar display with blocked dates
-    function updateCalendarDisplay() {
-        // Get all date cells in the calendar
-        const dateCells = document.querySelectorAll(".flatpickr-day");
-        
-        // Reset all cells
-        dateCells.forEach(cell => {
-            cell.classList.remove("blocked-date");
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("calntime-modal");
+        const img = document.querySelector(".calntime-cal_img");
+        const closeBtn = document.querySelector(".calntime-close");
+        const blockBtn = document.getElementById("calntime-block");
+        const unblockBtn = document.getElementById("calntime-unblock");
+        const updateBtn = document.getElementById("calntime-update");
+
+        // Store blocked dates
+        let blockedDates = [];
+
+        // Initialize calendar
+        const calendar = flatpickr("#calntime-datepicker", {
+            inline: true,
+            enableTime: false,
+            dateFormat: "Y-m-d",
+            onReady: function() {
+                // Load blocked dates from the database
+                loadBlockedDates();
+            }
         });
-        
-        // Mark blocked dates
-        blockedDates.forEach(date => {
+
+        // Function to load blocked dates from the database
+        function loadBlockedDates() {
+            fetch('get_blocked_dates.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        blockedDates = data.dates;
+                        updateCalendarDisplay();
+                    } else {
+                        console.error("Failed to load blocked dates:", data.message);
+                    }
+                })
+                .catch(error => console.error("Error loading blocked dates:", error));
+        }
+
+        // Function to update the calendar display with blocked dates
+        function updateCalendarDisplay() {
+            // Get all date cells in the calendar
+            const dateCells = document.querySelectorAll(".flatpickr-day");
+
+            // Reset all cells
             dateCells.forEach(cell => {
-                const cellDate = cell.getAttribute("aria-label");
-                if (cellDate && cellDate === formatDate(date)) {
-                    cell.classList.add("blocked-date");
-                }
+                cell.classList.remove("blocked-date");
             });
-        });
-    }
-    
-    // Format date to match flatpickr format
-    function formatDate(dateStr) {
-        const date = new Date(dateStr);
-        const months = [
-            "January", "February", "March", "April", "May", "June", 
-            "July", "August", "September", "October", "November", "December"
-        ];
-        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-    }
-    
-    // Block date button click
-    blockBtn.addEventListener("click", function() {
-        const selectedDate = calendar.selectedDates[0];
-        if (selectedDate) {
-            const formattedDate = formatDateForDB(selectedDate);
-            blockDate(formattedDate);
-        } else {
-            alert("Please select a date to block");
+
+            // Mark blocked dates
+            blockedDates.forEach(date => {
+                dateCells.forEach(cell => {
+                    const cellDate = cell.getAttribute("aria-label");
+                    if (cellDate && cellDate === formatDate(date)) {
+                        cell.classList.add("blocked-date");
+                    }
+                });
+            });
         }
-    });
-    
-    // Unblock date button click
-    unblockBtn.addEventListener("click", function() {
-        const selectedDate = calendar.selectedDates[0];
-        if (selectedDate) {
-            const formattedDate = formatDateForDB(selectedDate);
-            unblockDate(formattedDate);
-        } else {
-            alert("Please select a date to unblock");
+
+        // Format date to match flatpickr format
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
         }
-    });
-    
-    // Update calendar button click
-    updateBtn.addEventListener("click", function() {
-        // Reload blocked dates from the server
-        loadBlockedDates();
-        alert("Calendar updated successfully");
-    });
-    
-    // Format date for database (YYYY-MM-DD)
-    function formatDateForDB(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
-    // Function to block a date
-    function blockDate(date) {
-        const formData = new FormData();
-        formData.append('action', 'block');
-        formData.append('date', date);
-        
-        fetch('Admin_CalendarFunctions.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Add to local blocked dates array if not already there
-                if (!blockedDates.includes(date)) {
-                    blockedDates.push(date);
-                }
-                updateCalendarDisplay();
-                alert("Date blocked successfully");
+
+        // Block date button click
+        blockBtn.addEventListener("click", function() {
+            const selectedDate = calendar.selectedDates[0];
+            if (selectedDate) {
+                const formattedDate = formatDateForDB(selectedDate);
+                blockDate(formattedDate);
             } else {
-                alert("Failed to block date: " + data.message);
+                alert("Please select a date to block");
             }
-        })
-        .catch(error => {
-            console.error("Error blocking date:", error);
-            alert("An error occurred while blocking the date");
         });
-    }
-    
-    // Function to unblock a date
-    function unblockDate(date) {
-        const formData = new FormData();
-        formData.append('action', 'unblock');
-        formData.append('date', date);
-        
-        fetch('Admin_CalendarFunctions.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Remove from local blocked dates array
-                blockedDates = blockedDates.filter(d => d !== date);
-                updateCalendarDisplay();
-                alert("Date unblocked successfully");
+
+        // Unblock date button click
+        unblockBtn.addEventListener("click", function() {
+            const selectedDate = calendar.selectedDates[0];
+            if (selectedDate) {
+                const formattedDate = formatDateForDB(selectedDate);
+                unblockDate(formattedDate);
             } else {
-                alert("Failed to unblock date: " + data.message);
+                alert("Please select a date to unblock");
             }
-        })
-        .catch(error => {
-            console.error("Error unblocking date:", error);
-            alert("An error occurred while unblocking the date");
         });
-    }
-    
-    // Open modal
-    img.onclick = function() {
-        modal.style.display = "flex";
-        loadBlockedDates(); // Refresh dates when opening
-    }
-    
-    // Close modal
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-    
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        if (event.target == modal) {
+
+        // Update calendar button click
+        updateBtn.addEventListener("click", function() {
+            // Reload blocked dates from the server
+            loadBlockedDates();
+            alert("Calendar updated successfully");
+        });
+
+        // Format date for database (YYYY-MM-DD)
+        function formatDateForDB(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Function to block a date
+        function blockDate(date) {
+            const formData = new FormData();
+            formData.append('action', 'block');
+            formData.append('date', date);
+
+            fetch('Admin_CalendarFunctions.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add to local blocked dates array if not already there
+                        if (!blockedDates.includes(date)) {
+                            blockedDates.push(date);
+                        }
+                        updateCalendarDisplay();
+                        alert("Date blocked successfully");
+                    } else {
+                        alert("Failed to block date: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error blocking date:", error);
+                    alert("An error occurred while blocking the date");
+                });
+        }
+
+        // Function to unblock a date
+        function unblockDate(date) {
+            const formData = new FormData();
+            formData.append('action', 'unblock');
+            formData.append('date', date);
+
+            fetch('Admin_CalendarFunctions.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove from local blocked dates array
+                        blockedDates = blockedDates.filter(d => d !== date);
+                        updateCalendarDisplay();
+                        alert("Date unblocked successfully");
+                    } else {
+                        alert("Failed to unblock date: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error unblocking date:", error);
+                    alert("An error occurred while unblocking the date");
+                });
+        }
+
+        // Open modal
+        img.onclick = function() {
+            modal.style.display = "flex";
+            loadBlockedDates(); // Refresh dates when opening
+        }
+
+        // Close modal
+        closeBtn.onclick = function() {
             modal.style.display = "none";
         }
-    }
-});
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
 </script>
 
 </html>
