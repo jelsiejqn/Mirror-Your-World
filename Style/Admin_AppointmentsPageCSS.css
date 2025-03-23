@@ -203,9 +203,14 @@ button:hover {
     font-size: 1vw;
 }
 
+.radio-option {
+    text-align: center;
+}
+
 .confirm-cancel-btn {
+    padding: 10px;
     font-family: louis;
-    font-size: 0.7vw;
+    font-size: 1vw;
     background-color: rgb(208, 90, 90);
     color: white;
 }

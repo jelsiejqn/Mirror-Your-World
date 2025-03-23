@@ -458,30 +458,32 @@ if (isset($_SESSION['popup_message'])) {
             <span class="close-btn" onclick="closeCancelPopup()">&times;</span>
             <h1 class="cancellation-title">Mirror Your World <br> Cancellation of Appointment</h1>
             <form id="cancelForm" method="POST" action="cancel_appointment.php">
-                <input type="hidden" name="appointment_id" id="appointmentId">
-                <hr>
-                <label for="reason" class="radio-option"> Select a Reason for <br> Cancellation </label><br> <br>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="reason" value="Material Supply Issue" required>
-                        <span>Material Supply Issue</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="reason" value="Weather Conditions" required>
-                        <span>Weather Conditions</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="reason" value="Technical Issues" required>
-                        <span>Technical Issues</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="reason" value="Other" required>
-                        <span>Other</span>
-                    </label>
-                </div>
-                <button type="submit" class="confirm-cancel-btn">
-                    <h5 class="txt-confirm-cancel">Confirm Cancellation</h5>
-                </button>
+                <center>
+                    <input type="hidden" name="appointment_id" id="appointmentId">
+                    <hr>
+                    <center>
+                        <label for="reason" class="radio-option"> Select a Reason for Cancellation </label><br> <br>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="reason" value="Material Supply Issue" required>
+                                <span>Material Supply Issue</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="reason" value="Weather Conditions" required>
+                                <span>Weather Conditions</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="reason" value="Technical Issues" required>
+                                <span>Technical Issues</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="reason" value="Other" required>
+                                <span>Other</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="confirm-cancel-btn">
+                            Confirm Cancellation
+                        </button>
             </form>
         </div>
     </div>
