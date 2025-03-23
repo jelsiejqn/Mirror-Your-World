@@ -72,4 +72,45 @@
 }
 
 
+/* Add this to your Calendar.css file */
+.blocked-date {
+    background-color: #ffcccc !important;
+    color: #ff0000 !important;
+    text-decoration: line-through;
+    border-color: #ff0000 !important;
+}
 
+.calntime-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.calntime-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#calntime-block {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+#calntime-unblock {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#calntime-update {
+    background-color: #2196F3;
+    color: white;
+}
+
+.calntime-buttons button:hover {
+    opacity: 0.8;
+}

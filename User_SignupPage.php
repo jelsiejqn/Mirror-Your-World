@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="input-field">
                         <label> <img src="Assets/icon_email.png" class="field-icon"> </label>
-                        <input id="email" name="email" type="text" placeholder="Email" required>
+                        <input id="email" name="email" type="email" placeholder="Email" required>
                         <input id="company" name="company" type="text" placeholder="Company Name (optional)">
                     </div>
 
