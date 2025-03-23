@@ -318,23 +318,61 @@ $conn->close();
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
                 <h2>Cancelled</h2>
+=======
 
-                <table class="sortby-container">
+ <!-- Cancelled -->
+<div class="section" id="cancelled" style="display: none;">
+    <h2>Cancelled</h2>
+>>>>>>> 1ee2038b58ceb8eb22cf481f1390e9fdb21ee5cd
+
+    <table class="sortby-container">
+        <tr>
+            <td>
+                <select id="sortByDropdown" onchange="sortBookings()">
+                    <option value="recent">Sort by</option>
+                    <option value="recent">Most Recent</option>
+                    <option value="oldest">Oldest</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <center>
+        <?php if ($cancelledBookings->num_rows > 0): ?>
+            <?php while ($row = $cancelledBookings->fetch_assoc()): ?>
+                <table class="booking-container">
                     <tr>
-                        <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
+                        <td class="td-date">
+                            <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
+                        </td>
+                        <td class="td-details">
+                            <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?><br>
+                                Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?><br>
+                                Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
+                        </td>
+                        <td class="td-booker">
+                            <h5>Reason for Cancellation</h5>
+                            <h5><?= htmlspecialchars($row['cancellation_reason']) ?></h5>
+                        </td>
+                        <td class="td-buttons">
+                            <img src="Assets/icon_X.png" class="completed-icon">
                         </td>
                     </tr>
                 </table>
                 <br>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <h5>No cancelled bookings found.</h5>
+        <?php endif; ?>
+    </center>
+</div>
 
+<<<<<<< HEAD
                 <center>
                     <?php if (!empty($cancelledBookings)): ?>
                         <?php foreach ($cancelledBookings as $row): ?>
@@ -363,45 +401,46 @@ $conn->close();
                         <h5>No cancelled bookings found.</h5>
                     <?php endif; ?>
                 </center>
+=======
+
+<div id="cancelPopup" class="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closeCancelPopup()">&times;</span>
+        <h2 class="cancel-modal-title">Mirror Your World</h2>
+        <form id="cancelForm" method="POST" action="cancel_appointment.php">
+            <input type="hidden" name="appointment_id" id="cancelAppointmentId">
+            <label for="cancellation_reason">Select Reason for Cancellation</label><br>
+
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Personal Reasons" required>
+                    <span>Personal Reasons</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Scheduling Conflict" required>
+                    <span>Scheduling Conflict</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Health Issues" required>
+                    <span>Health Issues</span>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="reason" value="Other" required>
+                    <span>Other</span>
+                </label>
+>>>>>>> 1ee2038b58ceb8eb22cf481f1390e9fdb21ee5cd
             </div>
 
+            <button type="submit" class="txt-cancel">
+                Confirm Cancellation
+            </button>
+        </form>
+    </div>
+</div>
 
-            <div id="cancelPopup" class="popup">
-                <div class="popup-content">
-                    <span class="close-btn" onclick="closeCancelPopup()">&times;</span>
-                    <h2 class="cancel-modal-title">Mirror Your World</h2>
-                    <form id="cancelForm" method="POST" action="cancel_appointment.php">
-                        <input type="hidden" name="appointment_id" id="appointmentId">
-                        <label for="reason">Select Reason for Cancellation</label><br>
-
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="reason" value="Personal Reasons" required>
-                                <span>Personal Reasons</span>
-                            </label>
-
-                            <label class="radio-option">
-                                <input type="radio" name="reason" value="Scheduling Conflict" required>
-                                <span>Scheduling Conflict</span>
-                            </label>
-
-                            <label class="radio-option">
-                                <input type="radio" name="reason" value="Health Issues" required>
-                                <span>Health Issues</span>
-                            </label>
-
-                            <label class="radio-option">
-                                <input type="radio" name="reason" value="Other" required>
-                                <span>Other</span>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="txt-cancel">
-                            Confirm Cancellation
-                        </button>
-                    </form>
-                </div>
-            </div>
 
             <style>
                 .popup {
@@ -509,7 +548,7 @@ $conn->close();
     }
 
     function openCancelPopup(appointmentId) {
-        document.getElementById('appointmentId').value = appointmentId;
+        document.getElementById('cancelAppointmentId').value = appointmentId;
         let popup = document.getElementById('cancelPopup');
         popup.style.display = 'block';
         popup.style.opacity = '1';
@@ -557,6 +596,30 @@ $conn->close();
             }
         };
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Your existing code
+    
+    // Add this new code
+    var cancelForm = document.getElementById('cancelForm');
+    if (cancelForm) {
+        cancelForm.addEventListener('submit', function(event) {
+            var radioButtons = document.querySelectorAll('input[name="reason"]');
+            var isChecked = false;
+            
+            radioButtons.forEach(function(radio) {
+                if (radio.checked) {
+                    isChecked = true;
+                }
+            });
+            
+            if (!isChecked) {
+                event.preventDefault();
+                alert('Please select a reason for cancellation');
+            }
+        });
+    }
+});
 </script>
 
 

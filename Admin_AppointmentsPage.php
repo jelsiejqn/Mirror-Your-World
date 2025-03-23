@@ -7,8 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 // Debugging: Check if the session is active
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: Admin_LoginPage.php');
-    exit; 
+    die('Session is missing. Please log in again.');
 }
 
 // Add this near the beginning of your PHP
@@ -199,22 +198,22 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <div id="calntime-modal" class="calntime-modal" style="display: none;">
-        <div class="calntime-modal-content">
-            <span class="calntime-close">&times;</span>
-            <h2 class="calntime-title">Calendar Availability
-                <br>
-                <p class="calntime-description"> Please block off unavailable dates. </p>
-            </h2>
-            <center>
-                <div id="calntime-datepicker"></div>
-                <div class="calntime-buttons">
-                    <button id="calntime-block">Block Date</button>
-                    <button id="calntime-unblock">Unblock Date</button>
-                    <button id="calntime-update">Update</button>
-                </div>
-            </center>
-        </div>
+    <div class="calntime-modal-content">
+        <span class="calntime-close">&times;</span>
+        <h2 class="calntime-title">Calendar Availability
+            <br>
+            <p class="calntime-description"> Please block off unavailable dates. </p>
+        </h2>
+        <center>
+            <div id="calntime-datepicker"></div>
+            <div class="calntime-buttons">
+                <button id="calntime-block" type="button">Block Date</button>
+                <button id="calntime-unblock" type="button">Unblock Date</button>
+                <button id="calntime-update" type="button">Update</button>
+            </div>
+        </center>
     </div>
+</div>
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
         <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
@@ -774,7 +773,186 @@ if (isset($_SESSION['popup_message'])) {
         document.getElementById('modal-invoice').style.display = "block";
     }
 
+    // Calendar functionality
+document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.getElementById("calntime-modal");
+    const img = document.querySelector(".calntime-cal_img");
+    const closeBtn = document.querySelector(".calntime-close");
+    const blockBtn = document.getElementById("calntime-block");
+    const unblockBtn = document.getElementById("calntime-unblock");
+    const updateBtn = document.getElementById("calntime-update");
     
+    // Store blocked dates
+    let blockedDates = [];
+    
+    // Initialize calendar
+    const calendar = flatpickr("#calntime-datepicker", {
+        inline: true,
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        onReady: function() {
+            // Load blocked dates from the database
+            loadBlockedDates();
+        }
+    });
+    
+    // Function to load blocked dates from the database
+    function loadBlockedDates() {
+        fetch('get_blocked_dates.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    blockedDates = data.dates;
+                    updateCalendarDisplay();
+                } else {
+                    console.error("Failed to load blocked dates:", data.message);
+                }
+            })
+            .catch(error => console.error("Error loading blocked dates:", error));
+    }
+    
+    // Function to update the calendar display with blocked dates
+    function updateCalendarDisplay() {
+        // Get all date cells in the calendar
+        const dateCells = document.querySelectorAll(".flatpickr-day");
+        
+        // Reset all cells
+        dateCells.forEach(cell => {
+            cell.classList.remove("blocked-date");
+        });
+        
+        // Mark blocked dates
+        blockedDates.forEach(date => {
+            dateCells.forEach(cell => {
+                const cellDate = cell.getAttribute("aria-label");
+                if (cellDate && cellDate === formatDate(date)) {
+                    cell.classList.add("blocked-date");
+                }
+            });
+        });
+    }
+    
+    // Format date to match flatpickr format
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const months = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+    }
+    
+    // Block date button click
+    blockBtn.addEventListener("click", function() {
+        const selectedDate = calendar.selectedDates[0];
+        if (selectedDate) {
+            const formattedDate = formatDateForDB(selectedDate);
+            blockDate(formattedDate);
+        } else {
+            alert("Please select a date to block");
+        }
+    });
+    
+    // Unblock date button click
+    unblockBtn.addEventListener("click", function() {
+        const selectedDate = calendar.selectedDates[0];
+        if (selectedDate) {
+            const formattedDate = formatDateForDB(selectedDate);
+            unblockDate(formattedDate);
+        } else {
+            alert("Please select a date to unblock");
+        }
+    });
+    
+    // Update calendar button click
+    updateBtn.addEventListener("click", function() {
+        // Reload blocked dates from the server
+        loadBlockedDates();
+        alert("Calendar updated successfully");
+    });
+    
+    // Format date for database (YYYY-MM-DD)
+    function formatDateForDB(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
+    // Function to block a date
+    function blockDate(date) {
+        const formData = new FormData();
+        formData.append('action', 'block');
+        formData.append('date', date);
+        
+        fetch('Admin_CalendarFunctions.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Add to local blocked dates array if not already there
+                if (!blockedDates.includes(date)) {
+                    blockedDates.push(date);
+                }
+                updateCalendarDisplay();
+                alert("Date blocked successfully");
+            } else {
+                alert("Failed to block date: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error blocking date:", error);
+            alert("An error occurred while blocking the date");
+        });
+    }
+    
+    // Function to unblock a date
+    function unblockDate(date) {
+        const formData = new FormData();
+        formData.append('action', 'unblock');
+        formData.append('date', date);
+        
+        fetch('Admin_CalendarFunctions.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove from local blocked dates array
+                blockedDates = blockedDates.filter(d => d !== date);
+                updateCalendarDisplay();
+                alert("Date unblocked successfully");
+            } else {
+                alert("Failed to unblock date: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error unblocking date:", error);
+            alert("An error occurred while unblocking the date");
+        });
+    }
+    
+    // Open modal
+    img.onclick = function() {
+        modal.style.display = "flex";
+        loadBlockedDates(); // Refresh dates when opening
+    }
+    
+    // Close modal
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+});
 </script>
 
 </html>

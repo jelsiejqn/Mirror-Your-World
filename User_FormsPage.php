@@ -58,7 +58,13 @@
         $booked_dates[] = $row['appointment_date'];
         $booked_slots[$row['appointment_date']][] = $row['appointment_time'];
     }
-
+// Fetch completely blocked dates
+$blocked_dates = [];
+$blocked_query = "SELECT blocked_date FROM blocked_dates";
+$blocked_result = $conn->query($blocked_query);
+while ($row = $blocked_result->fetch_assoc()) {
+    $blocked_dates[] = $row['blocked_date'];
+}
     // Check if form is submitted
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $_SESSION['user_id'];
@@ -375,6 +381,34 @@
   `;
             document.head.appendChild(style);
         });
+
+        // JavaScript to handle date blocking
+document.addEventListener('DOMContentLoaded', function() {
+    // Store blocked dates from PHP
+    const blockedDates = <?php echo json_encode($blocked_dates); ?>;
+    
+    const dateInput = document.getElementById('appointment-date');
+    
+    // Set min date to today
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+    
+    // Disable blocked dates when user clicks on the date input
+    dateInput.addEventListener('input', function() {
+        const selectedDate = this.value;
+        if (blockedDates.includes(selectedDate)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Date Unavailable',
+                text: 'This date is not available for booking. Please select another date.',
+                confirmButtonText: 'OK'
+            });
+            this.value = ''; // Clear the selection
+        }
+    });
+});
     </script>
 
 </body>
