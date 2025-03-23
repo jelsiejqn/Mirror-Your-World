@@ -16,10 +16,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirmpassword']);
 
+    // Validate inputs
+    $validation_error = false;
+
+    // Validate names (letters and spaces only)
+    if (!preg_match("/^[a-zA-Z ]+$/", $first_name)) {
+        $error_message = "First name should contain only letters and spaces.";
+        $validation_error = true;
+    } elseif (!preg_match("/^[a-zA-Z ]+$/", $last_name)) {
+        $error_message = "Last name should contain only letters and spaces.";
+        $validation_error = true;
+    }
+    // Validate email format
+    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Please enter a valid email address.";
+        $validation_error = true;
+    }
+    // Validate username (alphanumeric and underscore, 4-20 characters)
+    elseif (!preg_match("/^[a-zA-Z0-9_]{4,20}$/", $username)) {
+        $error_message = "Username must be 4-20 characters and contain only letters, numbers, and underscores.";
+        $validation_error = true;
+    }
+    // Validate contact number (exactly 11 digits)
+    elseif (!preg_match("/^[0-9]{11}$/", $contact_number)) {
+        $error_message = "Contact number should contain exactly 11 digits.";
+        $validation_error = true;
+    }
+    // Validate password strength (at least 8 characters, with at least one uppercase, one lowercase, and one number)
+    elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password)) {
+        $error_message = "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.";
+        $validation_error = true;
+    }
     // Check if passwords match
-    if ($password !== $confirm_password) {
+    elseif ($password !== $confirm_password) {
         $error_message = "Passwords do not match. Please try again.";
-    } else {
+        $validation_error = true;
+    }
+
+    // If no validation errors, proceed with registration
+    if (!$validation_error) {
         // Check if username or email already exists in the database
         $check_query = "SELECT * FROM userstbl WHERE username = ? OR email = ?";
         $stmt = mysqli_prepare($conn, $check_query);
@@ -51,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // Execute the log query
                 if (mysqli_stmt_execute($stmt)) {
-                    // Instead of showing a success message in HTML, set the flag for SweetAlert
+                    // Set the flag for SweetAlert
                     $success_message = "Registration successful!";
                 } else {
                     $error_message = "Error logging action: " . mysqli_error($conn);
@@ -68,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_close($conn);
 }
 ?>
-
 <!-- HTML Form for the User Signup -->
 <html lang="en">
 
@@ -185,6 +219,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             }
         };
+
+        // Client-side validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                const fname = document.getElementById('fname').value.trim();
+                const lname = document.getElementById('lname').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const username = document.getElementById('username').value.trim();
+                const contactno = document.getElementById('contactno').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmpassword = document.getElementById('confirmpassword').value;
+                
+                // Clear previous error messages
+                const errorDiv = document.querySelector('.error-message');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+                
+                // Validate first name (letters and spaces only)
+                if (!/^[a-zA-Z ]+$/.test(fname)) {
+                    showError("First name should contain only letters and spaces.");
+                    isValid = false;
+                }
+                // Validate last name (letters and spaces only)
+                else if (!/^[a-zA-Z ]+$/.test(lname)) {
+                    showError("Last name should contain only letters and spaces.");
+                    isValid = false;
+                }
+                // Validate email format
+                else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+                    showError("Please enter a valid email address.");
+                    isValid = false;
+                }
+                // Validate username (alphanumeric and underscore, 4-20 characters)
+                else if (!/^[a-zA-Z0-9_]{4,20}$/.test(username)) {
+                    showError("Username must be 4-20 characters and contain only letters, numbers, and underscores.");
+                    isValid = false;
+                }
+                // Validate contact number (exactly 11 digits)
+                else if (!/^[0-9]{11}$/.test(contactno)) {
+                    showError("Contact number should contain exactly 11 digits.");
+                    isValid = false;
+                }
+                // Validate password strength
+                else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+                    showError("Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.");
+                    isValid = false;
+                }
+                // Check if passwords match
+                else if (password !== confirmpassword) {
+                    showError("Passwords do not match. Please try again.");
+                    isValid = false;
+                }
+                
+                // Prevent form submission if validation fails
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+            
+            // Function to show error messages
+            function showError(message) {
+                const loginDiv = document.querySelector('.loginDiv');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.style.color = 'red';
+                errorDiv.textContent = message;
+                loginDiv.appendChild(errorDiv);
+            }
+        });
 
         <?php if ($success_message) { ?>
             Swal.fire({
