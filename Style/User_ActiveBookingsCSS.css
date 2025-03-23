@@ -97,8 +97,21 @@ body {
    
 }
 
+.reviewtitle {
+    font-size: 2vw;
+    font-family: nexa;
+    color: #333;
+}
+
+.reviewdesc {
+    font-size: 1vw;
+    font-family: louis;
+    color: #656565;
+}
+
 .content h2 {
-    font-size: 28px;
+    font-size: 2vw;
+    font-family: louis;
     margin-bottom: 20px;
     color: #333;
     font-weight: 700;
@@ -206,8 +219,9 @@ select {
     padding: 0.5vw;
 }
 
-
 .booking-container {
+    min-width: 100%;
+    max-width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin-bottom: 10px;
@@ -257,16 +271,116 @@ h5 {
         border: none;
         border-radius: 20px;
         padding: 10px 20px; /* Adjust padding for size */
-        background-color: rgb(119, 119, 119);
-        font-size: 1em; /* Use 'em' for relative sizing, 1em is usually the default font size */
+        background-color:  rgb(63, 128, 63);
+        font-size: 1vw; /* Use 'em' for relative sizing, 1em is usually the default font size */
         cursor: pointer;
     }
     
     
     .review-button:hover {
+     
         opacity: 75%;
         transition: 0.3s ease;
     }
+
+    .submit-rev-btn {
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px; /* Adjust padding for size */
+        background-color:  rgb(63, 128, 63);
+        font-size: 1vw; /* Use 'em' for relative sizing, 1em is usually the default font size */
+        cursor: pointer;
+    }
+    
+    
+    .submit-rev-btn:hover {
+   
+        opacity: 75%;
+        transition: 0.3s ease;
+    }
+
+ /* Modal Styling */
+ #reviewModal {
+    border-radius: 20px;
+    padding: 0vw;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none; /* Ensure it stays hidden */
+    justify-content: center;
+    align-items: center;
+}
+
+
+.review-modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    top :-10;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+/* Close Button */
+.close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-family: louis;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    font-family: louis;
+}
+
+.review-modal-content input {
+    padding: 5px;
+}
+
+#rating {
+    width: 10%;
+    border-radius: 30px;
+    font-size: 2vw;
+}
+
+.submit-rev-btn {
+    font-size: 1vw;
+    font-family: louis;
+    display: block;
+    width: 40%;
+    padding: 20px;
+    background-color: #378e4b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.submit-rev-btn:hover {
+    opacity: 75%;
+    transition: 0.3s ease-in-out
+}
     
     
 

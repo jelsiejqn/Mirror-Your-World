@@ -167,7 +167,7 @@ $conn->close();
                                     </td>
                                 </tr>
                             </table>
-                            <br>
+
                         <?php endwhile; ?>
                     <?php else: ?>
                         <h5>No pending bookings found.</h5>
@@ -197,27 +197,32 @@ $conn->close();
                     <?php if ($confirmedBookings->num_rows > 0): ?>
                         <?php while ($row = $confirmedBookings->fetch_assoc()): ?>
                             <table class="booking-container">
+
                                 <tr>
                                     <td class="td-date">
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
                                         <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?><br>
-                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?><br>
-                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
+                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?>
+                                        </h5>
                                     </td>
                                     <td class="td-booker">
                                         <h5>Name: <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?><br>
                                             Email: <?= htmlspecialchars($row['email']) ?><br>
-                                            Contact Number: <?= htmlspecialchars($row['contact_number']) ?></h5>
+                                            Contact Number: <?= htmlspecialchars($row['contact_number']) ?>
+                                        </h5>
                                     </td>
-
                                     <td class="td-buttons">
                                         <img src="Assets/icon_check.png" class="completed-icon">
                                     </td>
                                 </tr>
+
+
                             </table>
-                            <br>
+
+
                         <?php endwhile; ?>
                     <?php else: ?>
                         <h5>No confirmed bookings found.</h5>
@@ -243,15 +248,16 @@ $conn->close();
                 <br>
 
                 <center>
-                    <table class="booking-container">
-                        <?php if ($pastBookings->num_rows > 0): ?>
-                            <?php while ($row = $pastBookings->fetch_assoc()): ?>
+
+                    <?php if ($pastBookings->num_rows > 0): ?>
+                        <?php while ($row = $pastBookings->fetch_assoc()): ?>
+                            <table class="booking-container">
                                 <tr>
                                     <td class="td-date">
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
-                                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?>
+                                        <h5>Consultation Type: <?php echo htmlspecialchars($row['consultation_type']); ?> <br>
                                             Time of Appointment: <?php echo htmlspecialchars($row['appointment_time']); ?><br>
                                             Site of Appointment: <br> <?php echo htmlspecialchars($row['address']); ?></h5>
                                     </td>
@@ -276,35 +282,41 @@ $conn->close();
                         <?php else: ?>
                             <h5>No past bookings found.</h5>
                         <?php endif; ?>
-                    </table>
+                            </table>
                 </center>
             </div>
 
-            <div id="reviewModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;">
-                <div style="background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
-                    <span class="close" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-                    <h2>Add Review</h2>
-                    <form id="reviewForm" method="post" action="submit_review.php">
-                        <input type="hidden" id="appointmentId" name="appointment_id" value="">
-                        <input type="hidden" id="userId" name="user_id" value="">
-                        <input type="hidden" id="reviewerFirstName" name="reviewer_first_name" value="">
-                        <input type="hidden" id="reviewerLastName" name="reviewer_last_name" value="">
+            <!-- Review Modal -->
+            <div id="reviewModal">
+                <div class="review-modal-content">
+                    <span class="close">&times;</span>
+                    <center>
+                        <p class="reviewtitle">Mirror Your World</h2>
+                        <h3 class="reviewdesc">Please leave a review! This helps us improve our services.</h3>
+                        <form id="reviewForm" method="post" action="submit_review.php">
+                            <input type="hidden" id="appointmentId" name="appointment_id" value="">
+                            <input type="hidden" id="userId" name="user_id" value="">
+                            <input type="hidden" id="reviewerFirstName" name="reviewer_first_name" value="">
+                            <input type="hidden" id="reviewerLastName" name="reviewer_last_name" value="">
 
-                        <div style="margin-bottom: 15px;">
-                            <label for="rating" style="display: block;">Rating (1-5):</label><br>
-                            <input type="number" id="rating" name="rating" min="1" max="5" required style="width: 100%;">
-                        </div>
+                            <div class="form-group">
+                                <center>
+                                    <label for="rating">Rating (1-5):</label><br>
 
-                        <div style="margin-bottom: 20px;">
-                            <label for="comment" style="display: block;">Comment:</label><br>
-                            <textarea id="comment" name="comment" rows="5" required style="width: 100%;"></textarea>
-                        </div>
+                                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+                                </center>
+                            </div>
 
-                        <input type="submit" value="Submit Review" style="background-color:rgb(165, 166, 165); color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%;">
-                    </form>
+                            <div class="form-group">
+                                <label for="comment">Comment:</label><br>
+                                <textarea id="comment" name="comment" rows="5" required></textarea>
+                            </div>
+
+                            <center>
+                                <input type="submit" value="Submit Review" class="submit-rev-btn">
+                        </form>
                 </div>
             </div>
-
 
             <!-- Cancelled -->
             <div class="section" id="cancelled" style="display: none;">
@@ -332,9 +344,10 @@ $conn->close();
                                         <h1><?php echo date('M d Y', strtotime($row['appointment_date'])); ?></h1>
                                     </td>
                                     <td class="td-details">
-                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?><br>
-                                            Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?><br>
-                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?></h5>
+                                        <h5>Consultation Type: <?= htmlspecialchars($row['consultation_type']) ?>
+                                            <br> Time of Appointment: <?= date('h:i A', strtotime($row['appointment_time'])) ?> <br>
+                                            Site of Appointment: <br> <?= htmlspecialchars($row['address']) ?>
+                                        </h5>
                                     </td>
                                     <td class="td-booker">
                                         <h5>Reason for Cancellation</h5>
