@@ -475,6 +475,53 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
+// Function to sort bookings based on the selected option
+function sortBookings() {
+    // Get the selected sort option (highest or lowest rating)
+    const sortOption = document.getElementById('sortByDropdown').value;
+    
+    // Get all booking containers
+    const bookingContainers = Array.from(document.querySelectorAll('.booking-container'));
+    
+    // Get the parent element containing all booking containers
+    const parentElement = bookingContainers[0].parentNode;
+    
+    // Sort the booking containers based on the rating
+    bookingContainers.sort(function(a, b) {
+        // Extract rating values from each container
+        const ratingA = parseFloat(a.querySelector('.td-satisfaction center').textContent.trim());
+        const ratingB = parseFloat(b.querySelector('.td-satisfaction center').textContent.trim());
+        
+        // Sort based on the selected option
+        if (sortOption === 'recent') { // Highest rating first
+            return ratingB - ratingA;
+        } else if (sortOption === 'oldest') { // Lowest rating first
+            return ratingA - ratingB;
+        }
+        
+        return 0;
+    });
+    
+    // Clear the parent element
+    while (parentElement.firstChild) {
+        parentElement.removeChild(parentElement.firstChild);
+    }
+    
+    // Re-append the sorted booking containers
+    bookingContainers.forEach(function(container, index) {
+        // Update the review number (first column)
+        container.querySelector('.td-date h1').textContent = index + 1;
+        parentElement.appendChild(container);
+    });
+}
+
+// Ensure the function runs when the page loads to apply default sorting
+document.addEventListener('DOMContentLoaded', function() {
+    // Sort by highest rating by default
+    document.getElementById('sortByDropdown').value = 'recent';
+    sortBookings();
+});
 </script>
 
 
