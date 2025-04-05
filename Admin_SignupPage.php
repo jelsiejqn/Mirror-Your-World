@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("sssss", $first_name, $last_name, $username, $email, $password_hash);
 
             if ($stmt->execute()) {
-                header("Location: Admin_LoginPage.php?success=1"); // Redirect to login page
+                header("Location: Admin_AppointmentsPage.php"); // Redirect to appointments page
                 exit();
             } else {
                 $error_message = "Registration failed. Please try again.";
@@ -58,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Admin_LoginPageCSS.css" />
+
+    
 </head>
 
 <body>
@@ -129,10 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <button class="btn_login" type="submit" name="action">
-                        Sign-Up
+                        Add Admin
                     </button>
-
-                    <p class="existingacc"> Already an admin? <a href="Admin_LoginPage.php" class="a1"> Login</a> </p>
 
                     <br /><br />
 

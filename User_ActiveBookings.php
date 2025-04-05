@@ -216,6 +216,11 @@ $conn->close();
                                     </td>
                                     <td class="td-buttons">
                                         <img src="Assets/icon_check.png" class="completed-icon">
+                                        <div class="download-options">
+                                            <a href="generate_pdf.php?type=details&id=<?= $row['appointment_id'] ?>" class="download-btn">
+                                                <img src="Assets/icon_download.png" class="download-icon" title="Download Details">
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -230,25 +235,24 @@ $conn->close();
                 </center>
             </div>
 
-
-            <!-- Past Bookings -->
-            <div class="section" id="past-bookings" style="display: none;">
-                <h2>Completed Bookings</h2>
-                <table class="sortby-container">
-                    <tr>
-                        <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
-                                <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <br>
+        <!-- Past Bookings -->
+        <div class="section" id="past-bookings" style="display: none;">
+            <h2>Completed Bookings</h2>
+            
+            <table class="sortby-container">
+                <tr>
+                    <td>
+                        <select id="sortByDropdown" onchange="sortBookings()">
+                            <option value="recent">Sort by</option>
+                            <option value="recent">Most Recent</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <br>
 
                 <center>
-
                     <?php if ($pastBookings->num_rows > 0): ?>
                         <?php while ($row = $pastBookings->fetch_assoc()): ?>
                             <table class="booking-container">
@@ -275,6 +279,11 @@ $conn->close();
                                             data-last-name="<?= htmlspecialchars($row['last_name']) ?>">
                                             Review
                                         </button>
+                                        <div class="download-options">
+                                            <a href="generate_pdf.php?type=receipt&id=<?= $row['appointment_id'] ?>" class="download-btn">
+                                                <img src="Assets/icon_receipt.png" class="download-icon" title="Download Receipt">
+                                            </a>
+                                        </div>
                                     </td>
                                     </td>
                                 </tr>

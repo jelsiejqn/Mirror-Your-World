@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,14 +9,16 @@
     <link rel="stylesheet" href="Style/Required.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
-
     <?php
     session_start();
+
+    // Include necessary files
+    require_once 'User_EmailFunctions.php';
+    include 'dbconnect.php';
 
     // Check if the user is logged in
     if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
@@ -23,9 +26,9 @@
         exit;
     }
 
-    include 'dbconnect.php';
     $user_id = $_SESSION['user_id'];
 
+    // Get user data
     $query = "SELECT first_name, last_name, email, company_name, contact_number, username, profile_picture FROM userstbl WHERE user_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $user_id);
@@ -46,7 +49,18 @@
         exit;
     }
 
+    // Display OTP form if OTP was previously sent
+    if (isset($_SESSION['password_otp'])) {
+        echo "<script>
+            window.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('otp-form').style.display = 'block';
+            });
+        </script>";
+    }
+
+    // Process form submissions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Update basic info
         if (isset($_POST['update_basic_info'])) {
             $first_name = $_POST['first_name'];
             $last_name = $_POST['last_name'];
@@ -60,6 +74,7 @@
             if ($stmt->execute()) showAlert('Your information has been updated successfully.');
         }
 
+        // Update username
         if (isset($_POST['update_username'])) {
             $new_username = $_POST['new_username'];
             $update_username_query = "UPDATE userstbl SET username = ? WHERE user_id = ?";
@@ -68,34 +83,8 @@
             if ($stmt->execute()) showAlert('Your username has been updated successfully.');
         }
 
-        if (isset($_POST['update_password'])) {
-            $current_password = $_POST['current_password'];
-            $new_password = $_POST['new_password'];
-            $confirm_password = $_POST['confirm_password'];
-
-            if ($new_password === $confirm_password) {
-                $password_check_query = "SELECT password FROM userstbl WHERE user_id = ?";
-                $stmt = $conn->prepare($password_check_query);
-                $stmt->bind_param('i', $user_id);
-                $stmt->execute();
-                $stmt->bind_result($stored_password);
-                $stmt->fetch();
-
-                if (password_verify($current_password, $stored_password)) {
-                    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-                    $update_password_query = "UPDATE userstbl SET password = ? WHERE user_id = ?";
-                    $stmt = $conn->prepare($update_password_query);
-                    $stmt->bind_param('si', $hashed_password, $user_id);
-                    if ($stmt->execute()) showAlert('Your password has been updated successfully.');
-                } else {
-                    echo "<script>Swal.fire('Error', 'Current password is incorrect!', 'error');</script>";
-                }
-            } else {
-                echo "<script>Swal.fire('Error', 'New passwords do not match!', 'error');</script>";
-            }
-        }
-
-        if (isset($_FILES['profile_picture'])) {
+        // Update profile picture
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['name'] != '') {
             $profile_picture = $_FILES['profile_picture']['name'];
             $target_dir = "uploads/";
             $target_file = $target_dir . basename($profile_picture);
@@ -115,6 +104,88 @@
                 $stmt = $conn->prepare($update_picture_query);
                 $stmt->bind_param('si', $target_file, $user_id);
                 if ($stmt->execute()) showAlert('Your profile picture has been updated successfully.');
+            }
+        }
+
+        // Password change request
+        if (isset($_POST['request_password_change'])) {
+            $current_password = $_POST['current_password'];
+            $new_password = $_POST['new_password'];
+            $confirm_password = $_POST['confirm_password'];
+
+            if ($new_password === $confirm_password) {
+                // Verify current password
+                $password_check_query = "SELECT password, email FROM userstbl WHERE user_id = ?";
+                $stmt = $conn->prepare($password_check_query);
+                $stmt->bind_param('i', $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user_data = $result->fetch_assoc();
+                $stored_password = $user_data['password'];
+                $user_email = $user_data['email'];
+
+                if (password_verify($current_password, $stored_password)) {
+                    // Generate OTP
+                    $otp = sprintf("%06d", mt_rand(100000, 999999));
+                    
+                    // Store OTP in session
+                    $_SESSION['password_otp'] = $otp;
+                    $_SESSION['password_otp_time'] = time();
+                    $_SESSION['new_password'] = $new_password;
+                    
+                    // Send OTP email
+                    try {
+                        sendOTPEmail($user_email, $otp, true);
+                        echo "<script>
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'OTP Sent',
+                                text: 'Please check your email for the OTP code.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                document.getElementById('otp-form').style.display = 'block';
+                                document.getElementById('hidden_new_password').value = '" . htmlspecialchars($new_password, ENT_QUOTES) . "';
+                            });
+                        </script>";
+                    } catch (Exception $e) {
+                        echo "<script>Swal.fire('Error', 'Failed to send OTP email. Please try again.', 'error');</script>";
+                    }
+                } else {
+                    echo "<script>Swal.fire('Error', 'Current password is incorrect!', 'error');</script>";
+                }
+            } else {
+                echo "<script>Swal.fire('Error', 'New passwords do not match!', 'error');</script>";
+            }
+        }
+
+        // OTP verification
+        if (isset($_POST['verify_otp'])) {
+            $entered_otp = $_POST['otp'];
+            $stored_otp = $_SESSION['password_otp'] ?? '';
+            $otp_time = $_SESSION['password_otp_time'] ?? 0;
+            $new_password = $_SESSION['new_password'] ?? '';
+            
+            // Check if OTP is valid and not expired (10 minute expiry)
+            if ($entered_otp === $stored_otp && (time() - $otp_time) <= 600) {
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $update_password_query = "UPDATE userstbl SET password = ? WHERE user_id = ?";
+                $stmt = $conn->prepare($update_password_query);
+                $stmt->bind_param('si', $hashed_password, $user_id);
+                
+                if ($stmt->execute()) {
+                    // Clear OTP session data
+                    unset($_SESSION['password_otp']);
+                    unset($_SESSION['password_otp_time']);
+                    unset($_SESSION['new_password']);
+                    
+                    showAlert('Your password has been updated successfully.');
+                }
+            } else {
+                if ((time() - $otp_time) > 600) {
+                    echo "<script>Swal.fire('Error', 'OTP has expired. Please request a new one.', 'error');</script>";
+                } else {
+                    echo "<script>Swal.fire('Error', 'Invalid OTP. Please try again.', 'error');</script>";
+                }
             }
         }
     }
@@ -169,7 +240,18 @@
                     <div>
                         <h3><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></h3>
                         <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
-                        <h3><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></h3>
+                        <h3><strong>Email:</strong> <?php 
+                            $email = $user['email'];
+                            $email_parts = explode('@', $email);
+                            $username = $email_parts[0];
+                            $domain = $email_parts[1];
+                            
+                            // Show first 2 characters, then asterisks, then last character of username
+                            $masked_username = substr($username, 0, 2) . str_repeat('*', strlen($username) - 3) . substr($username, -1);
+                            $masked_email = $masked_username . '@' . $domain;
+                            
+                            echo htmlspecialchars($masked_email); 
+                        ?></h3>
                         <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
                         <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
                     </div>
@@ -224,44 +306,70 @@
                 <h2>Change Password</h2>
                 <form action="User_AccountPage.php" method="POST">
                     <label for="current_password">Current Password</label>
-                    <input type="password" id="current_password" name="current_password">
+                    <input type="password" id="current_password" name="current_password" required>
 
                     <label for="new_password">New Password</label>
-                    <input type="password" id="new_password" name="new_password">
+                    <input type="password" id="new_password" name="new_password" required>
 
                     <label for="confirm_password">Confirm New Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password">
+                    <input type="password" id="confirm_password" name="confirm_password" required>
 
                     <br> <br>
-                    <button type="submit" name="update_password">Update Password</button>
+                    <button type="submit" name="request_password_change">Request Password Change</button>
+                </form>
+                
+                <!-- OTP verification form (initially hidden) -->
+                <form action="User_AccountPage.php" method="POST" id="otp-form" style="display: none; margin-top: 20px;">
+                    <h3>Verify Email OTP</h3>
+                    <p>An OTP has been sent to your email address. Please enter it below to complete your password change.</p>
+                    <label for="otp">Enter OTP Code</label>
+                    <input type="text" id="otp" name="otp" required>
+                    <input type="hidden" name="new_password" id="hidden_new_password">
+                    
+                    <br> <br>
+                    <button type="submit" name="verify_otp">Verify & Update Password</button>
                 </form>
             </div>
+
         </div>
     </div>
+
+    <script>
+        // Function to toggle the visibility of the dropdown content
+        function toggleDropdown() {
+            var dropdown = document.getElementById('dropdown1');
+            // Toggle the display of the dropdown menu
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        // Close the dropdown if the user clicks anywhere outside the dropdown
+        window.onclick = function(event) {
+            // Check if the click is outside the dropdown or icon
+            if (!event.target.matches('.dropdown-trigger') && !event.target.matches('.dropdown-trigger img')) {
+                var dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(function(dropdown) {
+                    dropdown.style.display = 'none'; // Close the dropdown
+                });
+            }
+        };
+        
+        // Document ready function
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show OTP form if needed (server-side check)
+            <?php if(isset($_SESSION['password_otp'])): ?>
+            document.getElementById('otp-form').style.display = 'block';
+            <?php endif; ?>
+            
+            // Clear the password fields when the page loads
+            document.getElementById('current_password').value = '';
+            document.getElementById('new_password').value = '';
+            document.getElementById('confirm_password').value = '';
+        });
+    </script>
 </body>
-
-<script>
-    // Function to toggle the visibility of the dropdown content
-    function toggleDropdown() {
-        var dropdown = document.getElementById('dropdown1');
-        // Toggle the display of the dropdown menu
-        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
-            dropdown.style.display = 'block';
-        } else {
-            dropdown.style.display = 'none';
-        }
-    }
-
-    // Close the dropdown if the user clicks anywhere outside the dropdown
-    window.onclick = function(event) {
-        // Check if the click is outside the dropdown or icon
-        if (!event.target.matches('.dropdown-trigger') && !event.target.matches('.dropdown-trigger img')) {
-            var dropdowns = document.querySelectorAll('.dropdown-content');
-            dropdowns.forEach(function(dropdown) {
-                dropdown.style.display = 'none'; // Close the dropdown
-            });
-        }
-    };
-</script>
 
 </html>
