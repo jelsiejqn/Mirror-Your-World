@@ -16,6 +16,7 @@ $result_clients = $conn->query($sql_clients);
 $sql_reviews = "SELECT r.*, u.first_name, u.last_name, u.profile_picture
                 FROM reviewstbl r
                 JOIN userstbl u ON r.user_id = u.user_id
+                WHERE r.approved = 1  -- Only select approved reviews
                 ORDER BY r.review_date DESC";
 
 $result_reviews = $conn->query($sql_reviews);

@@ -1,32 +1,64 @@
 <?php
 require "dbconnect.php";
 
-$sql = "SELECT 
-            r.review_id,
-            u.username,
-            r.rating,
-            r.comment,
-            r.review_date
-        FROM 
-            reviewstbl r
-        JOIN 
-            userstbl u ON r.user_id = u.user_id
-        ORDER BY 
-            r.rating DESC;";
-
-$result = $conn->query($sql);
-
-if (!$result) {
-    die("Error executing query: " . $conn->error);
+// Handle show/hide actions
+if (isset($_POST['action']) && isset($_POST['review_id'])) {
+    $review_id = $_POST['review_id'];
+    $action = $_POST['action'];
+    
+    if ($action === 'show') {
+        $update_sql = "UPDATE reviewstbl SET approved = 1 WHERE review_id = ?";
+    } else if ($action === 'hide') {
+        $update_sql = "UPDATE reviewstbl SET approved = 0 WHERE review_id = ?";
+    }
+    
+    $stmt = $conn->prepare($update_sql);
+    $stmt->bind_param("i", $review_id);
+    $stmt->execute();
+    $stmt->close();
+    
+    // Redirect to prevent form resubmission
+    header("Location: Admin_ReviewsPage.php");
+    exit();
 }
 
-// Check if there are any reviews
-if ($result->num_rows > 0) {
-    // Data will be fetched and used in the HTML below
-} else {
-    echo "No reviews found.";
+// Base SQL for all queries
+$base_sql = "SELECT 
+                r.review_id,
+                u.username,
+                r.rating,
+                r.comment,
+                r.review_date,
+                r.approved
+            FROM 
+                reviewstbl r
+            JOIN 
+                userstbl u ON r.user_id = u.user_id";
+
+// Query for all reviews
+$all_reviews_sql = $base_sql . " ORDER BY r.rating DESC;";
+
+// Query for hidden reviews
+$hidden_reviews_sql = $base_sql . " WHERE r.approved != 1 ORDER BY r.rating DESC;";
+
+// Query for shown reviews
+$shown_reviews_sql = $base_sql . " WHERE r.approved = 1 ORDER BY r.rating DESC;";
+
+// Execute the queries
+$all_reviews_result = $conn->query($all_reviews_sql);
+if (!$all_reviews_result) {
+    die("Error executing all reviews query: " . $conn->error);
 }
 
+$hidden_reviews_result = $conn->query($hidden_reviews_sql);
+if (!$hidden_reviews_result) {
+    die("Error executing hidden reviews query: " . $conn->error);
+}
+
+$shown_reviews_result = $conn->query($shown_reviews_sql);
+if (!$shown_reviews_result) {
+    die("Error executing shown reviews query: " . $conn->error);
+}
 ?>
 
 <html lang="en">
@@ -44,8 +76,60 @@ if ($result->num_rows > 0) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-
+    
+    <style>
+        .shown-tag {
+            background-color: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .hidden-tag {
+            background-color: #ff9800;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .show-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .hide-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .shown-review {
+            border-left: 4px solid #4CAF50 !important;
+        }
+        
+        .hidden-review {
+            border-left: 4px solid #ff9800 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -59,8 +143,6 @@ if ($result->num_rows > 0) {
         <a href="Admin_ReviewsPage.php">Reviews</a>
 
     </div>
-
-    <!-- Calendar -->
 
     <div class="logo">
         <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 30px; cursor: pointer;">
@@ -114,27 +196,29 @@ if ($result->num_rows > 0) {
         <!-- Sidebar (Options) -->
         <div class="sidebar">
             <h3>Dashboard</h3>
-            <a href="#" onclick="showContent('active-bookings')">Client Reviews</a>
+            <a href="#" onclick="showContent('active-bookings')" class="active">Client Reviews</a>
+            <a href="#" onclick="showContent('hidden-reviews')">Hidden Reviews</a>
+            <a href="#" onclick="showContent('shown-reviews')">Shown Reviews</a>
         </div>
 
         <!-- Main Content (Forms to edit) -->
         <div class="content">
 
-            <!-- Active Bookings -->
+            <!-- All Reviews -->
             <div class="section" id="active-bookings">
-                <h2>Client Reviews</h2>
-                <!-- Yung 12 hours pagitan na pwede silamagcancel both client and user -->
+                <h2>All Client Reviews</h2>
 
                 <table class="sortby-container">
                     <tr>
                         <td>
-                            <select id="sortByDropdown" onchange="sortBookings()">
+                            <select id="sortByDropdown" onchange="sortBookings('all')">
                                 <option value="recent">Sort by</option>
                                 <option value="recent">Highest</option>
                                 <option value="oldest">Lowest</option>
+                                <option value="hidden">Hidden</option>
+                                <option value="shown">Shown</option>
                             </select>
                         </td>
-
                     </tr>
                 </table>
                 <br>
@@ -142,11 +226,12 @@ if ($result->num_rows > 0) {
                 <center>
 
                     <?php
-                    if ($result->num_rows > 0) {
+                    if ($all_reviews_result->num_rows > 0) {
                         $review_count = 1;
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = $all_reviews_result->fetch_assoc()) {
+                            $reviewClass = $row["approved"] == 1 ? "shown-review" : "hidden-review";
                     ?>
-                            <table class="booking-container">
+                            <table class="booking-container <?php echo $reviewClass; ?>">
                                 <tr>
                                     <td class="td-date">
                                         <h1><?php echo $review_count; ?></h1>
@@ -156,6 +241,11 @@ if ($result->num_rows > 0) {
                                             <?php
                                             echo isset($row["username"]) ? $row["username"] : "Unknown User";
                                             ?>
+                                            <?php if ($row["approved"] == 1): ?>
+                                                <span class="shown-tag">Shown</span>
+                                            <?php else: ?>
+                                                <span class="hidden-tag">Hidden</span>
+                                            <?php endif; ?>
                                             <br>
                                         </h5>
                                     </td>
@@ -174,6 +264,18 @@ if ($result->num_rows > 0) {
                                         <h5>
                                             <?php echo $row["comment"]; ?>
                                         </h5>
+                                        <div class="action-buttons">
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="review_id" value="<?php echo $row["review_id"]; ?>">
+                                                <input type="hidden" name="action" value="show">
+                                                <button type="submit" class="show-btn">Show</button>
+                                            </form>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="review_id" value="<?php echo $row["review_id"]; ?>">
+                                                <input type="hidden" name="action" value="hide">
+                                                <button type="submit" class="hide-btn">Hide</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -200,14 +302,164 @@ if ($result->num_rows > 0) {
                         echo "No reviews found.";
                     }
                     ?>
-
-                    <!-- End Review Container -->
-
-
-
+                </center>
             </div>
 
+            <!-- Hidden Reviews -->
+            <div class="section" id="hidden-reviews" style="display: none;">
+                <h2>Hidden Reviews</h2>
+                <br>
+                <center>
+                    <?php
+                    if ($hidden_reviews_result->num_rows > 0) {
+                        $review_count = 1;
+                        while ($row = $hidden_reviews_result->fetch_assoc()) {
+                    ?>
+                            <table class="booking-container hidden-review">
+                                <tr>
+                                    <td class="td-date">
+                                        <h1><?php echo $review_count; ?></h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5>
+                                            <?php
+                                            echo isset($row["username"]) ? $row["username"] : "Unknown User";
+                                            ?>
+                                            <span class="hidden-tag">Hidden</span>
+                                            <br>
+                                        </h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>
+                                            <?php echo date('F j, Y', strtotime($row["review_date"])); ?>
+                                            <br>
+                                        </h5>
+                                    </td>
+                                    <td class="td-satisfaction">
+                                        <center>
+                                            <?php echo $row["rating"]; ?>
+                                        </center>
+                                    </td>
+                                    <td class="td-review">
+                                        <h5>
+                                            <?php echo $row["comment"]; ?>
+                                        </h5>
+                                        <div class="action-buttons">
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="review_id" value="<?php echo $row["review_id"]; ?>">
+                                                <input type="hidden" name="action" value="show">
+                                                <button type="submit" class="show-btn">Show</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-date"></td>
+                                    <td class="td-details">
+                                        <h6>Username</h6>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h6>Date</h6>
+                                    </td>
+                                    <td class="td-satisfaction">
+                                        <h6>Rating (1-5)</h6>
+                                    </td>
+                                    <td class="td-review">
+                                        <h6>Review</h6>
+                                    </td>
+                                </tr>
+                            </table>
+                    <?php
+                            $review_count++;
+                        }
+                        if ($review_count == 1) {
+                            echo "No hidden reviews found.";
+                        }
+                    } else {
+                        echo "No hidden reviews found.";
+                    }
+                    ?>
+                </center>
+            </div>
 
+            <!-- Shown Reviews -->
+            <div class="section" id="shown-reviews" style="display: none;">
+                <h2>Shown Reviews</h2>
+                <br>
+                <center>
+                    <?php
+                    if ($shown_reviews_result->num_rows > 0) {
+                        $review_count = 1;
+                        while ($row = $shown_reviews_result->fetch_assoc()) {
+                    ?>
+                            <table class="booking-container shown-review">
+                                <tr>
+                                    <td class="td-date">
+                                        <h1><?php echo $review_count; ?></h1>
+                                    </td>
+                                    <td class="td-details">
+                                        <h5>
+                                            <?php
+                                            echo isset($row["username"]) ? $row["username"] : "Unknown User";
+                                            ?>
+                                            <span class="shown-tag">Shown</span>
+                                            <br>
+                                        </h5>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h5>
+                                            <?php echo date('F j, Y', strtotime($row["review_date"])); ?>
+                                            <br>
+                                        </h5>
+                                    </td>
+                                    <td class="td-satisfaction">
+                                        <center>
+                                            <?php echo $row["rating"]; ?>
+                                        </center>
+                                    </td>
+                                    <td class="td-review">
+                                        <h5>
+                                            <?php echo $row["comment"]; ?>
+                                        </h5>
+                                        <div class="action-buttons">
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="review_id" value="<?php echo $row["review_id"]; ?>">
+                                                <input type="hidden" name="action" value="hide">
+                                                <button type="submit" class="hide-btn">Hide</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-date"></td>
+                                    <td class="td-details">
+                                        <h6>Username</h6>
+                                    </td>
+                                    <td class="td-booker">
+                                        <h6>Date</h6>
+                                    </td>
+                                    <td class="td-satisfaction">
+                                        <h6>Rating (1-5)</h6>
+                                    </td>
+                                    <td class="td-review">
+                                        <h6>Review</h6>
+                                    </td>
+                                </tr>
+                            </table>
+                    <?php
+                            $review_count++;
+                        }
+                        if ($review_count == 1) {
+                            echo "No shown reviews found.";
+                        }
+                    } else {
+                        echo "No shown reviews found.";
+                    }
+                    ?>
+                </center>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -246,47 +498,94 @@ if ($result->num_rows > 0) {
         if (activeSection) {
             activeSection.style.display = 'block';
         }
+
+        // Update active state in sidebar
+        var links = document.querySelectorAll('.sidebar a');
+        links.forEach(function(link) {
+            link.classList.remove('active');
+            if (link.getAttribute('onclick').includes(sectionId)) {
+                link.classList.add('active');
+            }
+        });
     }
 
-    function openModal() {
-        document.getElementById('cancelModal').classList.add('show');
-    }
-
-    function closeModal() {
-        document.getElementById('cancelModal').classList.remove('show');
-    }
-
-    function submitCancel() {
-        const selectedReason = document.querySelector('input[name="reason"]:checked');
-        if (selectedReason) {
-            alert('Cancellation reason submitted: ' + selectedReason.value);
-            closeModal();
-        } else {
-            alert('Please select a reason before submitting.');
+    // Function to sort bookings based on the selected option
+    function sortBookings(section = 'all') {
+        // Get the selected sort option
+        const sortOption = document.getElementById('sortByDropdown').value;
+        
+        // Determine which section to sort
+        let selector;
+        if (section === 'all') {
+            selector = '#active-bookings .booking-container';
+        } else if (section === 'hidden') {
+            selector = '#hidden-reviews .booking-container';
+        } else if (section === 'shown') {
+            selector = '#shown-reviews .booking-container';
         }
+        
+        // Get all booking containers for the selected section
+        const bookingContainers = Array.from(document.querySelectorAll(selector));
+        if (bookingContainers.length === 0) return;
+        
+        // Get the parent element containing all booking containers
+        const parentElement = bookingContainers[0].parentNode;
+        
+        // Sort the booking containers based on the criteria
+        bookingContainers.sort(function(a, b) {
+            // Extract values for sorting
+            const ratingA = parseFloat(a.querySelector('.td-satisfaction center').textContent.trim());
+            const ratingB = parseFloat(b.querySelector('.td-satisfaction center').textContent.trim());
+            const isShownA = a.classList.contains('shown-review');
+            const isShownB = b.classList.contains('shown-review');
+            
+            // Sort based on the selected option
+            if (sortOption === 'recent') { // Highest rating first
+                return ratingB - ratingA;
+            } else if (sortOption === 'oldest') { // Lowest rating first
+                return ratingA - ratingB;
+            } else if (sortOption === 'hidden') { // Hidden reviews first
+                return isShownA - isShownB;
+            } else if (sortOption === 'shown') { // Shown reviews first
+                return isShownB - isShownA;
+            }
+            
+            return 0;
+        });
+        
+        // Clear the parent element
+        while (parentElement.firstChild) {
+            parentElement.removeChild(parentElement.firstChild);
+        }
+        
+        // Re-append the sorted booking containers
+        bookingContainers.forEach(function(container, index) {
+            // Update the review number (first column)
+            container.querySelector('.td-date h1').textContent = index + 1;
+            parentElement.appendChild(container);
+        });
     }
 
-    // Calendar
-
+    // Calendar functionality (preserved from original)
     document.addEventListener("DOMContentLoaded", function() {
         const modal = document.getElementById("calntime-modal");
         const img = document.querySelector(".calntime-cal_img");
         const closeBtn = document.querySelector(".calntime-close");
-
+        
         flatpickr("#calntime-datepicker", {
             inline: true,
             enableTime: false,
             dateFormat: "Y-m-d"
         });
-
+        
         img.onclick = function() {
             modal.style.display = "flex";
         }
-
+        
         closeBtn.onclick = function() {
             modal.style.display = "none";
         }
-
+        
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -294,235 +593,11 @@ if ($result->num_rows > 0) {
         }
     });
 
-    
-    // Calendar functionality
-document.addEventListener("DOMContentLoaded", function() {
-    const modal = document.getElementById("calntime-modal");
-    const img = document.querySelector(".calntime-cal_img");
-    const closeBtn = document.querySelector(".calntime-close");
-    const blockBtn = document.getElementById("calntime-block");
-    const unblockBtn = document.getElementById("calntime-unblock");
-    const updateBtn = document.getElementById("calntime-update");
-    
-    // Store blocked dates
-    let blockedDates = [];
-    
-    // Initialize calendar
-    const calendar = flatpickr("#calntime-datepicker", {
-        inline: true,
-        enableTime: false,
-        dateFormat: "Y-m-d",
-        onReady: function() {
-            // Load blocked dates from the database
-            loadBlockedDates();
-        }
+    // Ensure the function runs when the page loads to apply default sorting
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sort by highest rating by default
+        document.getElementById('sortByDropdown').value = 'recent';
+        sortBookings('all');
     });
-    
-    // Function to load blocked dates from the database
-    function loadBlockedDates() {
-        fetch('get_blocked_dates.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    blockedDates = data.dates;
-                    updateCalendarDisplay();
-                } else {
-                    console.error("Failed to load blocked dates:", data.message);
-                }
-            })
-            .catch(error => console.error("Error loading blocked dates:", error));
-    }
-    
-    // Function to update the calendar display with blocked dates
-    function updateCalendarDisplay() {
-        // Get all date cells in the calendar
-        const dateCells = document.querySelectorAll(".flatpickr-day");
-        
-        // Reset all cells
-        dateCells.forEach(cell => {
-            cell.classList.remove("blocked-date");
-        });
-        
-        // Mark blocked dates
-        blockedDates.forEach(date => {
-            dateCells.forEach(cell => {
-                const cellDate = cell.getAttribute("aria-label");
-                if (cellDate && cellDate === formatDate(date)) {
-                    cell.classList.add("blocked-date");
-                }
-            });
-        });
-    }
-    
-    // Format date to match flatpickr format
-    function formatDate(dateStr) {
-        const date = new Date(dateStr);
-        const months = [
-            "January", "February", "March", "April", "May", "June", 
-            "July", "August", "September", "October", "November", "December"
-        ];
-        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-    }
-    
-    // Block date button click
-    blockBtn.addEventListener("click", function() {
-        const selectedDate = calendar.selectedDates[0];
-        if (selectedDate) {
-            const formattedDate = formatDateForDB(selectedDate);
-            blockDate(formattedDate);
-        } else {
-            alert("Please select a date to block");
-        }
-    });
-    
-    // Unblock date button click
-    unblockBtn.addEventListener("click", function() {
-        const selectedDate = calendar.selectedDates[0];
-        if (selectedDate) {
-            const formattedDate = formatDateForDB(selectedDate);
-            unblockDate(formattedDate);
-        } else {
-            alert("Please select a date to unblock");
-        }
-    });
-    
-    // Update calendar button click
-    updateBtn.addEventListener("click", function() {
-        // Reload blocked dates from the server
-        loadBlockedDates();
-        alert("Calendar updated successfully");
-    });
-    
-    // Format date for database (YYYY-MM-DD)
-    function formatDateForDB(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
-    // Function to block a date
-    function blockDate(date) {
-        const formData = new FormData();
-        formData.append('action', 'block');
-        formData.append('date', date);
-        
-        fetch('Admin_CalendarFunctions.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Add to local blocked dates array if not already there
-                if (!blockedDates.includes(date)) {
-                    blockedDates.push(date);
-                }
-                updateCalendarDisplay();
-                alert("Date blocked successfully");
-            } else {
-                alert("Failed to block date: " + data.message);
-            }
-        })
-        .catch(error => {
-            console.error("Error blocking date:", error);
-            alert("An error occurred while blocking the date");
-        });
-    }
-    
-    // Function to unblock a date
-    function unblockDate(date) {
-        const formData = new FormData();
-        formData.append('action', 'unblock');
-        formData.append('date', date);
-        
-        fetch('Admin_CalendarFunctions.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Remove from local blocked dates array
-                blockedDates = blockedDates.filter(d => d !== date);
-                updateCalendarDisplay();
-                alert("Date unblocked successfully");
-            } else {
-                alert("Failed to unblock date: " + data.message);
-            }
-        })
-        .catch(error => {
-            console.error("Error unblocking date:", error);
-            alert("An error occurred while unblocking the date");
-        });
-    }
-    
-    // Open modal
-    img.onclick = function() {
-        modal.style.display = "flex";
-        loadBlockedDates(); // Refresh dates when opening
-    }
-    
-    // Close modal
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-    
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-});
-
-// Function to sort bookings based on the selected option
-function sortBookings() {
-    // Get the selected sort option (highest or lowest rating)
-    const sortOption = document.getElementById('sortByDropdown').value;
-    
-    // Get all booking containers
-    const bookingContainers = Array.from(document.querySelectorAll('.booking-container'));
-    
-    // Get the parent element containing all booking containers
-    const parentElement = bookingContainers[0].parentNode;
-    
-    // Sort the booking containers based on the rating
-    bookingContainers.sort(function(a, b) {
-        // Extract rating values from each container
-        const ratingA = parseFloat(a.querySelector('.td-satisfaction center').textContent.trim());
-        const ratingB = parseFloat(b.querySelector('.td-satisfaction center').textContent.trim());
-        
-        // Sort based on the selected option
-        if (sortOption === 'recent') { // Highest rating first
-            return ratingB - ratingA;
-        } else if (sortOption === 'oldest') { // Lowest rating first
-            return ratingA - ratingB;
-        }
-        
-        return 0;
-    });
-    
-    // Clear the parent element
-    while (parentElement.firstChild) {
-        parentElement.removeChild(parentElement.firstChild);
-    }
-    
-    // Re-append the sorted booking containers
-    bookingContainers.forEach(function(container, index) {
-        // Update the review number (first column)
-        container.querySelector('.td-date h1').textContent = index + 1;
-        parentElement.appendChild(container);
-    });
-}
-
-// Ensure the function runs when the page loads to apply default sorting
-document.addEventListener('DOMContentLoaded', function() {
-    // Sort by highest rating by default
-    document.getElementById('sortByDropdown').value = 'recent';
-    sortBookings();
-});
 </script>
-
-
 </html>
