@@ -178,6 +178,12 @@ while ($row = $blocked_result->fetch_assoc()) {
         $stmt->close();
     }
 
+
+        $booked_slots_json = [];
+        foreach ($booked_slots as $date => $times) {
+            $booked_slots_json[$date] = $times;
+        }
+
     $conn->close();
     ?>
 
@@ -408,6 +414,173 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = ''; // Clear the selection
         }
     });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Store blocked dates and booked slots from PHP
+    const blockedDates = <?php echo json_encode($blocked_dates); ?>;
+    const bookedDates = <?php echo json_encode($booked_dates); ?>;
+    const bookedSlots = <?php echo json_encode($booked_slots); ?>;
+    
+    const dateInput = document.getElementById('appointment-date');
+    
+    // Set min date to tomorrow
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+    
+    // Add compact inline legend next to date input
+    const legendHTML = `
+        <div class="inline-legend">
+            <span class="legend-item"><span class="dot blocked"></span> Blocked</span>
+            <span class="legend-item"><span class="dot partial"></span> Partially Booked</span>
+            <span class="legend-item"><span class="dot available"></span> Available</span>
+        </div>
+    `;
+    
+    // Create a wrapper for date input and legend
+    const dateWrapper = document.createElement('div');
+    dateWrapper.className = 'date-legend-wrapper';
+    dateInput.parentNode.insertBefore(dateWrapper, dateInput);
+    dateWrapper.appendChild(dateInput);
+    
+    // Add legend after date input
+    const legendDiv = document.createElement('div');
+    legendDiv.innerHTML = legendHTML;
+    dateWrapper.appendChild(legendDiv);
+
+    // Add CSS for the compact legend
+    const legendStyle = document.createElement('style');
+    legendStyle.textContent = `
+        .date-legend-wrapper {
+            position: relative;
+        }
+        .inline-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 11px;
+            color: #555;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+        .dot.blocked {
+            background-color: #ff8888;
+        }
+        .dot.partial {
+            background-color: #ffc266;
+        }
+        .dot.available {
+            background-color: #88cc88;
+        }
+        
+        /* Date status indicator */
+        .date-status {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+        .date-status.blocked {
+            background-color: #ffcccc;
+            color: #dc3545;
+        }
+        .date-status.partial {
+            background-color: #ffe0b3;
+            color: #fd7e14;
+        }
+        .date-status.available {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+    `;
+    document.head.appendChild(legendStyle);
+    
+    // Create a status indicator element
+    const statusDiv = document.createElement('span');
+    statusDiv.className = 'date-status';
+    statusDiv.style.display = 'none';
+    dateInput.parentNode.insertBefore(statusDiv, dateInput.nextSibling);
+    
+    // Handle date selection
+    dateInput.addEventListener('change', function() {
+        const selectedDate = this.value;
+        
+        // Check if date is completely blocked
+        if (blockedDates.includes(selectedDate)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Date Unavailable',
+                text: 'This date is not available for booking.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#38853c'
+            });
+            this.value = ''; // Clear the selection
+            statusDiv.style.display = 'none';
+            return;
+        }
+        
+        // Update status indicator
+        statusDiv.style.display = 'inline-block';
+        if (bookedDates.includes(selectedDate)) {
+            statusDiv.className = 'date-status partial';
+            statusDiv.textContent = 'Some times booked';
+        } else {
+            statusDiv.className = 'date-status available';
+            statusDiv.textContent = 'All available';
+        }
+        
+        // Update time slots based on availability
+        updateTimeSlots(selectedDate);
+    });
+
+    // Function to update available time slots with visual indicators
+    function updateTimeSlots(selectedDate) {
+        const timeSelect = document.getElementById('time');
+        
+        // Default time slots
+        const allTimeSlots = [
+            { value: "09:00:00", display: "09:00 AM" },
+            { value: "12:00:00", display: "12:00 PM" },
+            { value: "15:00:00", display: "03:00 PM" },
+            { value: "18:00:00", display: "06:00 PM" }
+        ];
+        
+        // Reset the dropdown
+        timeSelect.innerHTML = '<option value="" disabled selected>Select Time</option>';
+        
+        // Get booked slots for the selected date
+        const dateBookedSlots = bookedSlots[selectedDate] || [];
+        
+        // Add time slots to dropdown
+        allTimeSlots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.value;
+            
+            // Check if this slot is booked
+            if (dateBookedSlots.includes(slot.value)) {
+                option.disabled = true;
+                option.textContent = `${slot.display} ⛔ (Booked)`;
+                option.style.color = '#999';
+            } else {
+                option.textContent = `${slot.display} ✓`;
+            }
+            
+            timeSelect.appendChild(option);
+        });
+    }
 });
     </script>
 
