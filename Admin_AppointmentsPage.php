@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $stmt->close();
 }
 
-$conn->close();
+
 
 if (isset($_SESSION['popup_message'])) {
     $message = htmlspecialchars($_SESSION['popup_message']);
@@ -398,7 +398,25 @@ if (isset($_SESSION['popup_message'])) {
                                             Contact: <?php echo $row['contact_number']; ?> </h5>
                                     </td>
                                     <td class="td-buttons">
-                                        <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
+                                        <?php
+                                        // Check if invoice already exists for this user/appointment
+                                        $invoice_check = $conn->prepare("SELECT invoice_id FROM invoicestbl WHERE user_id = ? ORDER BY created_at DESC LIMIT 1");
+                                        $invoice_check->bind_param("i", $row['user_id']);
+                                        $invoice_check->execute();
+                                        $invoice_result = $invoice_check->get_result();
+                                        $has_invoice = $invoice_result->num_rows > 0;
+                                        
+                                        if ($has_invoice) {
+                                            $invoice_data = $invoice_result->fetch_assoc();
+                                            ?>
+                                            <button class="btn-invoice-download" onclick="window.location.href='admin_invoice_pdf.php?invoice_id=<?php echo $invoice_data['invoice_id']; ?>'">Download Invoice</button>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
+                                            <?php
+                                        }
+                                        ?>
                                     </td>
                                 </tr>
                             </table>
@@ -501,7 +519,7 @@ if (isset($_SESSION['popup_message'])) {
             <h1 class="invoice-title">Mirror Your World <br>
                 <p class="invoice-sub">Create an Invoice for a Client <br> ------------------------------ Receipt ------------------------------</p>
             </h1>
-            <form method="POST" action="Admin_AppointmentsPage.php">
+            <form method="POST" action="admin_invoice_pdf.php" id="invoice-form">
                 <div class="invoice-info">
                     <label for="user-name">Client:</label>
                     <input type="text" id="user-name" disabled>
@@ -523,16 +541,51 @@ if (isset($_SESSION['popup_message'])) {
                     <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
                 </div>
                 <div class="invoice-modal-actions">
+                <div class="invoice-modal-actions">
                     <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-                    <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Send</button>
+                    <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Generate PDF</button>
+                </div>
                 </div><br>
                 <input type="hidden" id="invoice-user-id" name="user_id">
                 <input type="hidden" name="action" value="create_invoice_form">
+                <input type="hidden" name="generate_pdf" value="1">
             </form>
         </div>
     </div>
 
     <style>
+
+        /* PALITAN HERE */
+        .btn-invoice-download {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-invoice-download:hover {
+            background-color: #45a049;
+        }
+
+        .btn-invoice-create {
+            background-color: #2196F3;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-invoice-create:hover {
+            background-color: #0b7dda;
+        }
+        /* HANGGANG HERE */
         .popup {
             display: none;
             position: fixed;
