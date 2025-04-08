@@ -185,14 +185,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <button class="btn_login" type="submit" name="action" id="signup"> Sign Up </button>
                     <p class="existingacc"> Already have an account? <a href="User_LoginPage.php" class="a1"> Login. </a> </p>
+
+                    <!-- Display error or success messages -->
+                    <?php if (!empty($error_message)) { ?>
+                        <div class="error-message" style="color: red;">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php } ?>
+
                 </form>
 
-                <!-- Display error or success messages -->
-                <?php if (!empty($error_message)) { ?>
-                    <div class="error-message" style="color: red;">
-                        <?php echo $error_message; ?>
-                    </div>
-                <?php } ?>
+
 
             </div>
 
@@ -223,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Client-side validation
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('signupForm');
-            
+
             form.addEventListener('submit', function(event) {
                 let isValid = true;
                 const fname = document.getElementById('fname').value.trim();
@@ -233,13 +236,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 const contactno = document.getElementById('contactno').value.trim();
                 const password = document.getElementById('password').value;
                 const confirmpassword = document.getElementById('confirmpassword').value;
-                
+
                 // Clear previous error messages
                 const errorDiv = document.querySelector('.error-message');
                 if (errorDiv) {
                     errorDiv.remove();
                 }
-                
+
                 // Validate first name (letters and spaces only)
                 if (!/^[a-zA-Z ]+$/.test(fname)) {
                     showError("First name should contain only letters and spaces.");
@@ -275,13 +278,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     showError("Passwords do not match. Please try again.");
                     isValid = false;
                 }
-                
+
                 // Prevent form submission if validation fails
                 if (!isValid) {
                     event.preventDefault();
                 }
             });
-            
+
             // Function to show error messages
             function showError(message) {
                 const loginDiv = document.querySelector('.loginDiv');

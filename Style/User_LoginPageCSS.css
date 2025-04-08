@@ -3,6 +3,8 @@ body {
 }
 
 .loginForm {
+    max-height: 70vh;
+    max-width: 80vh;
     padding: 0.5vh;
     margin-top: 15vh;
     background-color: #f9f9f9;
@@ -12,6 +14,7 @@ body {
 
 .error {
     font-family: louis;
+    font-size: 1vw;
 }
 
 /* Text styling */
@@ -22,13 +25,13 @@ body {
 }
 
 .txt_Title {
-    margin-bottom: 0.5vh;
+    margin-bottom: 0.3vh;
 }
 
 .txt_MYW {
     font-family: nexa;
     font-size: 2.5rem;
-    margin-top: 0.5vh;
+    margin-top: -6vh;
 }
 
 .txt_Desc {
@@ -172,7 +175,7 @@ input {
 /* Large screens and desktops (min-width: 1025px) */
 @media (min-width: 1025px) {
     .loginForm {
-        width: 40vw; /* Default width */
+        width: 50vw; /* Default width */
         padding: 2vw; /* Padding for large screens */
         margin-top: 15vh;
     }
@@ -197,5 +200,31 @@ input {
 
     .btn_login {
         padding: 10px 40px; /* Default button size */
+    }
+}
+
+/* For tablets in landscape (width between 768px and 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1026px) {
+    .loginForm {
+        min-width: 60vw; /* increase width to look better on tablets */
+        margin-top: 15vh; /* optional: tweak vertical spacing */
+        padding: 0vh;
+    }
+
+    .txt_MYW {
+        font-size: 2rem; /* slightly smaller heading */
+    }
+
+    .txt_Desc {
+        font-size: 0.9rem; /* adjust for better spacing */
+    }
+
+    input {
+        max-width: 80%; /* give inputs more room */
+    }
+
+    .btn_login {
+        font-size: 1.5vw;
+        padding: 8px 20px; /* adjust button size */
     }
 }

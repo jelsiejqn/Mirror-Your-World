@@ -42,7 +42,7 @@ body {
 
 .txt_Desc {
     font-family: louis;
-    margin-top: -8vh;
+    margin-top: -6vh;
 }
 
 /* Button styling */
@@ -192,123 +192,53 @@ input::placeholder {
     font-size: 0.8rem;
 }
 
-/* Media Queries for Responsiveness */
-
-/* For devices with a max width of 1024px (tablets, smaller laptops) */
-@media (max-width: 1024px) {
+@media (max-width: 600px) {
     .form-container {
+        width: 90%;
         padding: 20px;
-        max-width: 90%;
+        transform: translate(-50%, -50%);
     }
 
-    .txt_MYW {
-        font-size: 2.5rem;
-    }
-
-    .txt_Desc {
-        margin-top: -5vh;
-    }
-
-    .name-fields {
+    .name-fields,
+    .consultation-fields,
+    .form-buttons {
         flex-direction: column;
-        gap: 20px;
-    }
-
-    .input-wrapper1, .input-wrapper2 {
         width: 100%;
     }
 
-    .input-wrapper {
-        max-width: 20px;
-    }
-
-    .address1 {
-        max-width: 10px;
-    }
-
-    .btnConsult {
-        font-size: 0.9rem;
-        padding: 5px 30px;
+    .input-wrapper1,
+    .input-wrapper2 {
+        width: 100%;
     }
 
     .btn-submit, .btn-clear {
-        font-size: 0.9rem;
-        padding: 8px 15px;
-    }
-}
-
-/* For devices with a max width of 768px (tablets) */
-@media (max-width: 768px) {
-    .form-container {
-        padding: 20px;
-        max-width: 90%;
-        top: 50%;
+        width: 100%;
     }
 
     .txt_MYW {
         font-size: 2rem;
+        text-align: center;
     }
 
     .txt_Desc {
-        margin-top: -5vh;
-    }
-
-    .input-wrapper1, .input-wrapper2 {
-        width: 100%;
-    }
-
-    .consultation-fields {
-        flex-direction: column;
-    }
-
-    .name-fields {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .btn-submit, .btn-clear {
-        font-size: 0.9rem;
-        padding: 8px 15px;
+        text-align: center;
     }
 }
 
-/* For devices with a max width of 480px (mobile phones) */
-@media (max-width: 480px) {
-    body {
-        font-size: 14px;
-    }
-
+@media (min-width: 601px) and (max-width: 900px) {
     .form-container {
-        padding: 15px;
-        max-width: 90%;
-        top: 50%;
-        max-height: 70%;
+        max-width: 600px;
+        padding: 30px;
+        transform: translate(-50%, -50%);
     }
 
     .txt_MYW {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
+        text-align: center;
     }
 
     .txt_Desc {
-        margin-top: -5vh;
-    }
-
-    .input-wrapper1, .input-wrapper2 {
-        width: 100%;
-    }
-
-    .btnConsult {
-        font-size: 0.9rem;
-        padding: 5px 25px;
-    }
-
-    .btn-submit, .btn-clear {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
-
-    .form-buttons {
-        flex-direction: column;
-        gap: 10px;
+        text-align: center;
     }
 }
+

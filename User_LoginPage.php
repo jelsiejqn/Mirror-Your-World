@@ -132,15 +132,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <p class="existingacc"> Don't have an account? <a href="User_SignupPage.php" class="a1"> Sign Up.</a> </p>
 
+                    <!-- Display error or success messages -->
+                    <?php if (!empty($error_message)) { ?>
+                        <div class="error-message" style="color: red;">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php } ?>
+
                     <br /><br />
                 </form>
 
-                <!-- Display error or success messages -->
-                <?php if (!empty($error_message)) { ?>
-                    <div class="error-message" style="color: red;">
-                        <?php echo $error_message; ?>
-                    </div>
-                <?php } ?>
+
 
             </div>
 

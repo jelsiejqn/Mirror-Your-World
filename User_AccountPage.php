@@ -127,12 +127,12 @@
                 if (password_verify($current_password, $stored_password)) {
                     // Generate OTP
                     $otp = sprintf("%06d", mt_rand(100000, 999999));
-                    
+
                     // Store OTP in session
                     $_SESSION['password_otp'] = $otp;
                     $_SESSION['password_otp_time'] = time();
                     $_SESSION['new_password'] = $new_password;
-                    
+
                     // Send OTP email
                     try {
                         sendOTPEmail($user_email, $otp, true);
@@ -164,20 +164,20 @@
             $stored_otp = $_SESSION['password_otp'] ?? '';
             $otp_time = $_SESSION['password_otp_time'] ?? 0;
             $new_password = $_SESSION['new_password'] ?? '';
-            
+
             // Check if OTP is valid and not expired (10 minute expiry)
             if ($entered_otp === $stored_otp && (time() - $otp_time) <= 600) {
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                 $update_password_query = "UPDATE userstbl SET password = ? WHERE user_id = ?";
                 $stmt = $conn->prepare($update_password_query);
                 $stmt->bind_param('si', $hashed_password, $user_id);
-                
+
                 if ($stmt->execute()) {
                     // Clear OTP session data
                     unset($_SESSION['password_otp']);
                     unset($_SESSION['password_otp_time']);
                     unset($_SESSION['new_password']);
-                    
+
                     showAlert('Your password has been updated successfully.');
                 }
             } else {
@@ -240,18 +240,18 @@
                     <div>
                         <h3><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></h3>
                         <h3><strong>Full Name:</strong> <?php echo htmlspecialchars($user['first_name'] . " " . $user['last_name']); ?></h3>
-                        <h3><strong>Email:</strong> <?php 
-                            $email = $user['email'];
-                            $email_parts = explode('@', $email);
-                            $username = $email_parts[0];
-                            $domain = $email_parts[1];
-                            
-                            // Show first 2 characters, then asterisks, then last character of username
-                            $masked_username = substr($username, 0, 2) . str_repeat('*', strlen($username) - 3) . substr($username, -1);
-                            $masked_email = $masked_username . '@' . $domain;
-                            
-                            echo htmlspecialchars($masked_email); 
-                        ?></h3>
+                        <h3><strong>Email:</strong> <?php
+                                                    $email = $user['email'];
+                                                    $email_parts = explode('@', $email);
+                                                    $username = $email_parts[0];
+                                                    $domain = $email_parts[1];
+
+                                                    // Show first 2 characters, then asterisks, then last character of username
+                                                    $masked_username = substr($username, 0, 2) . str_repeat('*', strlen($username) - 3) . substr($username, -1);
+                                                    $masked_email = $masked_username . '@' . $domain;
+
+                                                    echo htmlspecialchars($masked_email);
+                                                    ?></h3>
                         <h3><strong>Company Name:</strong> <?php echo htmlspecialchars($user['company_name']); ?></h3>
                         <h3><strong>Contact Number:</strong> <?php echo htmlspecialchars($user['contact_number']); ?></h3>
                     </div>
@@ -262,7 +262,12 @@
                 <h2>Change Profile Picture</h2>
                 <form action="User_AccountPage.php" method="POST" enctype="multipart/form-data">
                     <label for="profile-picture">Upload New Picture</label>
-                    <input type="file" id="profile-picture" name="profile_picture"> <br> <br>
+
+                    <input type="file" id="profile-picture" name="profile_picture">
+                    <label for="profile-picture">
+                        <p class="file-label"> File should be less than 2MB. <br> Accepts PNG and JPEG files only. </p>
+                    </label>
+                    <br>
                     <button type="submit" name="update_profile_picture">Update Picture</button>
                 </form>
             </div>
@@ -317,7 +322,7 @@
                     <br> <br>
                     <button type="submit" name="request_password_change">Request Password Change</button>
                 </form>
-                
+
                 <!-- OTP verification form (initially hidden) -->
                 <form action="User_AccountPage.php" method="POST" id="otp-form" style="display: none; margin-top: 20px;">
                     <h3>Verify Email OTP</h3>
@@ -325,7 +330,7 @@
                     <label for="otp">Enter OTP Code</label>
                     <input type="text" id="otp" name="otp" required>
                     <input type="hidden" name="new_password" id="hidden_new_password">
-                    
+
                     <br> <br>
                     <button type="submit" name="verify_otp">Verify & Update Password</button>
                 </form>
@@ -356,14 +361,14 @@
                 });
             }
         };
-        
+
         // Document ready function
         document.addEventListener('DOMContentLoaded', function() {
             // Show OTP form if needed (server-side check)
-            <?php if(isset($_SESSION['password_otp'])): ?>
-            document.getElementById('otp-form').style.display = 'block';
+            <?php if (isset($_SESSION['password_otp'])): ?>
+                document.getElementById('otp-form').style.display = 'block';
             <?php endif; ?>
-            
+
             // Clear the password fields when the page loads
             document.getElementById('current_password').value = '';
             document.getElementById('new_password').value = '';

@@ -137,6 +137,9 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
                 <div class="faq-frame" id="faq-frame-11">
                     <p>What is the process after booking an appointment?</p>
                 </div>
+                <div class="faq-frame" id="faq-frame-12">
+                    <p>How and When can I leave a review?</p>
+                </div>
             </div>
 
             <div class="faq-modal" id="faq-modal" style="display: none;">
@@ -390,6 +393,10 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
         "faq-frame-11": {
             title: "What is the process after booking an appointment?",
             description: "Once your appointment is booked, our team will confirm the details and, if necessary, schedule a consultation. We’ll then take measurements, finalize the design, and plan the installation process to ensure everything runs smoothly. You’ll be kept informed every step of the way!"
+        },
+        "faq-frame-12": {
+            title: "How and when can I leave a review?",
+            description: "You can leave a review once your installation is complete, or if you'd like, you can share your thoughts on how we handled your booking process and our customer service along the way. It’s entirely up to you! We value all feedback to help us improve and serve you better."
         },
     };
 

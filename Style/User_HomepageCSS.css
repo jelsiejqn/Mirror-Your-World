@@ -1,6 +1,7 @@
 
 
 .BGhome-container {
+    top: -10vh;
     margin: 0;
     padding: 0;
     position: relative;
@@ -36,7 +37,7 @@
     border-radius: 50px;
     background-color: white;
     padding: 10vh 5vw;
-    margin-top: -9vh;
+    margin-top: -25vh;
     position: relative;
     z-index: 10;
     display: flex;
@@ -151,7 +152,7 @@
     text-decoration: none;
     cursor: pointer;
     border: none;
-    font-size: 1.5vw;
+    font-size: 1.2vw;
     text-decoration: underline;
 }
 

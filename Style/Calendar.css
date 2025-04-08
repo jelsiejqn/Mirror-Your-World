@@ -1,3 +1,10 @@
+.calendar-wrapper {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
 .calntime-cal_img:hover {
     opacity: 70%;
     transition: 0.3s ease;

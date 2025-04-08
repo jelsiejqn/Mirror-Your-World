@@ -5,18 +5,18 @@ require "dbconnect.php";
 if (isset($_POST['action']) && isset($_POST['review_id'])) {
     $review_id = $_POST['review_id'];
     $action = $_POST['action'];
-    
+
     if ($action === 'show') {
         $update_sql = "UPDATE reviewstbl SET approved = 1 WHERE review_id = ?";
     } else if ($action === 'hide') {
         $update_sql = "UPDATE reviewstbl SET approved = 0 WHERE review_id = ?";
     }
-    
+
     $stmt = $conn->prepare($update_sql);
     $stmt->bind_param("i", $review_id);
     $stmt->execute();
     $stmt->close();
-    
+
     // Redirect to prevent form resubmission
     header("Location: Admin_ReviewsPage.php");
     exit();
@@ -76,7 +76,7 @@ if (!$shown_reviews_result) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
+
     <style>
         .shown-tag {
             background-color: #4CAF50;
@@ -87,7 +87,7 @@ if (!$shown_reviews_result) {
             display: inline-block;
             margin-left: 10px;
         }
-        
+
         .hidden-tag {
             background-color: #ff9800;
             color: white;
@@ -97,13 +97,13 @@ if (!$shown_reviews_result) {
             display: inline-block;
             margin-left: 10px;
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 5px;
             margin-top: 5px;
         }
-        
+
         .show-btn {
             background-color: #4CAF50;
             color: white;
@@ -112,7 +112,7 @@ if (!$shown_reviews_result) {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .hide-btn {
             background-color: #f44336;
             color: white;
@@ -121,11 +121,11 @@ if (!$shown_reviews_result) {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .shown-review {
             border-left: 4px solid #4CAF50 !important;
         }
-        
+
         .hidden-review {
             border-left: 4px solid #ff9800 !important;
         }
@@ -144,9 +144,17 @@ if (!$shown_reviews_result) {
 
     </div>
 
+
+    <!-- Calendar -->
+
     <div class="logo">
-        <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 30px; cursor: pointer;">
+        <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px">
     </div>
+
+    <div class="calendar-wrapper">
+        <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 40px; cursor: pointer;">
+    </div>
+
 
     <div id="calntime-modal" class="calntime-modal" style="display: none;">
         <div class="calntime-modal-content">
@@ -513,7 +521,7 @@ if (!$shown_reviews_result) {
     function sortBookings(section = 'all') {
         // Get the selected sort option
         const sortOption = document.getElementById('sortByDropdown').value;
-        
+
         // Determine which section to sort
         let selector;
         if (section === 'all') {
@@ -523,14 +531,14 @@ if (!$shown_reviews_result) {
         } else if (section === 'shown') {
             selector = '#shown-reviews .booking-container';
         }
-        
+
         // Get all booking containers for the selected section
         const bookingContainers = Array.from(document.querySelectorAll(selector));
         if (bookingContainers.length === 0) return;
-        
+
         // Get the parent element containing all booking containers
         const parentElement = bookingContainers[0].parentNode;
-        
+
         // Sort the booking containers based on the criteria
         bookingContainers.sort(function(a, b) {
             // Extract values for sorting
@@ -538,7 +546,7 @@ if (!$shown_reviews_result) {
             const ratingB = parseFloat(b.querySelector('.td-satisfaction center').textContent.trim());
             const isShownA = a.classList.contains('shown-review');
             const isShownB = b.classList.contains('shown-review');
-            
+
             // Sort based on the selected option
             if (sortOption === 'recent') { // Highest rating first
                 return ratingB - ratingA;
@@ -549,15 +557,15 @@ if (!$shown_reviews_result) {
             } else if (sortOption === 'shown') { // Shown reviews first
                 return isShownB - isShownA;
             }
-            
+
             return 0;
         });
-        
+
         // Clear the parent element
         while (parentElement.firstChild) {
             parentElement.removeChild(parentElement.firstChild);
         }
-        
+
         // Re-append the sorted booking containers
         bookingContainers.forEach(function(container, index) {
             // Update the review number (first column)
@@ -571,21 +579,21 @@ if (!$shown_reviews_result) {
         const modal = document.getElementById("calntime-modal");
         const img = document.querySelector(".calntime-cal_img");
         const closeBtn = document.querySelector(".calntime-close");
-        
+
         flatpickr("#calntime-datepicker", {
             inline: true,
             enableTime: false,
             dateFormat: "Y-m-d"
         });
-        
+
         img.onclick = function() {
             modal.style.display = "flex";
         }
-        
+
         closeBtn.onclick = function() {
             modal.style.display = "none";
         }
-        
+
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -600,4 +608,5 @@ if (!$shown_reviews_result) {
         sortBookings('all');
     });
 </script>
+
 </html>

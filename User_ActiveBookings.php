@@ -80,6 +80,8 @@ $conn->close();
 
     <link rel="stylesheet" href="Style/User_ActiveBookingsCSS.css" />
     <link rel="stylesheet" href="Style/Required.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 </head>
 
@@ -134,8 +136,8 @@ $conn->close();
                         <td>
                             <select id="sortByDropdown" onchange="sortBookings()">
                                 <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
+                                <option value="recent">Oldest</option>
+                                <option value="oldest">Newest</option>
                             </select>
                         </td>
                     </tr>
@@ -185,8 +187,8 @@ $conn->close();
                         <td>
                             <select id="sortByDropdown" onchange="sortBookings()">
                                 <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
+                                <option value="recent">Oldest</option>
+                                <option value="oldest">Newest</option>
                             </select>
                         </td>
                     </tr>
@@ -218,7 +220,7 @@ $conn->close();
                                         <img src="Assets/icon_check.png" class="completed-icon">
                                         <div class="download-options">
                                             <a href="generate_pdf.php?type=details&id=<?= $row['appointment_id'] ?>" class="download-btn">
-                                                <img src="Assets/icon_download.png" class="download-icon" title="Download Details">
+                                                <br> <img src="Assets/icon_download.png" class="download-icon" title="Download Details">
                                             </a>
                                         </div>
                                     </td>
@@ -235,22 +237,22 @@ $conn->close();
                 </center>
             </div>
 
-        <!-- Past Bookings -->
-        <div class="section" id="past-bookings" style="display: none;">
-            <h2>Completed Bookings</h2>
-            
-            <table class="sortby-container">
-                <tr>
-                    <td>
-                        <select id="sortByDropdown" onchange="sortBookings()">
-                            <option value="recent">Sort by</option>
-                            <option value="recent">Most Recent</option>
-                            <option value="oldest">Oldest</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <br>
+            <!-- Past Bookings -->
+            <div class="section" id="past-bookings" style="display: none;">
+                <h2>Completed Bookings</h2>
+
+                <table class="sortby-container">
+                    <tr>
+                        <td>
+                            <select id="sortByDropdown" onchange="sortBookings()">
+                                <option value="recent">Sort by</option>
+                                <option value="recent">Oldest</option>
+                                <option value="oldest">Newest</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <br>
 
                 <center>
                     <?php if ($pastBookings->num_rows > 0): ?>
@@ -281,7 +283,7 @@ $conn->close();
                                         </button>
                                         <div class="download-options">
                                             <a href="generate_pdf.php?type=receipt&id=<?= $row['appointment_id'] ?>" class="download-btn">
-                                                <img src="Assets/icon_receipt.png" class="download-icon" title="Download Receipt">
+                                                <br> <img src="Assets/icon_receipt.png" class="download-icon" title="Download Receipt">
                                             </a>
                                         </div>
                                     </td>
@@ -337,8 +339,8 @@ $conn->close();
                         <td>
                             <select id="sortByDropdown" onchange="sortBookings()">
                                 <option value="recent">Sort by</option>
-                                <option value="recent">Most Recent</option>
-                                <option value="oldest">Oldest</option>
+                                <option value="recent">Oldest</option>
+                                <option value="oldest">Newest</option>
                             </select>
                         </td>
                     </tr>
@@ -594,55 +596,65 @@ $conn->close();
     });
 
     function sortBookings() {
-    // Get the currently visible section
-    const visibleSection = document.querySelector('.section[style*="display: block"]') || 
-                          document.querySelector('.section:not([style*="display: none"])');
-    if (!visibleSection) return;
-    
-    // Get the selected sort option from the dropdown that triggered the event
-    const sortByValue = event.target.value;
-    
-    // Get all booking containers in the visible section
-    const bookingContainers = Array.from(visibleSection.querySelectorAll('.booking-container'));
-    
-    // Parse dates correctly using the MMM dd YYYY format
-    bookingContainers.sort((a, b) => {
-        const dateTextA = a.querySelector('.td-date h1').textContent.trim();
-        const dateTextB = b.querySelector('.td-date h1').textContent.trim();
-        
-        // Parse dates in MMM dd YYYY format
-        const dateParts = (text) => {
-            const parts = text.split(' ');
-            // Convert month name to month number
-            const months = {
-                'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-                'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+        // Get the currently visible section
+        const visibleSection = document.querySelector('.section[style*="display: block"]') ||
+            document.querySelector('.section:not([style*="display: none"])');
+        if (!visibleSection) return;
+
+        // Get the selected sort option from the dropdown that triggered the event
+        const sortByValue = event.target.value;
+
+        // Get all booking containers in the visible section
+        const bookingContainers = Array.from(visibleSection.querySelectorAll('.booking-container'));
+
+        // Parse dates correctly using the MMM dd YYYY format
+        bookingContainers.sort((a, b) => {
+            const dateTextA = a.querySelector('.td-date h1').textContent.trim();
+            const dateTextB = b.querySelector('.td-date h1').textContent.trim();
+
+            // Parse dates in MMM dd YYYY format
+            const dateParts = (text) => {
+                const parts = text.split(' ');
+                // Convert month name to month number
+                const months = {
+                    'Jan': 0,
+                    'Feb': 1,
+                    'Mar': 2,
+                    'Apr': 3,
+                    'May': 4,
+                    'Jun': 5,
+                    'Jul': 6,
+                    'Aug': 7,
+                    'Sep': 8,
+                    'Oct': 9,
+                    'Nov': 10,
+                    'Dec': 11
+                };
+                return new Date(
+                    parseInt(parts[2]), // year
+                    months[parts[0]], // month (0-11)
+                    parseInt(parts[1]) // day
+                );
             };
-            return new Date(
-                parseInt(parts[2]), // year
-                months[parts[0]],   // month (0-11)
-                parseInt(parts[1])  // day
-            );
-        };
-        
-        const dateA = dateParts(dateTextA);
-        const dateB = dateParts(dateTextB);
-        
-        // Sort according to selection (recent = newest first, oldest = oldest first)
-        return sortByValue === 'oldest' ? dateA - dateB : dateB - dateA;
-    });
-    
-    // Get the container where the booking tables are located
-    const container = visibleSection.querySelector('center');
-    
-    // Clear the container and append sorted booking containers
-    container.innerHTML = '';
-    
-    // Re-append the sorted booking containers
-    bookingContainers.forEach(container => {
-        visibleSection.querySelector('center').appendChild(container);
-    });
-}
+
+            const dateA = dateParts(dateTextA);
+            const dateB = dateParts(dateTextB);
+
+            // Sort according to selection (recent = newest first, oldest = oldest first)
+            return sortByValue === 'oldest' ? dateA - dateB : dateB - dateA;
+        });
+
+        // Get the container where the booking tables are located
+        const container = visibleSection.querySelector('center');
+
+        // Clear the container and append sorted booking containers
+        container.innerHTML = '';
+
+        // Re-append the sorted booking containers
+        bookingContainers.forEach(container => {
+            visibleSection.querySelector('center').appendChild(container);
+        });
+    }
 </script>
 
 

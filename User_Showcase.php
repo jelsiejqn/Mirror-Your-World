@@ -245,7 +245,7 @@ $result_reviews = $conn->query($sql_reviews);
                     <?php
                         }
                     } else {
-                        echo "<p>No reviews available.</p>";
+                        echo '<p style="font-size: 1.5vw;">No reviews available yet.</p>';
                     }
                     ?>
 

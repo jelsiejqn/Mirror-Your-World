@@ -1,14 +1,20 @@
 body {
     overflow: visible;
 }
+
+.error-message {
+    font-size: 1vw;
+    font-family: louis;
+    margin-bottom: 10px;
+}
 .loginForm {
-    margin-top: 8%;
+    margin-top: 20vh;
     background-color: #f9f9f9;
-    width: 100%;
-    max-width: 38%;
     border-radius: 40px;
     padding: 10px;
     box-sizing: border-box;
+    max-width: 100vh;
+    max-height: 100vh;
 }
 
 /* Text styling */
@@ -90,48 +96,8 @@ input {
     opacity: 80%;
 }
 
-@media (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .loginForm {
-        transform: scale(0.9);
-        max-width: 80%;
+        margin-top: 15vh;
     }
-}
-
-/* Tablets and large phones (up to 850px) */
-@media (max-width: 850px) {
-    .loginForm {
-        transform: scale(0.85);
-        max-width: 90%;
-    }
-}
-
-/* Responsive scaling when the browser is small */
-@media (max-width: 768px) {
-    .loginForm {
-        margin-top: 10%;
-        transform: scale(0.85); /* Shrinks the form to 85% of its original size */
-        max-width: 90%; /* Allows it to take up more screen width */
-    }
-}
-
-@media (max-width: 480px) {
-    .loginForm {
-        margin-top: 2%;
-        transform: scale(0.75); /* Further shrinks for smaller devices */
-        max-width: 95%;
-    }
-}
-
-/* Prevent input overflow */
-input {
-    width: 100%; /* Make input responsive within the form */
-    max-width: 14rem; /* Maintain shape */
-    box-sizing: border-box;
-}
-
-/* Ensure buttons remain proportional */
-.btn_login {
-    width: 100%;
-    max-width: 14rem;
-    box-sizing: border-box;
 }

@@ -661,11 +661,23 @@ p {
 @media (max-width: 768px) {
 
     .frames-container {
+        max-width: 60vh;
         grid-template-columns: 1fr; /* Stacks frames in one column */
       }
+
+      .frame-description {
+        font-size: 2vw;
+      }
     
+      .frame-date {
+        font-size: 1.5vw;
+      }
+
+      .frame-info {
+        font-size: 1.3vw;
+      }
     .policy-header {
-        font-size: 1.8em;
+        font-size: 1vw;
     }
 
     .policy-container {
@@ -678,6 +690,21 @@ p {
 
     .policy-item {
         font-size: 0.95em;
+    }
+
+    .card {
+        min-height: 10vh;
+    }
+
+    .card-title {
+        font-size: 3vw;
+    }
+    .card-subtitle {
+        font-size: 2.7vw;
+    }
+
+    .card-info {
+        font-size: 2vw;
     }
 }
 
@@ -906,3 +933,8 @@ figure.snip1157 {
     margin-left: 1vw;
   }
   
+  @media (max-width: 540px) {
+    .frame-container {
+        max-width: 90vw; /* or any % you like */
+    }
+}

@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="Style/Required.css" />
     <link rel="stylesheet" href="Style/Admin_LoginPageCSS.css" />
 
-    
+
 </head>
 
 <body>

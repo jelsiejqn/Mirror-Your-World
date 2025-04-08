@@ -192,9 +192,16 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <!-- Calendar -->
+
     <div class="logo">
-        <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 30px; cursor: pointer;">
+        <img src="Assets/icon_Logo.png" alt="Logo" style="width: 30px">
     </div>
+
+    <div class="calendar-wrapper">
+        <img src="Assets/icon_calendar.png" class="calntime-cal_img" alt="calendar" style="width: 40px; cursor: pointer;">
+    </div>
+
+
 
     <div id="calntime-modal" class="calntime-modal" style="display: none;">
         <div class="calntime-modal-content">
@@ -215,28 +222,28 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <div class="profile-container" style="position: fixed; top: 10px; right: 20px; z-index: 1000; border-radius: 20px;">
-    <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
-        <img src="Assets/icon_Profile.png" class="iconProfile" alt="Profile Icon" width="40px" height="40px" style="width: 25px; height: 25px; object-fit: cover; cursor: pointer; transition: filter 0.3s ease;" onmouseover="this.style.filter='invert(1)';" onmouseout="this.style.filter='invert(0)';" />
-    </button>
-    <br />
-    <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
-        <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
-            <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
-        </li>
-        <?php 
-        if(isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == 1) { 
-        ?>
-        <li style="list-style: none; margin: 0; padding: 10px;">
-            <a href="Admin_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Add Admin</a>
-        </li>
-        <?php } ?>
-        <form method="POST" action="Admin_LoginPage.php">
-            <li style="list-style: none; margin: 0; padding: 10px;">
-                <a href="Admin_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+        <button class="btn dropdown-trigger" data-target="dropdown1" style="border-radius: 20px; padding: 0; background-color: transparent; border: none; cursor: pointer;" onclick="toggleDropdown()">
+            <img src="Assets/icon_Profile.png" class="iconProfile" alt="Profile Icon" width="40px" height="40px" style="width: 25px; height: 25px; object-fit: cover; cursor: pointer; transition: filter 0.3s ease;" onmouseover="this.style.filter='invert(1)';" onmouseout="this.style.filter='invert(0)';" />
+        </button>
+        <br />
+        <ul id="dropdown1" class="dropdown-content" style="transition: 0.3s; display: none; position: absolute; top: 60px; right: 0; background-color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); width: 200px; padding: 0; margin: 0;">
+            <li style="list-style: none; margin: 0; padding: 10px; transition: 0.3s;">
+                <a href="Admin_AccountPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Account</a>
             </li>
-        </form>
-    </ul>
-</div>
+            <?php
+            if (isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == 1) {
+            ?>
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="Admin_SignupPage.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Add Admin</a>
+                </li>
+            <?php } ?>
+            <form method="POST" action="Admin_LoginPage.php">
+                <li style="list-style: none; margin: 0; padding: 10px;">
+                    <a href="Admin_LogoutProcess.php" style="color: black; text-decoration: none; display: block; padding: 5px 10px;">Logout</a>
+                </li>
+            </form>
+        </ul>
+    </div>
     <!-- Required -->
     <div class="dashboard-container">
         <!-- Sidebar (Options) -->
@@ -405,16 +412,16 @@ if (isset($_SESSION['popup_message'])) {
                                         $invoice_check->execute();
                                         $invoice_result = $invoice_check->get_result();
                                         $has_invoice = $invoice_result->num_rows > 0;
-                                        
+
                                         if ($has_invoice) {
                                             $invoice_data = $invoice_result->fetch_assoc();
-                                            ?>
+                                        ?>
                                             <button class="btn-invoice-download" onclick="window.location.href='admin_invoice_pdf.php?invoice_id=<?php echo $invoice_data['invoice_id']; ?>'">Download Invoice</button>
-                                            <?php
+                                        <?php
                                         } else {
-                                            ?>
+                                        ?>
                                             <button class="btn-invoice-create" onclick="populateInvoiceModal(<?php echo htmlspecialchars($appointment_json); ?>)">Create Invoice</button>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </td>
@@ -541,10 +548,10 @@ if (isset($_SESSION['popup_message'])) {
                     <input type="number" id="tax-discount" name="tax_discount" placeholder="Enter tax/discount rate">
                 </div>
                 <div class="invoice-modal-actions">
-                <div class="invoice-modal-actions">
-                    <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
-                    <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Generate PDF</button>
-                </div>
+                    <div class="invoice-modal-actions">
+                        <button type="button" class="btn-invoice-cancel" id="btn-cancel-invoice">Cancel</button>
+                        <button type="submit" class="btn-invoice-send" id="btn-send-invoice">Generate PDF</button>
+                    </div>
                 </div><br>
                 <input type="hidden" id="invoice-user-id" name="user_id">
                 <input type="hidden" name="action" value="create_invoice_form">
@@ -554,7 +561,6 @@ if (isset($_SESSION['popup_message'])) {
     </div>
 
     <style>
-
         /* PALITAN HERE */
         .btn-invoice-download {
             background-color: #4CAF50;
@@ -585,6 +591,7 @@ if (isset($_SESSION['popup_message'])) {
         .btn-invoice-create:hover {
             background-color: #0b7dda;
         }
+
         /* HANGGANG HERE */
         .popup {
             display: none;

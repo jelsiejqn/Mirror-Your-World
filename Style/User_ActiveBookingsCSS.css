@@ -13,6 +13,11 @@ body {
     font-family: louis;
 }
 
+.download-icon {
+    font-size: 1vw;
+    font-family: louis;
+}
+
 /* Container for the dashboard */
 .dashboard-container {
     margin-top: 5%;
@@ -238,7 +243,9 @@ h1 {
     }
     
 .td-details {
-    width: auto;
+    /* width: auto; */
+    max-width: 30%;
+    min-width: 30%;
     }
     
 h5 {
@@ -247,8 +254,10 @@ h5 {
     }
     
 .td-booker {
-    width: 30%;
+    max-width: 30%;
+    min-width: 30%;
     }
+
 
     .cancel-btn {
         color: white;
