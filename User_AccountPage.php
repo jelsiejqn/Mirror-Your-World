@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="Style/Required.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="Scripts/system-check.js"></script> -->
 </head>
 
 <body>
