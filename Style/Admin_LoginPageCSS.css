@@ -1,9 +1,23 @@
+body {
+    font-family: louis;
+}
+
 .loginForm {
-    margin-top: 10%;
+    width: 40vw; /* Ensures the form width adapts well across devices */
+    min-width: 100%; /* Prevents it from becoming too wide */
+    padding: 2vw;
+    margin-top: 15vh;
     background-color: #f9f9f9;
-    max-width: 38%;
     border-radius: 40px;
-    padding: 2%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error {
+    font-family: louis;
+    font-size: 1vw;
 }
 
 /* Text styling */
@@ -14,50 +28,50 @@
 }
 
 .txt_Title {
-    margin-bottom: 5vh;
+    margin-bottom: 0.3vh;
 }
 
 .txt_MYW {
     font-family: nexa;
-    font-size: 3rem;
-    margin-top: 3.5vh;
+    font-size: 2.5rem;
+    margin-top: -6vh;
 }
 
 .txt_Desc {
     font-family: louis;
-    margin-top: -7vh;
+    margin-top: -5vh;
+    font-size: 1rem; /* Adjusted font size for better fit */
 }
 
 input, label {
-    
     font-family: louis;
     margin-bottom: 10px;
-    padding: 1px 5px 1px 5px;
-    
+    padding: 1px 5px;
+    box-sizing: border-box;
 }
 
 input {
-    height: 1.8rem;
-    width: 14rem;
+    height: 2rem;
+    width: 90%; /* Make the input fields responsive */
     border-radius: 5px;
-    border-style: solid;
-    opacity: 50%;
+    border: solid 1px #ccc;
+    opacity: 80%;
 }
 
 .btn_login {
-    margin-top: 15;
+    margin-top: 15px;
     font-family: louis;
     color: white;
     background-color: #1e271f;
     border-style: none;
     border-radius: 20px;
-    padding: 10px 37px 10px 37px;
+    padding: 10px 40px;
     cursor: pointer;
 }
 
 .btn_login:hover {
-   opacity: 80%;
-   transition: 0.3s;
+    opacity: 80%;
+    transition: 0.3s;
 }
 
 .existingacc, .a1 {
@@ -81,9 +95,139 @@ input {
     transition: 0.3s;
 }
 
+.forgot-password {
+    font-family: louis;
+}
+
 .field-icon {
     top: 0;
     width: 20px;
     opacity: 80%;
 }
 
+/* Mobile and small screen styles (max-width: 767px) */
+@media (max-width: 767px) {
+    .loginForm {
+        min-width: 90vw; /* More width for smaller screens */
+        padding: 5vw; /* Adjust padding for smaller screens */
+        margin-top: 15vh; /* Adjust top margin for better vertical alignment */
+    }
+
+    .txt_Title {
+        margin-bottom: 3vh;
+        font-size: 1.8rem; /* Reduce font size for title */
+    }
+
+    .txt_MYW {
+        font-size: 2rem; /* Reduce font size for smaller screens */
+        margin-top: 2vh;
+    }
+
+    .txt_Desc {
+        font-size: 0.9rem; /* Reduce description font size */
+        margin-top: -4vh;
+    }
+
+    input {
+        height: 2rem; /* Adjust height of input fields */
+        width: 90%; /* Make inputs fit the screen width */
+    }
+
+    .btn_login {
+        padding: 8px 30px; /* Reduce button padding for smaller screens */
+        font-size: 1rem; /* Adjust button text size */
+    }
+
+    .field-icon {
+        width: 18px; /* Adjust field icon size */
+    }
+}
+
+/* Large screens */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .loginForm {
+        min-width: 50vw; /* Slightly larger width for tablets */
+        padding: 3vw; /* Adjust padding for tablets */
+        margin-top: 15vh; /* Adjust top margin */
+    }
+
+    .txt_Title {
+        margin-bottom: 4vh;
+        font-size: 2rem; /* Adjust font size */
+    }
+
+    .txt_MYW {
+        font-size: 2.5rem; /* Adjust font size */
+    }
+
+    .txt_Desc {
+        font-size: 1rem;
+        margin-top: -6vh;
+    }
+
+    input {
+        width: 90%; /* Make inputs fill most of the screen */
+    }
+
+    .btn_login {
+        padding: 10px 35px; /* Adjust padding */
+        font-size: 1.2rem; /* Adjust button text size */
+    }
+}
+
+/* Large screens and desktops (min-width: 1025px) */
+@media (min-width: 1025px) {
+    .loginForm {
+        min-width: 50vw; /* Default width */
+        padding: 2vw; /* Padding for large screens */
+        margin-top: 15vh;
+    }
+
+    .txt_Title {
+        margin-bottom: 5vh;
+        font-size: 2.5rem; /* Default font size */
+    }
+
+    .txt_MYW {
+        font-size: 3rem; /* Default font size */
+    }
+
+    .txt_Desc {
+        font-size: 1.1rem;
+        margin-top: -7vh;
+    }
+
+    input {
+        width: 80%; /* Reduce width for larger screens */
+    }
+
+    .btn_login {
+        padding: 10px 40px; /* Default button size */
+    }
+}
+
+/* For tablets in landscape (width between 768px and 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1026px) {
+    .loginForm {
+        min-width: 60vw; /* increase width to look better on tablets */
+        margin-top: 15vh; /* optional: tweak vertical spacing */
+        padding: 0vh;
+    }
+
+    .txt_MYW {
+        font-size: 2rem; /* slightly smaller heading */
+    }
+
+    .txt_Desc {
+        font-size: 0.9rem; /* adjust for better spacing */
+    }
+
+    input {
+        max-width: 80%; /* give inputs more room */
+    }
+
+    .btn_login {
+        font-size: 1.5vw;
+        padding: 8px 20px; /* adjust button size */
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-require "dbconnect.php";
+include "dbconnect.php";
 
 session_start();
 
@@ -143,7 +143,7 @@ $result_reviews = $conn->query($sql_reviews);
                             echo '</div>';
                         }
                     } else {
-                        echo '<p>No showcase items available.</p>';
+                        echo '<p style="font-size: 1.5vw; color: gray; position: absolute; top: -25%; left: 50%; transform: translate(-50%, 1750%); text-align: center;">No showcase items available.</p>';
                     }
 
                     $conn->close();
@@ -204,7 +204,7 @@ $result_reviews = $conn->query($sql_reviews);
                                     echo '</div>';
                                 }
                             } else {
-                                echo '<p>No clients found.</p>'; // Or any other message if no clients
+                                echo '<p style="font-size: 1.5vw; color: gray; position: absolute; top: 0; left: 50%; transform: translate(-50%, 1750%); text-align: center;">No clients yet!</p>';
                             }
                             ?>
                         </div>
@@ -245,7 +245,7 @@ $result_reviews = $conn->query($sql_reviews);
                     <?php
                         }
                     } else {
-                        echo '<p style="font-size: 1.5vw;">No reviews available yet.</p>';
+                        echo '<p style="font-size: 1.5vw; color: gray; position: absolute; top: 25%; left: 50%; transform: translate(-50%, 1750%); text-align: center;">No reviews available yet.</p>';
                     }
                     ?>
 
@@ -485,7 +485,7 @@ $result_reviews = $conn->query($sql_reviews);
     }
 
     function sendEmail() {
-        window.open("https://mail.google.com/mail/?view=cm&fs=1&to=hellodeesy@gmail.com", "_blank");
+        window.open("https://mail.google.com/mail/?view=cm&fs=1&to=mirroryourworld.company@gmail.com", "_blank");
     }
 </script>
 

@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                     <p class="existingacc"> Don't have an account? <a href="User_SignupPage.php" class="a1"> Sign Up.</a> </p>
-
+                    <!-- <p class="existingacc">Admin? <a href="Admin_LoginPage.php" class="a1"> Click Here.</a> </p> -->
                     <!-- Display error or success messages -->
                     <?php if (!empty($error_message)) { ?>
                         <div class="error-message" style="color: red;">

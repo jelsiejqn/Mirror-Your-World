@@ -320,7 +320,7 @@ $isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']);
     }
 
     function sendEmail() {
-        window.open("https://mail.google.com/mail/?view=cm&fs=1&to=hellodeesy@gmail.com", "_blank");
+        window.open("https://mail.google.com/mail/?view=cm&fs=1&to=mirroryourworld.company.com", "_blank");
     }
 </script>
 
